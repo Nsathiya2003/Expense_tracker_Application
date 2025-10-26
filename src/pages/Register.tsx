@@ -1,23 +1,25 @@
-import { useState } from "react"
+import { useState } from "react";
+import type { FormData } from "../types/types";
+
 
 export default function Register(){
-    const [data,setData] = useState({
+    const [data,setData] = useState<FormData>({
         username:'',
         mobileNumber:'',
         emailId:'',
         password:''
     });
 
-    const handleChange = (event:any) => {
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value} = event.target;
         setData((prev) => ({
             ...prev,
-            [name]: value
+            [name as keyof FormData]: value
         }));
     }
 
-    const handleSubmit = (e:any) => {
-        e.preventDefault();
+    const handleSubmit = (   event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
 
     }
 

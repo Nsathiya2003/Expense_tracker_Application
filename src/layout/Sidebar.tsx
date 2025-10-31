@@ -15,7 +15,6 @@ export default function SideBar(){
   };
 
   const handleChangeMenu = () => {
-    console.log('heloooo')
     setOpenSubMenu(null);
     setOpen(!open)
   }

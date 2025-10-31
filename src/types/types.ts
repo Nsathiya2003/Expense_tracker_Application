@@ -3,7 +3,9 @@ export interface FormData{
         username:string,
         mobileNumber:string,
         emailId:string,
-        password:string
+        password:string,
+        lastname:string
+        
 }
 
 //user login 

@@ -11,7 +11,7 @@ export default function Register(){
         mobileNumber:'',
         emailId:'',
         password:'',
-        lastname:''
+        initial:''
     });
     const [passwordVisible,setPasswordVisible]= useState(false);
 
@@ -27,94 +27,101 @@ export default function Register(){
         event.preventDefault();
 
     }
-
+ 
     return(
     <>
-    <div className="register-container flex justify-center items-center h-screen">
-        <div className="bg-[#548f54] w-[28%] h-100 relative">
-         <form action="submit" onSubmit={handleSubmit} className="flex flex-col gap-4 p-20 ">
-            <h1 className="text-center text-xl font-semibold text-light-grey">SIGN UP</h1>
-            <p className="text-center text-red-700 font-semibold">Already have an account?<a href="/login" className="text-blue-800 font-semibold">login</a></p>
-            
-            <input type="text"
-             name="username"
-             id="username"
-             value={data.username} 
-             onChange={handleChange}
-             placeholder="Enter your first name" 
-             className="w-full p-2 pr-10 rounded-xl text-sm  border border-[#5A5A5A]  placeholder:text-gray-400"
-             />
+    <div className="register-container flex justify-center items-center min-h-screen  px-4">
+  <div className="bg-[#548f54] w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-[400px] rounded-2xl shadow-lg">
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col gap-5 p-6 sm:p-10 md:p-12 lg:p-16"
+    >
+      <h1 className="text-center text-2xl font-bold text-white">SIGN UP</h1>
+      <p className="text-center text-gray-200 text-sm">
+        Already have an account?{" "}
+        <a href="/" className="text-blue-900 font-semibold hover:underline transition-all duration-400">
+          Login
+        </a>
+      </p>
 
-            <input type="text"
-             name="lastname"
-             id="lastname"
-             value={data.lastname} 
-             onChange={handleChange}
-             placeholder="Enter your last name" 
-             className="w-full p-2 rounded-xl text-sm"
-             />
+      {/* Username */}
+      <input
+        type="text"
+        name="username"
+        id="username"
+        value={data.username}
+        onChange={handleChange}
+        placeholder="Enter your first name"
+        className="w-full p-3 rounded-lg text-sm border border-gray-400 placeholder-gray-600"
+      />
 
-            <input type="text" 
-             name="mobileNumber" 
-             id="mobileNumber" 
-             value={data.mobileNumber} 
-             onChange={handleChange} 
-             placeholder="Enter your mobile No" 
-                className="w-full p-2 pr-10 rounded-xl text-sm  border border-[#5A5A5A]  placeholder:text-gray-400"
+      {/* Initial */}
+      <input
+        type="text"
+        name="initial"
+        id="initial"
+        value={data.initial}
+        onChange={handleChange}
+        placeholder="Enter your last name"
+        className="w-full p-3 rounded-lg text-sm border border-gray-400 placeholder-gray-600"
+      />
 
-             />
+      {/* Mobile Number */}
+      <input
+        type="text"
+        name="mobileNumber"
+        id="mobileNumber"
+        value={data.mobileNumber}
+        onChange={handleChange}
+        placeholder="Enter your mobile number"
+        className="w-full p-3 rounded-lg text-sm border border-gray-400 placeholder-gray-600"
+      />
 
-            <input type="text" 
-             name="emailId" 
-             id="emailId" 
-             value={data.emailId} 
-             onChange={handleChange} 
-             placeholder="Enter your EmailId"
-                className="w-full p-2 pr-10 rounded-xl text-sm  border border-[#5A5A5A] placeholder:text-gray-400"
-             />
+      {/* Email ID */}
+      <input
+        type="email"
+        name="emailId"
+        id="emailId"
+        value={data.emailId}
+        onChange={handleChange}
+        placeholder="Enter your email ID"
+        className="w-full p-3 rounded-lg text-sm border border-gray-400 placeholder-gray-600"
+      />
 
-           <div className="relative w-full">
-            {!passwordVisible ? (
-                <>
-                 <input
-                type="password"
-                name="password"
-                id="password"
-                value={data.password}
-                onChange={handleChange}
-                placeholder="Enter your password"
-                className="w-full p-2 pr-10 rounded-xl text-sm  border border-[#5A5A5A]  placeholder:text-gray-400"
-            />
-            
-            <FaEye onClick={()=>setPasswordVisible(!passwordVisible)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 cursor-pointer"
-            />
-            </>
-            ) : (
-                <>
-                       <input
-                type="text"
-                name="password"
-                id="password"
-                value={data.password}
-                onChange={handleChange}
-                placeholder="Enter your password"
-                className="w-full p-2 pr-10 rounded-xl text-sm  border border-[#5A5A5A]  placeholder:text-gray-400"
-            />
-            <FaEyeSlash
-             onClick={()=>setPasswordVisible(!passwordVisible)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 cursor-pointer"
-            />
-                </>
-           
-            )}
-           
-            </div>
+      {/* Password */}
+      <div className="relative w-full">
+        <input
+          type={passwordVisible ? "text" : "password"}
+          name="password"
+          id="password"
+          value={data.password}
+          onChange={handleChange}
+          placeholder="Enter your password"
+          className="w-full p-3 pr-10 rounded-lg text-sm border border-gray-400 placeholder-gray-600"
+        />
+        {passwordVisible ? (
+          <FaEyeSlash
+            onClick={() => setPasswordVisible(!passwordVisible)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-700 cursor-pointer"
+          />
+        ) : (
+          <FaEye
+            onClick={() => setPasswordVisible(!passwordVisible)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-700 cursor-pointer"
+          />
+        )}
+      </div>
 
-            <button type="submit" className="bg-[#2C2C2C] w-full h-10 rounded-full hover:bg-[#5B3256] transition all text-white">Create Account</button>
-        </form>
-        </div>
-    </div>
+      <button
+        type="submit"
+        className="bg-[#2C2C2C] w-full h-11 rounded-full text-white font-semibold hover:bg-[#5B3256] transition-all duration-300"
+      >
+        Create Account
+      </button>
+    </form>
+  </div>
+</div>
+
     </>
     )
 }

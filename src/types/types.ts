@@ -4,7 +4,7 @@ export interface FormData{
         mobileNumber:string,
         emailId:string,
         password:string,
-        lastname:string
+        initial:string
         
 }
 

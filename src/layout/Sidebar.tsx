@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { BsArrowLeftShort } from "react-icons/bs";
 // import {  MdSavings } from "react-icons/md";
-import { SidebarItems } from "../datas/Sidebar-items";
+import { SidebarItems } from "../data/Sidebar-items";
 import logo from '../assets/expense1.jpg'
 import { MdKeyboardArrowDown } from "react-icons/md";
 

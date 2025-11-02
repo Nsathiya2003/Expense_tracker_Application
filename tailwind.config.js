@@ -10,7 +10,8 @@ export default {
         "dark-purple": "#1B1B1B",
         "light-white": "rgba(255,255,255,0.18)",
         "light-grey":"rgba(30, 23, 23, 0.18)",
-        "purple":'#5B3256'
+        "purple":'#5B3256',
+        // "dark-gray":
       },
     },
   },

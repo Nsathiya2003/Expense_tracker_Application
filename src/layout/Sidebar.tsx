@@ -4,10 +4,11 @@ import { BsArrowLeftShort } from "react-icons/bs";
 import { SidebarItems } from "../data/Sidebar-items";
 import logo from '../assets/expense1.jpg'
 import { MdKeyboardArrowDown } from "react-icons/md";
+import { useAppContext } from "../context/AppContext";
 
 export default function SideBar(){
-
-  const [open,setOpen] = useState(true);
+  const { open,setOpen} = useAppContext();
+  
   const [openSubMenu, setOpenSubMenu] = useState<number | null>(null);
 
   const handleSubMenuToggle = (index:number) => {

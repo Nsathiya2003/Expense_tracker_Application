@@ -1,9 +1,15 @@
+import { useAppContext } from "../context/AppContext";
 import { CardItems } from "../data/dashboard-card-items";
 
 export default function Cards() {
+    const { open} = useAppContext();
+  
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6 w-full lg:w-[1160px] px-4">
-      {CardItems.map((item, index) => {
+<div
+  className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 w-full px-6 
+    ${open ? "lg:w-[1180px] " : "lg:w-[1184px] gap-10 "}
+  `}
+>      {CardItems.map((item, index) => {
         const Icon = item.icon;
         return (
           <div
@@ -21,7 +27,7 @@ export default function Cards() {
 
               {/* Icon Section */}
               <div className="p-3 bg-[#00C8DC]/20 rounded-full flex justify-center items-center">
-                <Icon className="w-8 h-8 text-[#00C8DC]" />
+                <Icon className="w-8 h-8 text-[#00C8DC]"  style={{ color: item.color }} />
               </div>
             </div>
 
@@ -29,12 +35,12 @@ export default function Cards() {
             <div className="flex justify-between items-end mt-4">
               <div>
                 <p className="text-gray-400 text-sm">Records (30 days)</p>
-                <h3 className="text-xl font-bold">{item.totalRecords}</h3>
+                <h3 className="text-xl font-bold"  style={{ color: item.color }}>{item.totalRecords}</h3>
               </div>
 
               <div className="text-right">
                 <p className="text-gray-400 text-sm">Total Amount</p>
-                <h3 className="text-xl font-bold text-[#00C8DC]">₹{item.totalAmount}</h3>
+                <h3 className="text-xl font-bold text-[#00C8DC]"  style={{ color: item.color }}>₹{item.totalAmount}</h3>
               </div>
             </div>
           </div>

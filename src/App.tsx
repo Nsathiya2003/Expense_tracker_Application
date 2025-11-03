@@ -12,23 +12,13 @@ function App() {
 
   return (
    <BrowserRouter>
-   {/* <Router> */}
-      <Routes>
-         <Route path='/' element={<Login/>}/>
-         <Route path='/register' element={<Register/>}/>
-         <Route path='/dashboard' element={
-            <MainLayout>
-            <Dashboard/>
-            </MainLayout>
-            }/>
-         <Route path ='/forgot-password' element={<ForgotPassword/>}/>
-         <Route path ='/reset-password' element={
-            <ResetPassword/>
-            } />
-
-
-      </Routes>
-   {/* </Router> */}
+         <Routes>
+            <Route path='/' element={<Login/>}/>
+            <Route path='/register' element={<Register/>}/>
+            <Route path='/dashboard' element={<MainLayout> <Dashboard/></MainLayout>}/>
+            <Route path ='/forgot-password' element={<ForgotPassword/>}/>
+            <Route path ='/reset-password' element={<ResetPassword/>} />
+         </Routes>
    </BrowserRouter>
   )
 }

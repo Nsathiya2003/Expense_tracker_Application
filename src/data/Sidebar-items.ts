@@ -49,9 +49,9 @@ export const SidebarItems = [
   },
   {
     label: "Profile Setting",
-    title: "SettProfile Setting",
+    title: "Profile Setting",
     icon: FaCog,
-    routes: "/settings",
+    routes: "/profile-setting",
     description: "Manage application settings",
   },
 ];

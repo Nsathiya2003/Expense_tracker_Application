@@ -1,9 +1,9 @@
 // MainLayout.tsx
-import type { MainLayoutProps } from "../types/types";
+import { Outlet } from "react-router-dom";
 import Header from "./Header";
 import SideBar from "./Sidebar";
 
-export default function MainLayout({ children }: MainLayoutProps) {
+export default function MainLayout() {
   return (
     <div className="flex min-h-screen text-white">
       {/* Sidebar */}
@@ -16,8 +16,8 @@ export default function MainLayout({ children }: MainLayoutProps) {
 
         {/* Page content */}
         <main className="flex-1 p-6 overflow-y-auto rounded-tl-2xl">
-          {children}
-        </main>
+          {<Outlet />}     
+             </main>
       </div>
     </div>
   );

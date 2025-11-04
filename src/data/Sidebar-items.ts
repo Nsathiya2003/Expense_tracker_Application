@@ -1,4 +1,4 @@
-import { FaCommentDollar, FaChartLine, FaCog } from "react-icons/fa";
+import { FaCommentDollar, FaChartLine, FaCog, FaMoneyBillWave } from "react-icons/fa";
 import { GiPayMoney, GiReceiveMoney } from "react-icons/gi";
 import { MdDashboard } from "react-icons/md";
 
@@ -31,6 +31,13 @@ export const SidebarItems = [
         routes: "/expense",
         description: "Expense data management",
       },
+      {
+        label: "Budgets",
+        title: "Budgets",
+        icon: FaMoneyBillWave,
+        routes: "/expense",
+        description: "Budget data management",
+      },
     ],
   },
   {
@@ -41,8 +48,8 @@ export const SidebarItems = [
     description: "View reports and analytics",
   },
   {
-    label: "Settings",
-    title: "Settings",
+    label: "Profile Setting",
+    title: "SettProfile Setting",
     icon: FaCog,
     routes: "/settings",
     description: "Manage application settings",

@@ -26,7 +26,7 @@ export default function SideBar(){
          <div className="flex">
       {/* Sidebar container */}
       <div
-        className={`bg-[#548f54] h-screen p-4 pt-8 relative transition-all duration-300 ${
+        className={`bg-[#548f54] h-screen h-full p-4 pt-8 relative transition-all duration-300 ${
           open ? "w-72" : "w-20"
         }`}
       >

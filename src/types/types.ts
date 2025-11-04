@@ -18,3 +18,8 @@ export interface LoginData{
 export interface MainLayoutProps {
   children: ReactNode;  // tells TS that children can be any valid React elements
 }
+
+export interface AppContextType {
+  open:boolean,
+  setOpen : (value:boolean) => void;
+}

@@ -181,7 +181,7 @@ export default function ProfileSetting() {
             ></textarea>
 
             {/* Save Button on the same row — right aligned */}
-            <button className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-6 rounded-lg shadow-md transition-all duration-200 self-end flex justify-end">
+            <button className="bg-[#548f54] hover:bg-blue-600 text-white font-medium py-2 px-6 rounded-lg shadow-md transition-all duration-200 self-end flex justify-end">
               Save
             </button>
           </div>

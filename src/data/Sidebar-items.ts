@@ -1,4 +1,9 @@
-import { FaCommentDollar, FaChartLine, FaCog, FaMoneyBillWave } from "react-icons/fa";
+import {
+  FaCommentDollar,
+  FaChartLine,
+  FaCog,
+  FaMoneyBillWave,
+} from "react-icons/fa";
 import { GiPayMoney, GiReceiveMoney } from "react-icons/gi";
 import { MdDashboard } from "react-icons/md";
 
@@ -21,21 +26,21 @@ export const SidebarItems = [
         label: "Income",
         title: "Income",
         icon: GiReceiveMoney,
-        routes: "/income",
+        routes: "/transaction/income",
         description: "Income data management",
       },
       {
         label: "Expense",
         title: "Expense",
         icon: GiPayMoney,
-        routes: "/expense",
+        routes: "/transaction/expense",
         description: "Expense data management",
       },
       {
         label: "Budgets",
         title: "Budgets",
         icon: FaMoneyBillWave,
-        routes: "/expense",
+        routes: "/budget",
         description: "Budget data management",
       },
     ],

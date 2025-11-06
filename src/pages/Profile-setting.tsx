@@ -17,9 +17,9 @@ export default function ProfileSetting() {
   };
 
   return (
-    <div className="flex flex-col items-start justify-start h-[610px] bg-light-grey p-4">
+    <div className="flex flex-col items-start justify-center h-[610px] bg-light-grey p-4">
       {/* Profile Picture */}
-      <div className="flex flex-row items-start justify-start mb-10">
+      <div className="flex flex-row items-center justify-center mb-10 mx-8  ">
         <div className="relative w-40 h-40">
           <input
             ref={fileInputRef}
@@ -38,7 +38,7 @@ export default function ProfileSetting() {
               className="w-40 h-40 rounded-full object-cover shadow-md border border-gray-200"
             />
           ) : (
-            <div className="w-40 h-40 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 text-sm font-medium shadow-inner">
+            <div className="w-40 h-40 rounded-full bg-gray-200 flex items-center justify-center  bg-[rgba(255,255,255,0.15)] text-sm font-medium shadow-inner">
               No Image
             </div>
           )}
@@ -52,7 +52,7 @@ export default function ProfileSetting() {
         </div>
         <div className="p-10">
           <p className="text-start text-lg font-bold text-[#548f54]">
-            Profile Settings
+            Profile Setting
           </p>
           <p className="text-white-500 text-sm">
             Update your personal information below
@@ -61,36 +61,44 @@ export default function ProfileSetting() {
       </div>
 
       {/* Form Section */}
-      <div className=" rounded-2xl p-2 w-[700px]">
+      <div className=" rounded-2xl p-2 w-[700px] mx-8">
         {/* Row 1 */}
         <div className="flex flex-row gap-8 mb-4">
           <div className="flex flex-col w-full">
             <label
               htmlFor="firstName"
-              className="text-sm text-gray-600 mb-2 font-medium"
+              className="text-sm text-white-600 mb-2 font-medium"
             >
-              First Name
+              First Name <span className="text-red-600">*</span>
             </label>
             <input
               type="text"
               id="firstName"
               placeholder="Enter your first name"
-              className="bg-gray-100 w-full h-10 px-4 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-700 text-sm"
+              className="w-full h-11 px-4 rounded-lg border border-gray-300 
+             bg-[rgba(255,255,255,0.15)] backdrop-blur-md 
+             text-white-600 text-sm placeholder-text-white
+             focus:outline-none focus:ring-2 focus:ring-blue-400 
+             transition-all duration-200"
             />
           </div>
 
           <div className="flex flex-col w-full">
             <label
               htmlFor="lastName"
-              className="text-sm text-gray-600 mb-2 font-medium"
+              className="text-sm text-white-600 mb-2 font-medium"
             >
-              Last Name
+              Last Name <span className="text-red-600">*</span>
             </label>
             <input
               type="text"
               id="lastName"
               placeholder="Enter your last name"
-              className="bg-gray-100 w-full h-10 px-4 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-700 text-sm"
+              className="w-full h-11 px-4 rounded-lg border border-gray-300 
+             bg-[rgba(255,255,255,0.15)] backdrop-blur-md 
+             text-white-600 text-sm placeholder-text-white
+             focus:outline-none focus:ring-2 focus:ring-blue-400 
+             transition-all duration-200"
             />
           </div>
         </div>
@@ -100,30 +108,38 @@ export default function ProfileSetting() {
           <div className="flex flex-col w-full">
             <label
               htmlFor="mobileNumber"
-              className="text-sm text-gray-600 mb-2 font-medium"
+              className="text-sm text-white-600 mb-2 font-medium"
             >
-              Phone Number
+              Phone Number <span className="text-red-600">*</span>
             </label>
             <input
               type="text"
               id="mobileNumber"
-              placeholder="Enter your phone number"
-              className="bg-gray-100 w-full h-10 px-4 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-700 text-sm"
+              placeholder="Enter your phone no"
+              className="w-full h-11 px-4 rounded-lg border border-gray-300 
+             bg-[rgba(255,255,255,0.15)] backdrop-blur-md 
+             text-white-600 text-sm placeholder-text-white
+             focus:outline-none focus:ring-2 focus:ring-blue-400 
+             transition-all duration-200"
             />
           </div>
 
           <div className="flex flex-col w-full">
             <label
               htmlFor="emailId"
-              className="text-sm text-gray-600 mb-2 font-medium"
+              className="text-sm text-white-600 mb-2 font-medium"
             >
-              Email ID
+              Email ID <span className="text-red-600">*</span>
             </label>
             <input
               type="email"
               id="emailId"
               placeholder="Enter your email"
-              className="bg-gray-100 w-full h-10 px-4 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-700 text-sm"
+              className="w-full h-11 px-4 rounded-lg border border-gray-300 
+             bg-[rgba(255,255,255,0.15)] backdrop-blur-md 
+             text-white-600 text-sm placeholder-text-white
+             focus:outline-none focus:ring-2 focus:ring-blue-400 
+             transition-all duration-200"
             />
           </div>
         </div>
@@ -133,33 +149,56 @@ export default function ProfileSetting() {
           <div className="flex flex-col w-full">
             <label
               htmlFor="age"
-              className="text-sm text-gray-600 mb-2 font-medium"
+              className="text-sm text-white-600 mb-2 font-medium"
             >
-              Age (optional)
+              Age
             </label>
             <input
               type="text"
               id="age"
               placeholder="Enter your age"
-              className="bg-gray-100 w-full h-10 px-4 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400 text-black-800 text-sm"
+              className="w-full h-11 px-4 rounded-lg border border-gray-300 
+             bg-[rgba(255,255,255,0.15)] backdrop-blur-md 
+             text-white-600 text-sm placeholder-text-white
+             focus:outline-none focus:ring-2 focus:ring-blue-400 
+             transition-all duration-200"
             />
           </div>
 
           <div className="flex flex-col w-full">
             <label
               htmlFor="gender"
-              className="text-sm text-gray-600 mb-2 font-medium"
+              className="text-sm text-white-600 mb-2 font-medium"
             >
               Gender
             </label>
             <select
               id="gender"
-              className="bg-gray-100 w-full h-10 px-4 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-700 text-sm"
+              className="w-full h-11 px-4 rounded-lg border border-gray-300 
+             bg-[rgba(255,255,255,0.15)] backdrop-blur-md 
+             text-white-600 text-sm placeholder-text-white
+             focus:outline-none focus:ring-2 focus:ring-blue-400 
+             transition-all duration-200"
             >
-              <option value="">Select Gender</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Others">Others</option>
+              <option
+                value=""
+                className="w-full h-11 px-4 rounded-lg border border-gray-300 
+             bg-[rgba(255,255,255,0.15)] backdrop-blur-md 
+             text-white-600 text-sm placeholder-text-white
+             focus:outline-none focus:ring-2 focus:ring-blue-400 
+             transition-all duration-200"
+              >
+                Select Gender
+              </option>
+              <option value="Male" className="bg-[rgba(255,255,255,0.15)]">
+                Male
+              </option>
+              <option value="Female" className="bg-[rgba(255,255,255,0.15)]">
+                Female
+              </option>
+              <option value="Others" className="bg-[rgba(255,255,255,0.15)]">
+                Others
+              </option>
             </select>
           </div>
         </div>
@@ -167,7 +206,7 @@ export default function ProfileSetting() {
         <div className="flex flex-col w-full">
           <label
             htmlFor="address"
-            className="text-sm text-gray-600 mb-2 font-medium"
+            className="text-sm text-white-600 mb-2 font-medium"
           >
             Address
           </label>
@@ -177,11 +216,15 @@ export default function ProfileSetting() {
               id="address"
               placeholder="Address"
               rows={4}
-              className="bg-gray-100 w-full h-20 px-4 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-700 text-sm resize-none"
+              className="w-full h-20 px-4 rounded-lg border border-gray-300 
+             bg-[rgba(255,255,255,0.15)] backdrop-blur-md 
+             text-white-600 text-sm placeholder-text-white
+             focus:outline-none focus:ring-2 focus:ring-blue-400 
+             transition-all duration-200 p-2"
             ></textarea>
 
             {/* Save Button on the same row — right aligned */}
-            <button className="bg-[#548f54] hover:bg-blue-600 text-white font-medium py-2 px-6 rounded-lg shadow-md transition-all duration-200 self-end flex justify-end">
+            <button className="bg-[#548f54] hover:bg-[#5B3256] text-white font-medium py-2 px-6 rounded-lg shadow-md transition-all duration-200 self-end flex justify-end">
               Save
             </button>
           </div>

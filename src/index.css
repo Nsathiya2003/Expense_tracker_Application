@@ -2,14 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-body{
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-    background-color: #446144;
-    /* background-color: #548f54; */
-        background-color: #354135;
-                /* background-color: #2a2e2a; */
-
-
+body {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  background-color: #446144;
+  /* background-color: #548f54; */
+  background-color: #354135;
+  /* background-color: #2a2e2a; */
+  /* background-color: rgb(184, 227, 241); */
 }

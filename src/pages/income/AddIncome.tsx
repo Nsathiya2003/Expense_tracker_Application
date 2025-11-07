@@ -1,21 +1,23 @@
-export default function Income() {
+export default function AddIncome() {
   return (
     <>
-      <div className="flex flex items-start justify-start w-full h-min-screen ">
-        <h1 className="text-[#2C2C2C] text-bold">Add Income</h1>
-        <div className=" rounded-2xl p-4 w-[700px] mx-4">
+      <div className="h-min-screen p-2">
+        <h1 className="text-[#548f54] text-bold text-xl font-semibold px-8">
+          Add Income
+        </h1>
+        <div className=" rounded-2xl p-4 w-[450px] mx-4">
           {/* Row 1 */}
           <div className="flex flex-row gap-8 mb-4">
             <div className="flex flex-col w-full">
               <label
                 htmlFor="gender"
-                className="text-sm text-white-600 mb-2 font-medium"
+                className="text-sm text-white-600 mb-2 font-medium "
               >
                 Choose Category<span className="text-red-600 p-2">*</span>
               </label>
               <select
                 id="gender"
-                className="w-[400px] h-11 px-4 rounded-lg border border-gray-300 
+                className="w-[350px] h-11 px-4 rounded-lg border border-gray-300 
              bg-[rgba(255,255,255,0.15)] backdrop-blur-md 
              text-white-600 text-sm placeholder-text-white
              focus:outline-none focus:ring-2 focus:ring-blue-400 
@@ -75,7 +77,7 @@ export default function Income() {
                 type="text"
                 id="income_amount"
                 placeholder="Enter your amount"
-                className="w-[400px] h-11 px-4 rounded-lg border border-gray-300 
+                className="w-[350px] h-11 px-4 rounded-lg border border-gray-300 
              bg-[rgba(255,255,255,0.15)] backdrop-blur-md 
              text-white-600 text-sm placeholder-text-white
              focus:outline-none focus:ring-2 focus:ring-blue-400 
@@ -96,7 +98,7 @@ export default function Income() {
               <input
                 type="date"
                 id="income_date"
-                className="w-[400px] h-11 px-4 rounded-lg border border-gray-300 
+                className="w-[350px] h-11 px-4 rounded-lg border border-gray-300 
              bg-[rgba(255,255,255,0.15)] backdrop-blur-md 
              text-white-600 text-sm placeholder-text-white
              focus:outline-none focus:ring-2 focus:ring-blue-400 
@@ -116,7 +118,7 @@ export default function Income() {
               </label>
               <select
                 id="payment_mode"
-                className="w-[400px] h-11 px-4 rounded-lg border border-gray-300 
+                className="w-[350px] h-11 px-4 rounded-lg border border-gray-300 
              bg-[rgba(255,255,255,0.15)] backdrop-blur-md 
              text-white-600 text-sm placeholder-text-white
              focus:outline-none focus:ring-2 focus:ring-blue-400 
@@ -124,7 +126,7 @@ export default function Income() {
               >
                 <option
                   value=""
-                  className="w-full h-11 px-4 rounded-lg border border-gray-300 
+                  className="w-[350px] h-11 px-4 rounded-lg border border-gray-300 
              bg-[rgba(255,255,255,0.15)] backdrop-blur-md 
              text-white-600 text-sm placeholder-text-white
              focus:outline-none focus:ring-2 focus:ring-blue-400 
@@ -170,7 +172,7 @@ export default function Income() {
                 id="address"
                 placeholder="Address"
                 rows={4}
-                className="w-[400px] h-20 px-4 rounded-lg border border-gray-300 
+                className="w-[350px] h-20 px-4 rounded-lg border border-gray-300 
              bg-[rgba(255,255,255,0.15)] backdrop-blur-md 
              text-white-600 text-sm placeholder-text-white
              focus:outline-none focus:ring-2 focus:ring-blue-400 

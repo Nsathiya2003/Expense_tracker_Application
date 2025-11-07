@@ -13,6 +13,7 @@ export default {
         purple: "#5B3256",
         "light-blue": " rgb(184, 227, 241)",
         // "dark-gray":
+        purple: "#50404eff",
       },
     },
   },

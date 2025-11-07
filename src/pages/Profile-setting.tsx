@@ -38,7 +38,7 @@ export default function ProfileSetting() {
               className="w-40 h-40 rounded-full object-cover shadow-md border border-gray-200"
             />
           ) : (
-            <div className="w-40 h-40 rounded-full bg-gray-200 flex items-center justify-center  bg-[rgba(255,255,255,0.15)] text-sm font-medium shadow-inner">
+            <div className="w-40 h-40 rounded-full flex items-center justify-center  bg-[rgba(255,255,255,0.15)] text-sm font-medium shadow-inner">
               No Image
             </div>
           )}

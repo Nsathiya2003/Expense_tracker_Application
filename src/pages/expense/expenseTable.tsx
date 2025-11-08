@@ -6,7 +6,7 @@ import FilterDialog from "../../component/filter";
 import { IoIosArrowForward } from "react-icons/io";
 import { IoIosArrowBack } from "react-icons/io";
 
-export default function IncomeTable() {
+export default function ExpenseTable() {
   const data = [
     {
       id: 1,
@@ -62,7 +62,7 @@ export default function IncomeTable() {
   const totalPages = Math.ceil(data.length / itemsPerPage);
 
   return (
-    <div className="overflow-x-auto mt-24 px-6 text-gray-200">
+    <div className="overflow-x-auto mt-10 px-6 text-gray-200">
       {/* Header Section */}
       <div className="flex flex-wrap items-center justify-between mb-6">
         <h1 className="text-[#54af54] font-semibold text-2xl tracking-wide">

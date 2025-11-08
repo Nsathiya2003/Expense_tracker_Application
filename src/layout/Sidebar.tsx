@@ -21,7 +21,7 @@ export default function SideBar() {
 
   return (
     <div
-      className={`bg-[#548f54] h-screen p-4 pt-8 relative transition-all duration-300 ${
+      className={`bg-[#548f54] h-screen sticky top-0 p-4 pt-8 transition-all duration-300 ${
         open ? "w-72" : "w-20"
       }`}
     >
@@ -49,7 +49,11 @@ export default function SideBar() {
       </div>
 
       {/* Menu Section */}
-      <div className={`mt-8 text-white text-lg font-medium ${!open ? "pl-0" : "pl-2"}`}>
+      <div
+        className={`mt-8 text-white text-lg font-medium ${
+          !open ? "pl-0" : "pl-2"
+        }`}
+      >
         {SidebarItems.map((item, index) => {
           const Icon = item.icon;
           const hasSubItems = !!item.subItems;

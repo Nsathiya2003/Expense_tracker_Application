@@ -46,11 +46,11 @@ export const SidebarItems = [
     ],
   },
   {
-    label: "Reports",
-    title: "Reports",
+    label: "Saving Goals",
+    title: "Saving Goals",
     icon: FaChartLine,
-    routes: "/reports",
-    description: "View reports and analytics",
+    routes: "/goal",
+    description: "View goal",
   },
   {
     label: "Profile Setting",

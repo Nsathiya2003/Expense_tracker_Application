@@ -10,7 +10,7 @@ export default function AddIncome() {
           <div className="flex flex-row gap-8 mb-4">
             <div className="flex flex-col w-full">
               <label
-                htmlFor="gender"
+                htmlFor="category"
                 className="text-sm text-white-600 mb-2 font-medium "
               >
                 Choose Category<span className="text-red-600 p-2">*</span>
@@ -18,48 +18,16 @@ export default function AddIncome() {
               <select
                 id="gender"
                 className="w-[350px] h-11 px-4 rounded-lg border border-gray-300 
-             bg-[rgba(255,255,255,0.15)] backdrop-blur-md 
-             text-white-600 text-sm placeholder-text-white
-             focus:outline-none focus:ring-2 focus:ring-blue-400 
-             transition-all duration-200"
+             bg-[rgba(255,255,255,0.15)]"
               >
-                <option
-                  value=""
-                  className="w-full h-11 px-4 rounded-lg border border-gray-300 
-             bg-[rgba(255,255,255,0.15)] backdrop-blur-md 
-             text-white-600 text-sm placeholder-text-white
-             focus:outline-none focus:ring-2 focus:ring-blue-400 
-             transition-all duration-200"
-                >
-                  Select Gender
-                </option>
+                <option>Select Gender</option>
                 <option value="Salery" className="bg-[rgba(255,255,255,0.15)]">
                   Salery
                 </option>
-                <option
-                  value="Business"
-                  className="bg-[rgba(255,255,255,0.15)]"
-                >
-                  Business
-                </option>
-                <option
-                  value="Investments"
-                  className="bg-[rgba(255,255,255,0.15)]"
-                >
-                  Investments
-                </option>
-                <option
-                  value="Freelancing"
-                  className="bg-[rgba(255,255,255,0.15)]"
-                >
-                  Freelancing
-                </option>
-                <option
-                  value="Freelancing"
-                  className="bg-[rgba(255,255,255,0.15)]"
-                >
-                  Others
-                </option>
+                <option value="Business">Business</option>
+                <option value="Investments">Investments</option>
+                <option value="Freelancing">Freelancing</option>
+                <option value="Freelancing">Others</option>
               </select>
             </div>
           </div>
@@ -143,18 +111,8 @@ export default function AddIncome() {
                 <option value="G-pay" className="bg-[rgba(255,255,255,0.15)]">
                   G-pay
                 </option>
-                <option
-                  value="Phone-pay"
-                  className="bg-[rgba(255,255,255,0.15)]"
-                >
-                  Phone-pay
-                </option>
-                <option
-                  value="Freelancing"
-                  className="bg-[rgba(255,255,255,0.15)]"
-                >
-                  Others
-                </option>
+                <option value="Phone-pay">Phone-pay</option>
+                <option value="Freelancing">Others</option>
               </select>
             </div>
           </div>
@@ -164,7 +122,7 @@ export default function AddIncome() {
               htmlFor="address"
               className="text-sm text-white-600 mb-2 font-medium"
             >
-              Address
+              Notes(optional)
             </label>
             <div className="flex items-end justify-between gap-8">
               <textarea

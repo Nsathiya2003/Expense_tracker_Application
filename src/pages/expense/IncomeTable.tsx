@@ -66,7 +66,7 @@ export default function IncomeTable() {
       {/* Header Section */}
       <div className="flex flex-wrap items-center justify-between mb-6">
         <h1 className="text-[#54af54] font-semibold text-2xl tracking-wide">
-          View Income
+          View Expense
         </h1>
 
         {/* Search Box and Filter Icon */}

@@ -8,10 +8,9 @@ import ForgotPassword from "./pages/Forgot-password";
 import ResetPassword from "./pages/Reset-password";
 import MainLayout from "./layout/Main-layout";
 import ProfileSetting from "./pages/Profile-setting";
-import Income from "./pages/income/AddIncome";
-import Expense from "./pages/Expense";
-import Budget from "./pages/Budget";
 import ViewPage from "./pages/income/ViewIncome";
+import ViewExpense from "./pages/expense/ViewExpense";
+import ViewBudget from "./pages/budget/ViewBudget";
 
 function App() {
   return (
@@ -27,10 +26,10 @@ function App() {
         <Route element={<MainLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile-setting" element={<ProfileSetting />} />
-          <Route path="/transaction" element={<Income />} />
+          <Route path="/transaction" element={<ViewPage />} />
           <Route path="/transaction/income" element={<ViewPage />} />
-          <Route path="/transaction/expense" element={<Expense />} />
-          <Route path="/budget" element={<Budget />} />
+          <Route path="/transaction/expense" element={<ViewExpense />} />
+          <Route path="/transaction/budget" element={<ViewBudget />} />
         </Route>
       </Routes>
     </BrowserRouter>

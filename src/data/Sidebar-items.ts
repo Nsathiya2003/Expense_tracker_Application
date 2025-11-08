@@ -19,7 +19,7 @@ export const SidebarItems = [
     label: "Transaction",
     title: "Transaction",
     icon: FaCommentDollar,
-    routes: "/transaction",
+    routes: "/transaction/income",
     description: "Manage transactions (both expense and income)",
     subItems: [
       {
@@ -40,7 +40,7 @@ export const SidebarItems = [
         label: "Budgets",
         title: "Budgets",
         icon: FaMoneyBillWave,
-        routes: "/budget",
+        routes: "/transaction/budget",
         description: "Budget data management",
       },
     ],

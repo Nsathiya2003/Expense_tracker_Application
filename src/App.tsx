@@ -11,6 +11,7 @@ import ProfileSetting from "./pages/Profile-setting";
 import ViewPage from "./pages/income/ViewIncome";
 import ViewExpense from "./pages/expense/ViewExpense";
 import ViewBudget from "./pages/budget/ViewBudget";
+import ViewGoal from "./pages/goal/viewGoal";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           <Route path="/transaction/income" element={<ViewPage />} />
           <Route path="/transaction/expense" element={<ViewExpense />} />
           <Route path="/transaction/budget" element={<ViewBudget />} />
+          <Route path="/goal" element={<ViewGoal />}></Route>
         </Route>
       </Routes>
     </BrowserRouter>

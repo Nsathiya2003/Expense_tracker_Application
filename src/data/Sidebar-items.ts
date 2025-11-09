@@ -5,6 +5,7 @@ import {
   FaMoneyBillWave,
 } from "react-icons/fa";
 import { GiPayMoney, GiReceiveMoney } from "react-icons/gi";
+import { IoIosLogOut, IoIosNotifications } from "react-icons/io";
 import { MdDashboard } from "react-icons/md";
 
 export const SidebarItems = [
@@ -58,5 +59,19 @@ export const SidebarItems = [
     icon: FaCog,
     routes: "/profile-setting",
     description: "Manage application settings",
+  },
+  {
+    label: "Notifications",
+    title: "Notifications",
+    icon: IoIosNotifications,
+    routes: "/notification",
+    description: "Manage application notification",
+  },
+  {
+    label: "Logout",
+    title: "Logout",
+    icon: IoIosLogOut,
+    routes: "/",
+    description: "Logout",
   },
 ];

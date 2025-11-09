@@ -1,159 +1,82 @@
-// export default function AddIncome() {
-//   return (
-//     <>
-//       <div className="h-min-screen p-2">
-//         <h1 className="text-[#548f54] text-bold text-xl font-semibold px-8">
-//           Add Income
-//         </h1>
-//         <div className=" rounded-2xl p-4 w-[450px] mx-4">
-//           {/* Row 1 */}
-//           <div className="flex flex-row gap-8 mb-4">
-//             <div className="flex flex-col w-full">
-//               <label
-//                 htmlFor="category"
-//                 className="text-sm text-white-600 mb-2 font-medium "
-//               >
-//                 Choose Category<span className="text-red-600 p-2">*</span>
-//               </label>
-//               <select
-//                 id="gender"
-//                 className="w-[350px] h-11 px-4 rounded-lg border border-gray-300
-//              bg-[rgba(255,255,255,0.15)]"
-//               >
-//                 <option>Select Gender</option>
-//                 <option value="Salery" className="bg-[rgba(255,255,255,0.15)]">
-//                   Salery
-//                 </option>
-//                 <option value="Business">Business</option>
-//                 <option value="Investments">Investments</option>
-//                 <option value="Freelancing">Freelancing</option>
-//                 <option value="Freelancing">Others</option>
-//               </select>
-//             </div>
-//           </div>
-
+import { useState } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
-
-//           {/* Row 2 */}
-//           <div className="flex flex-row gap-8 mb-4">
-//             <div className="flex flex-col w-full">
-//               <label
-//                 htmlFor="income_amount"
-//                 className="text-sm text-white-600 mb-2 font-medium"
-//               >
-//                 Income Amount<span className="text-red-600">*</span>
-//               </label>
-//               <input
-//                 type="text"
-//                 id="income_amount"
-//                 placeholder="Enter your amount"
-//                 className="w-[350px] h-11 px-4 rounded-lg border border-gray-300
-//              bg-[rgba(255,255,255,0.15)] backdrop-blur-md
-//              text-white-600 text-sm placeholder-text-white
-//              focus:outline-none focus:ring-2 focus:ring-blue-400
-//              transition-all duration-200"
-//               />
-//             </div>
-//           </div>
-
-//           {/* Row 3 */}
-//           <div className="flex flex-row gap-8 mb-4">
-//             <div className="flex flex-col w-full">
-//               <label
-//                 htmlFor="income_date"
-//                 className="text-sm text-white-600 mb-2 font-medium"
-//               >
-//                 Date <span className="text-red-600">*</span>
-//               </label>
-//               <input
-//                 type="date"
-//                 id="income_date"
-//                 className="w-[350px] h-11 px-4 rounded-lg border border-gray-300
-//              bg-[rgba(255,255,255,0.15)] backdrop-blur-md
-//              text-white-600 text-sm placeholder-text-white
-//              focus:outline-none focus:ring-2 focus:ring-blue-400
-//              transition-all duration-200"
-//               />
-//             </div>
-//           </div>
-
-//           {/* Row 4 */}
-//           <div className="flex flex-row gap-8 mb-4">
-//             <div className="flex flex-col w-full">
-//               <label
-//                 htmlFor="payment_mode"
-//                 className="text-sm text-white-600 mb-2 font-medium"
-//               >
-//                 Choose Payment Mode<span className="text-red-600 p-2">*</span>
-//               </label>
-//               <select
-//                 id="payment_mode"
-//                 className="w-[350px] h-11 px-4 rounded-lg border border-gray-300
-//              bg-[rgba(255,255,255,0.15)] backdrop-blur-md
-//              text-white-600 text-sm placeholder-text-white
-//              focus:outline-none focus:ring-2 focus:ring-blue-400
-//              transition-all duration-200"
-//               >
-//                 <option
-//                   value=""
-//                   className="w-[350px] h-11 px-4 rounded-lg border border-gray-300
-//              bg-[rgba(255,255,255,0.15)] backdrop-blur-md
-//              text-white-600 text-sm placeholder-text-white
-//              focus:outline-none focus:ring-2 focus:ring-blue-400
-//              transition-all duration-200"
-//                 >
-//                   Select Payment Mode
-//                 </option>
-//                 <option value="Cash" className="bg-[rgba(255,255,255,0.15)]">
-//                   Cash
-//                 </option>
-//                 <option value="Account" className="bg-[rgba(255,255,255,0.15)]">
-//                   Account
-//                 </option>
-//                 <option value="G-pay" className="bg-[rgba(255,255,255,0.15)]">
-//                   G-pay
-//                 </option>
-//                 <option value="Phone-pay">Phone-pay</option>
-//                 <option value="Freelancing">Others</option>
-//               </select>
-//             </div>
-//           </div>
-//           {/* Address Field */}
-//           <div className="flex flex-col w-full">
-//             <label
-//               htmlFor="address"
-//               className="text-sm text-white-600 mb-2 font-medium"
-//             >
-//               Notes(optional)
-//             </label>
-//             <div className="flex items-end justify-between gap-8">
-//               <textarea
-//                 name="address"
-//                 id="address"
-//                 placeholder="Address"
-//                 rows={4}
-//                 className="w-[350px] h-20 px-4 rounded-lg border border-gray-300
-//              bg-[rgba(255,255,255,0.15)] backdrop-blur-md
-//              text-white-600 text-sm placeholder-text-white
-//              focus:outline-none focus:ring-2 focus:ring-blue-400
-//              transition-all duration-200 p-2"
-//               ></textarea>
-
-//               {/* Save Button on the same row — right aligned */}
-//             </div>
-//           </div>
-//           <div className=" flex justify-center items-center">
-//             <button className="bg-[#548f54] hover:bg-[#5B3256] text-white font-medium py-2 px-6 my-4 rounded-lg shadow-md transition-all duration-200">
-//               Save
-//             </button>
-//           </div>
-//         </div>
-//       </div>
-//     </>
-//   );
-// }
+import * as Dialog from "@radix-ui/react-dialog";
+import { FiX } from "react-icons/fi";
 
 export default function AddIncome() {
+  const [openDialog, setOpenDialog] = useState(false);
+
+  function DialogGoalBody({ onClose }: { onClose: () => void }) {
+    const [choice, setChoice] = useState<"yes" | "no" | null>(null);
+
+    return (
+      <div className="flex flex-col gap-4">
+        {/* Question */}
+        <label className="text-sm font-medium">
+          Do you want to contribute part of this income to your saving goal?
+        </label>
+
+        {/* Radio Buttons */}
+        <div className="flex gap-6">
+          <label className="flex items-center gap-2">
+            <input
+              type="radio"
+              name="goal_choice"
+              value="yes"
+              checked={choice === "yes"}
+              onChange={() => setChoice("yes")}
+              className="accent-[#548f54] w-4 h-4"
+            />
+            Yes
+          </label>
+
+          <label className="flex items-center gap-2">
+            <input
+              type="radio"
+              name="goal_choice"
+              value="no"
+              checked={choice === "no"}
+              onChange={() => setChoice("no")}
+              className="accent-[#548f54] w-4 h-4"
+            />
+            No
+          </label>
+        </div>
+
+        {/* Conditional Goal Fields */}
+        {choice === "yes" && (
+          <>
+            <div className="flex flex-col gap-3 mt-2">
+              <label className="text-sm">Choose Saving Goal</label>
+              <select className="h-10 px-3 rounded-md bg-[rgba(255,255,255,0.15)] border border-gray-400 text-white text-sm">
+                <option>Select a goal</option>
+                <option>Emergency Fund</option>
+                <option>Vacation</option>
+                <option>New Vehicle</option>
+                <option>Others</option>
+              </select>
+
+              <label className="text-sm">Amount to Contribute</label>
+              <input
+                type="number"
+                placeholder="Enter amount"
+                className="h-10 px-3 rounded-md bg-[rgba(255,255,255,0.15)] border border-gray-400 text-white text-sm"
+              />
+            </div>
+          </>
+        )}
+
+        {/* Confirm Button */}
+        <button
+          onClick={onClose}
+          className="mt-6 bg-[#548f54] hover:bg-green-600 rounded-md py-2 text-sm font-medium"
+        >
+          {choice === "yes" ? "Confirm & Save" : "Close"}
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-full">
       <h1 className="text-[#548f54] text-2xl font-semibold mb-4 px-2">
@@ -176,9 +99,9 @@ export default function AddIncome() {
               <select
                 id="category"
                 className="h-11 w-full px-4 pr-10 rounded-lg border border-gray-400
-      bg-[rgba(255,255,255,0.15)] text-white text-sm
-      focus:outline-none focus:ring-2 focus:ring-green-400
-      transition-all duration-200 appearance-none"
+                bg-[rgba(255,255,255,0.15)] text-white text-sm
+                focus:outline-none focus:ring-2 focus:ring-green-400
+                transition-all duration-200 appearance-none"
                 style={{
                   backgroundColor: "rgba(255,255,255,0.15)",
                   color: "white",
@@ -265,33 +188,47 @@ export default function AddIncome() {
               <option value="Others">Others</option>
             </select>
           </div>
-
-          {/* Notes */}
-          <div className="flex flex-col lg:col-span-2">
-            <label
-              htmlFor="notes"
-              className="text-sm text-white mb-2 font-medium"
-            >
-              Notes (Optional)
-            </label>
-            <textarea
-              id="notes"
-              placeholder="Add any notes here..."
-              rows={3}
-              className="w-full px-4 py-2 rounded-lg border border-gray-400 
-              bg-[rgba(255,255,255,0.15)] text-white text-sm placeholder-white
-              focus:outline-none focus:ring-2 focus:ring-green-400 transition-all duration-200"
-            ></textarea>
-          </div>
         </div>
 
         {/* Save Button */}
         <div className="flex justify-start">
-          <button className="bg-[#548f54] hover:bg-[#5B3256] text-white font-medium py-2 px-6 rounded-lg shadow-md transition-all duration-200">
+          <button
+            onClick={() => setOpenDialog(true)}
+            className="bg-[#548f54] hover:bg-[#5B3256] text-white font-medium py-2 px-6 rounded-lg shadow-md transition-all duration-200"
+          >
             Save
           </button>
         </div>
       </div>
+
+      {/* 💬 Radix Dialog for Goal Saving */}
+      <Dialog.Root open={openDialog} onOpenChange={setOpenDialog}>
+        <Dialog.Portal>
+          {/* Overlay */}
+          <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm" />
+
+          {/* Content */}
+          <Dialog.Content
+            className="fixed top-1/2 left-1/2 w-[420px] -translate-x-1/2 -translate-y-1/2 
+      bg-[#2E2E48] rounded-2xl shadow-lg p-6 text-white focus:outline-none"
+          >
+            {/* Header */}
+            <div className="flex justify-between items-center mb-4">
+              <Dialog.Title className="text-lg font-semibold">
+                Saving Goal Contribution
+              </Dialog.Title>
+              <Dialog.Close asChild>
+                <button className="text-gray-400 hover:text-white">
+                  <FiX size={22} />
+                </button>
+              </Dialog.Close>
+            </div>
+
+            {/* Body */}
+            <DialogGoalBody onClose={() => setOpenDialog(false)} />
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
     </div>
   );
 }

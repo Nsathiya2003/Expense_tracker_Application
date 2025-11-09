@@ -5,6 +5,7 @@ import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 import { IoEye } from "react-icons/io5";
 import { useState } from "react";
 import FilterDialog from "../../component/filter";
+import { useNavigate } from "react-router-dom";
 
 export default function GoalTable() {
   const data = [
@@ -44,7 +45,10 @@ export default function GoalTable() {
       mode: "Cash",
     },
   ];
-
+  const navigate = useNavigate();
+  const ViewHistory = () => {
+    navigate("/goal-history");
+  };
   const [filterOpen, setFilterOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
@@ -104,7 +108,10 @@ export default function GoalTable() {
                   </div>
                   {/* View */}
                   <div className="relative group">
-                    <IoEye className="text-green-500 text-xl cursor-pointer hover:text-green-400" />
+                    <IoEye
+                      className="text-green-500 text-xl cursor-pointer hover:text-green-400"
+                      onClick={ViewHistory}
+                    />
                     <span className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                       View
                     </span>

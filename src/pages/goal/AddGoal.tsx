@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function AddGoal() {
   return (
     <div className="h-min-screen">

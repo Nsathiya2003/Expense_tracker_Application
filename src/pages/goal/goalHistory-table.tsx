@@ -5,6 +5,7 @@ import { IoEye } from "react-icons/io5";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import FilterDialog from "../../component/filter";
+import { FiFilter } from "react-icons/fi";
 
 export default function GoalHistoryTable() {
   const data = [
@@ -57,16 +58,47 @@ export default function GoalHistoryTable() {
   const currentData = data.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(data.length / itemsPerPage);
 
+  const handleFilter = () => {
+    setFilterOpen(true);
+  };
+
   return (
-    <div className="flex flex-col items-center mt-8 w-full">
+    <div className="flex flex-col mt-8 w-full items-center">
+      {/* Header Row */}
+      <div className="flex items-center justify-between w-full max-w-[1100px] mb-6">
+        {/* Title */}
+        <h1 className="text-[#54af54] font-semibold text-2xl tracking-wide">
+          View Income
+        </h1>
+
+        {/* Search Box + Filter Icon */}
+        <div className="flex items-center gap-3">
+          {/* Search Input */}
+          <div className="flex items-center border border-gray-600 rounded-lg bg-[rgba(255,255,255,0.1)] backdrop-blur-md overflow-hidden">
+            <input
+              type="text"
+              name="search"
+              id="search"
+              placeholder="Search here..."
+              className="w-[250px] h-11 px-4 bg-transparent text-white placeholder:text-gray-400 focus:outline-none"
+            />
+          </div>
+
+          {/* Filter Icon */}
+          <FiFilter
+            className="text-[#54af54] text-2xl cursor-pointer hover:text-[#6ecf6e] transition"
+            onClick={handleFilter}
+          />
+        </div>
+      </div>
+
       {/* Table Container */}
       <div
         className="bg-[#1E1E2E] border border-[#2B2B40] shadow-md 
-                   w-full max-w-[1100px] h-[266px] overflow-y-auto overflow-x-hidden 
-                   scrollbar-thin scrollbar-thumb-[#54af54]/70 scrollbar-track-[#2E2E48]"
+               w-full max-w-[1100px] h-[266px] overflow-y-auto overflow-x-hidden 
+               scrollbar-thin scrollbar-thumb-[#54af54]/70 scrollbar-track-[#2E2E48]"
       >
         <table className="w-full text-sm text-gray-200">
-          {/* Table Header */}
           <thead className="bg-[#2E2E48] text-white uppercase text-xs tracking-wider sticky top-0 z-10">
             <tr>
               <th className="py-3 px-4 text-left font-semibold">Sl.No</th>
@@ -80,7 +112,6 @@ export default function GoalHistoryTable() {
             </tr>
           </thead>
 
-          {/* Table Body */}
           <tbody>
             {currentData.map((item, index) => (
               <tr
@@ -96,8 +127,6 @@ export default function GoalHistoryTable() {
                 </td>
                 <td className="py-3 px-4">{item.date}</td>
                 <td className="py-3 px-4">{item.mode}</td>
-
-                {/* Action Buttons */}
                 <td className="py-3 px-4 flex justify-center items-center gap-4">
                   <BiEdit
                     className="text-blue-400 text-lg cursor-pointer hover:text-blue-300 transition"
@@ -116,7 +145,6 @@ export default function GoalHistoryTable() {
               </tr>
             ))}
 
-            {/* No Data */}
             {currentData.length === 0 && (
               <tr>
                 <td

@@ -37,8 +37,8 @@ export const SidebarItems = [
         description: "Expense data management",
       },
       {
-        label: "Budgets",
-        title: "Budgets",
+        label: "Budget",
+        title: "Budget",
         icon: FaMoneyBillWave,
         routes: "/transaction/budget",
         description: "Budget data management",

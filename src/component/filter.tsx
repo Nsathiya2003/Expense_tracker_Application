@@ -16,7 +16,7 @@ export default function FilterDialog({
 
         {/* Content positioned below the icon */}
         <Dialog.Content
-          className={`absolute top-[250px] right-[80px] bg-[#2E2E48] text-white p-6 rounded-2xl 
+          className={`absolute top-[200px] right-[80px] bg-[#2E2E48] text-white p-6 rounded-2xl 
           shadow-2xl border border-gray-700 w-[360px]
           data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp`}
         >

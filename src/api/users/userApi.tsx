@@ -1,8 +1,8 @@
-import { apiClient } from "./apiClient";
-import { handleRequest } from "./requestHandler";
+import { apiClient } from "../apiClient";
+import { handleRequest } from "../requestHandler";
 
 export interface CreateUserPayload {
-  firstName: string;
+  username: string;
   lastName: string;
   emailId: string;
   password: string;

@@ -9,7 +9,28 @@ export interface CreateUserPayload {
   mobileNumber: string;
 }
 
+export interface LoginUserPayload {
+  emailId: string;
+  password: string;
+}
+
+export interface ForgotUserPayload {
+  emailId: string;
+}
+
+export interface ResetPasswordPayload {
+  emailId: string;
+  password: string;
+  otp: string;
+}
+
 export const UserApi = {
   createUser: (body: CreateUserPayload) =>
     handleRequest(apiClient.post("user/create", body)),
+  loginUser: (body: LoginUserPayload) =>
+    handleRequest(apiClient.post("/user/login", body)),
+  forgotPassword: (body: ForgotUserPayload) =>
+    handleRequest(apiClient.post("/user/forgot-password", body)),
+  resetPassword: (body: ResetPasswordPayload) =>
+    handleRequest(apiClient.post("/user/reset-password", body)),
 };

@@ -14,11 +14,7 @@ export default function Register() {
   });
   const [passwordVisible, setPasswordVisible] = useState(false);
 
-  const { mutate, isPending, isError, error } = useCreateUser();
-
-  console.log("isPending----", isPending);
-  console.log("isError----", isError);
-  console.log("error----", error);
+  const { mutate, isPending } = useCreateUser();
 
   const handleChange = (
     event: React.ChangeEvent<
@@ -45,6 +41,14 @@ export default function Register() {
     };
 
     mutate(payload);
+    //set the values empty...
+    setData({
+      username: "",
+      mobileNumber: "",
+      emailId: "",
+      password: "",
+      lastName: "",
+    });
   };
 
   return (

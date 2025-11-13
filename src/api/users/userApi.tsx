@@ -24,6 +24,17 @@ export interface ResetPasswordPayload {
   otp: string;
 }
 
+export interface UpdateUserPayload {
+  user_profile: File;
+  username: string;
+  lastName: string;
+  emailId: string;
+  mobileNumber: string;
+  age?: number;
+  gender?: string;
+  address?: string;
+}
+
 export const UserApi = {
   createUser: (body: CreateUserPayload) =>
     handleRequest(apiClient.post("user/create", body)),
@@ -33,4 +44,6 @@ export const UserApi = {
     handleRequest(apiClient.post("/user/forgot-password", body)),
   resetPassword: (body: ResetPasswordPayload) =>
     handleRequest(apiClient.post("/user/reset-password", body)),
+  updateUser: (body: FormData) =>
+    handleRequest(apiClient.put("/user/update", body)),
 };

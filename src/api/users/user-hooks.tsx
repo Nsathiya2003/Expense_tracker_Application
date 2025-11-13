@@ -84,3 +84,17 @@ export const useResetPassword = () => {
     },
   });
 };
+
+export const useUpdateUser = () => {
+  return useMutation({
+    mutationFn: (body: FormData) => UserApi.updateUser(body),
+
+    onSuccess: (data) => {
+      toast.success(`${data?.message}` || "User update successfully");
+    },
+
+    onError: (error) => {
+      toast.error(`${error?.message}` || "something went wrong");
+    },
+  });
+};

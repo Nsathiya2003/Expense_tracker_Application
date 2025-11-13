@@ -1,14 +1,44 @@
 import React, { useRef, useState } from "react";
 import { IoAddCircleSharp } from "react-icons/io5";
+import { useUpdateUser } from "../api/users/user-hooks";
 
 export default function ProfileSetting() {
-  const [file, setFile] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [data, setData] = useState({
+    firstName: "",
+    lastName: "",
+    mobileNumber: "",
+    emailId: "",
+    user_profile: "",
+    age: "",
+    gender: "",
+    address: "",
+  });
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = event.target.files?.[0];
-    if (selectedFile) {
-      setFile(URL.createObjectURL(selectedFile));
+  const [file, setFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  const { mutate, isPending } = useUpdateUser();
+
+  console.log("file---", file);
+
+  const handleChange = (
+    event: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => {
+    const target = event.target as HTMLInputElement;
+
+    if (target.type === "file" && target.files?.[0]) {
+      const selectedFile = target.files[0];
+      console.log("Selected file:", selectedFile);
+      setFile(selectedFile);
+
+      //  Create preview URL for the <img>
+      setPreviewUrl(URL.createObjectURL(selectedFile));
+    } else {
+      const { name, value } = target;
+      setData((prev) => ({ ...prev, [name]: value }));
     }
   };
 
@@ -16,39 +46,59 @@ export default function ProfileSetting() {
     fileInputRef.current?.click();
   };
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    console.log("heloooo");
+    e.preventDefault();
+
+    const formData = new FormData();
+
+    formData.append("firstName", data?.firstName);
+    formData.append("lastName", data?.lastName);
+    formData.append("mobileNumber", data?.mobileNumber);
+    formData.append("emailId", data?.emailId);
+    formData.append("age", data?.age);
+    formData.append("gender", data?.gender);
+    formData.append("address", data?.address);
+    formData.append("user_profile", data?.user_profile);
+
+    mutate(formData);
+  };
+
   return (
     <div className="flex flex-col items-start justify-center h-[610px] bg-light-grey p-4">
       {/* Profile Picture */}
       <div className="flex flex-row items-center justify-center mb-10 mx-8  ">
         <div className="relative w-40 h-40">
-          <input
-            ref={fileInputRef}
-            type="file"
-            id="profile"
-            name="profile"
-            accept="image/*"
-            className="hidden"
-            onChange={handleChange}
-          />
-
-          {file ? (
-            <img
-              src={file}
-              alt="profile"
-              className="w-40 h-40 rounded-full object-cover shadow-md border border-gray-200"
+          <form action="submit" onSubmit={handleSubmit}>
+            <input
+              ref={fileInputRef}
+              type="file"
+              id="user_profile"
+              name="user_profile"
+              accept="image/*"
+              className="hidden"
+              onChange={handleChange}
             />
-          ) : (
-            <div className="w-40 h-40 rounded-full flex items-center justify-center  bg-[rgba(255,255,255,0.15)] text-sm font-medium shadow-inner">
-              No Image
-            </div>
-          )}
 
-          <button
-            onClick={handleIconClick}
-            className="absolute bottom-1 right-1 rounded-full p-1 bg-white shadow-md hover:scale-105 transition-transform"
-          >
-            <IoAddCircleSharp className="text-2xl text-blue-500" />
-          </button>
+            {previewUrl ? (
+              <img
+                src={previewUrl}
+                alt="profile"
+                className="w-40 h-40 rounded-full object-cover shadow-md border border-gray-200"
+              />
+            ) : (
+              <div className="w-40 h-40 rounded-full flex items-center justify-center bg-[rgba(255,255,255,0.15)] text-sm font-medium shadow-inner">
+                No Image
+              </div>
+            )}
+
+            <button
+              onClick={handleIconClick}
+              className="absolute bottom-1 right-1 rounded-full p-1 bg-white shadow-md hover:scale-105 transition-transform"
+            >
+              <IoAddCircleSharp className="text-2xl text-blue-500" />
+            </button>
+          </form>
         </div>
         <div className="p-10">
           <p className="text-start text-lg font-bold text-[#548f54]">
@@ -74,12 +124,15 @@ export default function ProfileSetting() {
             <input
               type="text"
               id="firstName"
+              name="firstName"
               placeholder="Enter your first name"
               className="w-full h-11 px-4 rounded-lg border border-gray-300 
-             bg-[rgba(255,255,255,0.15)] backdrop-blur-md 
-             text-white-600 text-sm placeholder-text-white
-             focus:outline-none focus:ring-2 focus:ring-blue-400 
-             transition-all duration-200"
+                bg-[rgba(255,255,255,0.15)] backdrop-blur-md 
+                text-white-600 text-sm placeholder-text-white
+                focus:outline-none focus:ring-2 focus:ring-blue-400 
+                transition-all duration-200"
+              value={data?.firstName}
+              onChange={handleChange}
             />
           </div>
 
@@ -93,12 +146,15 @@ export default function ProfileSetting() {
             <input
               type="text"
               id="lastName"
+              name="lastName"
               placeholder="Enter your last name"
               className="w-full h-11 px-4 rounded-lg border border-gray-300 
-             bg-[rgba(255,255,255,0.15)] backdrop-blur-md 
-             text-white-600 text-sm placeholder-text-white
-             focus:outline-none focus:ring-2 focus:ring-blue-400 
-             transition-all duration-200"
+                bg-[rgba(255,255,255,0.15)] backdrop-blur-md 
+                text-white-600 text-sm placeholder-text-white
+                focus:outline-none focus:ring-2 focus:ring-blue-400 
+                transition-all duration-200"
+              value={data?.lastName}
+              onChange={handleChange}
             />
           </div>
         </div>
@@ -115,12 +171,15 @@ export default function ProfileSetting() {
             <input
               type="text"
               id="mobileNumber"
+              name="mobileNumber"
               placeholder="Enter your phone no"
               className="w-full h-11 px-4 rounded-lg border border-gray-300 
              bg-[rgba(255,255,255,0.15)] backdrop-blur-md 
              text-white-600 text-sm placeholder-text-white
              focus:outline-none focus:ring-2 focus:ring-blue-400 
              transition-all duration-200"
+              value={data?.mobileNumber}
+              onChange={handleChange}
             />
           </div>
 
@@ -134,12 +193,15 @@ export default function ProfileSetting() {
             <input
               type="email"
               id="emailId"
+              name="emailId"
               placeholder="Enter your email"
               className="w-full h-11 px-4 rounded-lg border border-gray-300 
              bg-[rgba(255,255,255,0.15)] backdrop-blur-md 
              text-white-600 text-sm placeholder-text-white
              focus:outline-none focus:ring-2 focus:ring-blue-400 
              transition-all duration-200"
+              value={data?.emailId}
+              onChange={handleChange}
             />
           </div>
         </div>
@@ -156,12 +218,15 @@ export default function ProfileSetting() {
             <input
               type="text"
               id="age"
+              name="age"
               placeholder="Enter your age"
               className="w-full h-11 px-4 rounded-lg border border-gray-300 
              bg-[rgba(255,255,255,0.15)] backdrop-blur-md 
              text-white-600 text-sm placeholder-text-white
              focus:outline-none focus:ring-2 focus:ring-blue-400 
              transition-all duration-200"
+              value={data?.age}
+              onChange={handleChange}
             />
           </div>
 
@@ -174,11 +239,14 @@ export default function ProfileSetting() {
             </label>
             <select
               id="gender"
+              name="gender"
               className="w-full h-11 px-4 rounded-lg border border-gray-300 
              bg-[rgba(255,255,255,0.15)] backdrop-blur-md 
              text-white-600 text-sm placeholder-text-white
              focus:outline-none focus:ring-2 focus:ring-blue-400 
              transition-all duration-200"
+              value={data?.gender}
+              onChange={handleChange}
             >
               <option
                 value=""
@@ -221,11 +289,47 @@ export default function ProfileSetting() {
              text-white-600 text-sm placeholder-text-white
              focus:outline-none focus:ring-2 focus:ring-blue-400 
              transition-all duration-200 p-2"
+              value={data?.address}
+              onChange={handleChange}
             ></textarea>
 
             {/* Save Button on the same row — right aligned */}
-            <button className="bg-[#548f54] hover:bg-[#5B3256] text-white font-medium py-2 px-6 rounded-lg shadow-md transition-all duration-200 self-end flex justify-end">
-              Save
+            <button
+              type="submit"
+              disabled={isPending}
+              className={`bg-[#2C2C2C] w-full h-11 rounded-full text-white font-semibold transition-all duration-300 flex justify-center items-center gap-2 ${
+                isPending
+                  ? "opacity-60 cursor-not-allowed"
+                  : "hover:bg-[#5B3256]"
+              }`}
+            >
+              {isPending ? (
+                <>
+                  <svg
+                    className="animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                    ></path>
+                  </svg>
+                  <span>Updating...</span>
+                </>
+              ) : (
+                "Update Account"
+              )}
             </button>
           </div>
         </div>

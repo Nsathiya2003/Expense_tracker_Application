@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
   CreateUserPayload,
   ForgotUserPayload,
@@ -38,6 +38,7 @@ export const useLoginUser = () => {
 
       //set auth token...
       localStorage.setItem("authToken", data?.data?.access_token);
+      localStorage.setItem("user_id", data?.data?.data?._id);
       setTimeout(() => {
         navigate("/dashboard");
       }, 4000);
@@ -96,5 +97,15 @@ export const useUpdateUser = () => {
     onError: (error) => {
       toast.error(`${error?.message}` || "something went wrong");
     },
+  });
+};
+
+export const useGetUser = () => {
+  return useQuery({
+    queryKey: ["user"],
+
+    queryFn: () => UserApi.getUser(),
+    staleTime: 1000 * 60 * 5, // 5 minutes cache
+    refetchOnWindowFocus: false,
   });
 };

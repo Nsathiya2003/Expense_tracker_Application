@@ -14,6 +14,8 @@ export default function Header() {
   const handleLogout = () => {
     setLogoutConfirm(false);
     console.log("User logged out");
+    localStorage.removeItem("userId");
+
     // Add your logout logic here (e.g. clear auth, redirect)
     navigate("/");
   };

@@ -46,3 +46,5 @@ apiClient.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+export const baseImgUrl = "http://localhost:3000";

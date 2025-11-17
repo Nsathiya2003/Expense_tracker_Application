@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { IoAddCircleSharp } from "react-icons/io5";
 import { useGetUser, useUpdateUser } from "../api/users/user-hooks";
+import { baseImgUrl } from "../api/apiClient";
 
 export default function ProfileSetting() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -34,11 +35,13 @@ export default function ProfileSetting() {
         gender: userData.data.gender || "",
         address: userData.data.address || "",
       });
-      if (userData.data.user_profile) {
-        setPreviewUrl(userData.data.user_profile);
+      if (userData.data.file_path) {
+        console.log("baseImgUrl---", baseImgUrl);
+        setPreviewUrl(`${baseImgUrl}${userData?.data?.file_path}`);
       }
     }
   }, [userData]);
+  console.log("previewUrl is----", previewUrl);
 
   const handleChange = (
     event: React.ChangeEvent<

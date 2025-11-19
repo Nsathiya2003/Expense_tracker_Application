@@ -4,9 +4,12 @@ import { handleRequest } from "../requestHandler";
 export interface CreateIncomePayload {
   income_category: string;
   income_amount: number;
-  date: Date;
-  payment_mode: string;
-  notes?: string;
+  income_date: Date;
+  payment_receive_mode: string;
+  notes: string;
+  saving_contribution: boolean;
+  goal_id: string;
+  goal_contribute_amount: number;
 }
 
 export const incomeApi = {

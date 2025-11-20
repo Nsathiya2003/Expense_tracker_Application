@@ -10,18 +10,34 @@ export default function AddIncome() {
 
   const [data, setData] = useState({
     income_category: "",
-    income_amount: "", // ❗ string to prevent input freeze
+    income_amount: "",
     income_date: "",
     payment_receive_mode: "",
     notes: "",
     saving_contribution: false,
     goal_id: "",
-    goal_contribute_amount: "", // ❗ string
+    goal_contribute_amount: "",
   });
+
+  //reset form
+  const resetForm = () => {
+    setData({
+      income_category: "",
+      income_amount: "",
+      income_date: "",
+      payment_receive_mode: "",
+      notes: "",
+      saving_contribution: false,
+      goal_id: "",
+      goal_contribute_amount: "",
+    });
+
+    setChoice(null); // reset yes/no
+  };
 
   const [choice, setChoice] = useState<"yes" | "no" | null>(null);
 
-  const { mutate } = useCreateIncome();
+  const { mutate } = useCreateIncome(resetForm);
 
   const handleChange = (
     event: React.ChangeEvent<

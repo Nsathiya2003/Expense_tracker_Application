@@ -15,4 +15,5 @@ export interface CreateIncomePayload {
 export const incomeApi = {
   createIncome: (body: CreateIncomePayload) =>
     handleRequest(apiClient.post("/income/create", body)),
+  getIncome: () => handleRequest(apiClient.get("/income/find")),
 };

@@ -5,6 +5,9 @@ import { useState } from "react";
 import FilterDialog from "../../component/filter";
 import { IoIosArrowForward } from "react-icons/io";
 import { IoIosArrowBack } from "react-icons/io";
+import { useGetIncome } from "../../api/income/income-hooks";
+import TableLoader from "../../utils/TableLoader";
+import type { IncomeData } from "../../types/types";
 
 export default function IncomeTable() {
   const data = [
@@ -45,6 +48,13 @@ export default function IncomeTable() {
     },
   ];
 
+  const { data: incomeData, isPending, isError, error } = useGetIncome();
+
+  console.log("data is----", incomeData);
+  console.log("isPending----", isPending);
+  console.log("isPending----", isError);
+  console.log("isPending----", error);
+
   const [filterOpen, setFilterOpen] = useState(false);
 
   //pagination...
@@ -57,7 +67,9 @@ export default function IncomeTable() {
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentData = data.slice(indexOfFirstItem, indexOfLastItem);
+  console.log("data----", data);
+  console.log("incomeData----", incomeData?.data);
+  const currentData = incomeData?.data.slice(indexOfFirstItem, indexOfLastItem);
 
   const totalPages = Math.ceil(data.length / itemsPerPage);
 
@@ -95,7 +107,7 @@ export default function IncomeTable() {
         <table className="min-w-full text-sm">
           <thead className="bg-[#2E2E48] text-white uppercase text-xs tracking-wider">
             <tr>
-              <th className="py-3 px-4 text-left font-semibold">Sl.No</th>
+              {/* <th className="py-3 px-4 text-left font-semibold">Sl.No</th> */}
               <th className="py-3 px-4 text-left font-semibold">Category</th>
               <th className="py-3 px-4 text-left font-semibold">Amount</th>
               <th className="py-3 px-4 text-left font-semibold">Date</th>
@@ -107,28 +119,38 @@ export default function IncomeTable() {
           </thead>
 
           <tbody>
-            {currentData.map((item, index) => (
-              <tr
-                key={item.id}
-                className={`border-b border-gray-700 hover:bg-[rgba(255,255,255,0.1)] transition  ${
-                  index % 2 === 0 ? "bg-[rgba(255,255,255,0.03)]" : ""
-                }`}
-              >
-                <td className="py-4 px-4">{item.id}</td>
-                <td className="py-3 px-4">{item.category}</td>
-                <td className="py-3 px-4">{item.amount}</td>
-                <td className="py-3 px-4">{item.date}</td>
-                <td className="py-3 px-4">{item.mode}</td>
-                <td className="py-3 px-4 flex items-center gap-3">
-                  <button className="hover:scale-110 transition">
-                    <BiEdit className="text-blue-400 text-xl cursor-pointer hover:text-blue-300" />
-                  </button>
-                  <button className="hover:scale-110 transition">
-                    <MdDelete className="text-red-500 text-xl cursor-pointer hover:text-red-400" />
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {isPending ? (
+              <TableLoader />
+            ) : (
+              <>
+                {currentData.map((item: IncomeData, index: number) => (
+                  <tr
+                    key={item._id}
+                    className={`border-b border-gray-700 hover:bg-[rgba(255,255,255,0.1)] transition  ${
+                      index % 2 === 0 ? "bg-[rgba(255,255,255,0.03)]" : ""
+                    }`}
+                  >
+                    {/* <td className="py-4 px-4">{item._id}</td> */}
+                    <td className="py-3 px-4">{item.income_category}</td>
+                    <td className="py-3 px-4">{item.income_amount}</td>
+                    <td className="py-3 px-4">
+                      {item.income_date
+                        ? new Date(item?.income_date).toLocaleDateString()
+                        : "-"}
+                    </td>
+                    <td className="py-3 px-4">{item.payment_receive_mode}</td>
+                    <td className="py-3 px-4 flex items-center gap-3">
+                      <button className="hover:scale-110 transition">
+                        <BiEdit className="text-blue-400 text-xl cursor-pointer hover:text-blue-300" />
+                      </button>
+                      <button className="hover:scale-110 transition">
+                        <MdDelete className="text-red-500 text-xl cursor-pointer hover:text-red-400" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </>
+            )}
           </tbody>
         </table>
       </div>

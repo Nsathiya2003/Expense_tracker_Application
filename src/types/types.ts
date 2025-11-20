@@ -37,4 +37,6 @@ export interface IncomeData {
   saving_contribution: string;
   goal_id: string;
   goal_contribute_amount: number;
+  _id: string;
+  payment_receive_mode: string;
 }

@@ -1,3 +1,5 @@
+import type { GoalData } from "./types";
+
 export type IncomeItem = {
   _id: string;
   category: string;
@@ -12,3 +14,17 @@ export type IncomeItem = {
   updatedBy: string | null;
   __v: number;
 };
+
+export interface GoalFilterResponse {
+  status: boolean;
+  message: string;
+  data: GoalData[];
+  pagination: {
+    page: number;
+    limit: number;
+    totalRecords: number;
+    totalPages: number;
+    hasNextPage: boolean;
+    hasPrevPage: boolean;
+  };
+}

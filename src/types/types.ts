@@ -40,3 +40,11 @@ export interface IncomeData {
   _id: string;
   payment_receive_mode: string;
 }
+
+export interface GoalData {
+  goal_name: string;
+  target_amount: number;
+  deadline_date: Date;
+  notes: string;
+  _id: string;
+}

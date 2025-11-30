@@ -2,7 +2,7 @@ import { BiEdit } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
 import { FiFilter } from "react-icons/fi";
 import { useState } from "react";
-import FilterDialog from "../../component/filter";
+import FilterDialog from "../../dialog/filter";
 import { IoIosArrowForward } from "react-icons/io";
 import { IoIosArrowBack } from "react-icons/io";
 

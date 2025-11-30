@@ -2,12 +2,13 @@ import { BiEdit } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
 import { FiFilter } from "react-icons/fi";
 import { useState } from "react";
-import FilterDialog from "../../component/filter";
+import FilterDialog from "../../dialog/filter";
 import { IoIosArrowForward } from "react-icons/io";
 import { IoIosArrowBack } from "react-icons/io";
 import { useGetIncome } from "../../api/income/income-hooks";
 import TableLoader from "../../utils/TableLoader";
 import type { IncomeData } from "../../types/types";
+import { useNavigate } from "react-router-dom";
 
 export default function IncomeTable() {
   const data = [
@@ -48,14 +49,16 @@ export default function IncomeTable() {
     },
   ];
 
-  const { data: incomeData, isPending, isError, error } = useGetIncome();
-
-  console.log("data is----", incomeData);
-  console.log("isPending----", isPending);
-  console.log("isPending----", isError);
-  console.log("isPending----", error);
-
   const [filterOpen, setFilterOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleEdit = (item: IncomeData) => {
+    // setEditId(item?._id);
+    navigate(`/transaction/income/${item?._id}`);
+  };
+
+  //get all data...
+  const { data: incomeData, isPending } = useGetIncome();
 
   //pagination...
   const [currentPage, setCurrentPage] = useState(1);
@@ -114,6 +117,8 @@ export default function IncomeTable() {
               <th className="py-3 px-4 text-left font-semibold">
                 Payment Mode
               </th>
+              <th className="py-3 px-4 text-left font-semibold">Goal name</th>
+              <th className="py-3 px-4 text-left font-semibold">Goal Amount</th>
               <th className="py-3 px-4 text-left font-semibold">Action</th>
             </tr>
           </thead>
@@ -141,7 +146,10 @@ export default function IncomeTable() {
                     <td className="py-3 px-4">{item.payment_receive_mode}</td>
                     <td className="py-3 px-4 flex items-center gap-3">
                       <button className="hover:scale-110 transition">
-                        <BiEdit className="text-blue-400 text-xl cursor-pointer hover:text-blue-300" />
+                        <BiEdit
+                          className="text-blue-400 text-xl cursor-pointer hover:text-blue-300"
+                          onClick={() => handleEdit(item)}
+                        />
                       </button>
                       <button className="hover:scale-110 transition">
                         <MdDelete className="text-red-500 text-xl cursor-pointer hover:text-red-400" />
@@ -196,6 +204,9 @@ export default function IncomeTable() {
 
       {/* filter component */}
       <FilterDialog open={filterOpen} onClose={() => setFilterOpen(false)} />
+
+      {/* Add Income component*/}
+      {/* {editId && <AddIncome id={editId} />} */}
     </div>
   );
 }

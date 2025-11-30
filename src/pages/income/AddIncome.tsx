@@ -1,12 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import * as Dialog from "@radix-ui/react-dialog";
 import { FiX } from "react-icons/fi";
-import { useCreateIncome } from "../../api/income/income-hooks";
-import type { CreateIncomePayload } from "../../api/income/incomeApi";
+import {
+  useCreateIncome,
+  useGetIncomeById,
+  useUpdateIncome,
+  type updateIncomePayload,
+} from "../../api/income/income-hooks";
+import { useParams } from "react-router-dom";
+
+// type IncomeProps = {
+//   id: string;
+// };
 
 export default function AddIncome() {
   const [openDialog, setOpenDialog] = useState(false);
+  const { id } = useParams<string>();
 
   const [data, setData] = useState({
     income_category: "",
@@ -18,6 +28,34 @@ export default function AddIncome() {
     goal_id: "",
     goal_contribute_amount: "",
   });
+
+  //get income data by id
+  console.log("id----", id);
+  const { data: incomeById } = useGetIncomeById(id);
+
+  // Fetch data by ID and update state
+  useEffect(() => {
+    if (incomeById?.data) {
+      console.log(
+        "income date is----",
+        new Date(incomeById?.data?.income_date).toLocaleDateString().split("T")[
+          "0"
+        ]
+      );
+      setData({
+        income_amount: incomeById.data.income_amount,
+        income_category: incomeById.data.income_category,
+        income_date: incomeById.data.income_date
+          ? new Date(incomeById.data.income_date).toISOString().split("T")[0]
+          : "",
+        payment_receive_mode: incomeById.data.payment_receive_mode,
+        notes: incomeById.data.notes,
+        saving_contribution: incomeById.data.saving_contribution,
+        goal_contribute_amount: incomeById.data.goal_contribute_amount,
+        goal_id: incomeById.data.goal_id,
+      });
+    }
+  }, [incomeById?.data]);
 
   //reset form
   const resetForm = () => {
@@ -37,7 +75,11 @@ export default function AddIncome() {
 
   const [choice, setChoice] = useState<"yes" | "no" | null>(null);
 
+  // Add income api call...
   const { mutate } = useCreateIncome(resetForm);
+
+  //update income api call
+  const { mutate: updateIncome } = useUpdateIncome(resetForm);
 
   const handleChange = (
     event: React.ChangeEvent<
@@ -58,7 +100,7 @@ export default function AddIncome() {
       return;
     }
 
-    const payload: CreateIncomePayload = {
+    const payload: updateIncomePayload = {
       income_category: data.income_category,
       income_amount: Number(data.income_amount) || 0,
       notes: data.notes,
@@ -67,9 +109,13 @@ export default function AddIncome() {
       saving_contribution: choice === "yes",
       goal_contribute_amount: Number(data.goal_contribute_amount) || 0,
       goal_id: data.goal_id,
+      id: incomeById?.data?._id,
     };
-
-    mutate(payload);
+    if (incomeById?.data?._id) {
+      updateIncome(payload);
+    } else {
+      mutate(payload);
+    }
   };
 
   const DialogGoalBody = () => {
@@ -169,7 +215,7 @@ export default function AddIncome() {
   return (
     <div className="min-h-full">
       <h1 className="text-[#548f54] text-2xl font-semibold mb-4 px-2">
-        Add Income
+        Income Details
       </h1>
 
       <div className="rounded-2xl p-4 shadow-lg w-full max-w-[1200px] mx-auto bg-[rgba(255,255,255,0.05)]">
@@ -331,7 +377,7 @@ export default function AddIncome() {
           onClick={() => setOpenDialog(true)}
           className="bg-[#548f54] text-white font-medium py-2 px-6 rounded-lg shadow-md"
         >
-          Save
+          {incomeById?.data?._id ? "Edit Income" : "Save Income"}
         </button>
       </div>
 

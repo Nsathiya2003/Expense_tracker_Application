@@ -4,7 +4,7 @@ import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 import { IoEye } from "react-icons/io5";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import FilterDialog from "../../component/filter";
+import FilterDialog from "../../dialog/filter";
 import { FiFilter } from "react-icons/fi";
 
 export default function GoalHistoryTable() {

@@ -16,4 +16,8 @@ export const incomeApi = {
   createIncome: (body: CreateIncomePayload) =>
     handleRequest(apiClient.post("/income/create", body)),
   getIncome: () => handleRequest(apiClient.get("/income/find")),
+  getIncomeById: (id: string | undefined) =>
+    handleRequest(apiClient.get(`/income/get/${id}`)),
+  updateIncome: (body: CreateIncomePayload, id: string | null) =>
+    handleRequest(apiClient.put(`/income/update/${id}`, body)),
 };

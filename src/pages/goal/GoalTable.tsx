@@ -9,6 +9,7 @@ import { useDeleteGoal, useGoalFilter } from "../../api/goal/goal-hooks";
 import type { GoalData } from "../../types/types";
 import TableLoader from "../../utils/TableLoader";
 import { DeleteDialog } from "../../dialog/delete-dialog";
+import { FiFilter } from "react-icons/fi";
 
 export default function GoalTable({
   onEdit,
@@ -27,7 +28,9 @@ export default function GoalTable({
     fromDate: "",
     toDate: "",
     deadline_date: "",
+    status: "",
   });
+  const [tempFilters, setTempFilters] = useState({ ...filters });
 
   // --- Fetch filtered + paginated goals ---
   const { data: filterData, isLoading } = useGoalFilter(filters);
@@ -36,6 +39,10 @@ export default function GoalTable({
   const totalPages = filterData?.pagination?.totalPages || 1;
   const hasPrevPage = filterData?.pagination?.hasPrevPage;
   const hasNextPage = filterData?.pagination?.hasNextPage;
+
+  const handleFilter = () => {
+    setFilterOpen(true);
+  };
 
   // --- Handlers ---
   const handlePageChange = (newPage: number) => {
@@ -46,9 +53,7 @@ export default function GoalTable({
     setFilters((prev) => ({ ...prev, search: value, page: 1 }));
   };
 
-  // const handleDateFilter = (from: string, to: string) => {
-  //   setFilters(prev => ({ ...prev, fromDate: from, toDate: to, page: 1 }));
-  // };
+  console.log(filters, "filters----");
 
   const viewHistory = () => navigate("/goal-history");
 
@@ -77,17 +82,25 @@ export default function GoalTable({
               className="w-[250px] h-11 px-4 bg-transparent text-white placeholder:text-gray-400 focus:outline-none"
             />
           </div>
+          <FiFilter
+            className="text-[#54af54] text-2xl cursor-pointer hover:text-[#6ecf6e] transition"
+            onClick={handleFilter}
+          />
         </div>
       </div>
 
       {/* Table */}
-      <div className="bg-[rgba(255,255,255,0.05)] rounded-2xl border border-gray-700 shadow-lg backdrop-blur-md">
+      <div className="bg-[rgba(255,255,255,0.05)] border border-gray-700 shadow-lg backdrop-blur-md">
         <table className="w-full text-sm">
           <thead className="bg-[#2E2E48] text-white uppercase text-xs tracking-wider">
             <tr>
               <th className="py-2 px-4 text-left font-semibold">Goal Name</th>
               <th className="py-2 px-4 text-left font-semibold">Goal Amount</th>
+              <th className="py-2 px-4 text-left font-semibold">
+                Allocated Amount
+              </th>
               <th className="py-2 px-4 text-left font-semibold">Target Date</th>
+              <th className="py-2 px-4 text-left font-semibold">Goal Status</th>
               <th className="py-2 px-4 text-left font-semibold">Action</th>
             </tr>
           </thead>
@@ -107,9 +120,24 @@ export default function GoalTable({
                     >
                       <td className="py-4 px-4">{item.goal_name}</td>
                       <td className="py-4 px-4">{item.target_amount}</td>
+                      <td className="py-4 px-4">{item.allocated_amount}</td>
                       <td className="py-4 px-4">
                         {new Date(item?.deadline_date).toLocaleDateString()}
                       </td>
+                      <td className="py-4 px-4">
+                        <span
+                          className={`inline-block text-xs font-medium px-2 py-1 rounded-full ${
+                            item.status === "PENDING"
+                              ? "bg-red-200 text-red-800"
+                              : item.status === "COMPLETED"
+                              ? "bg-green-200 text-green-800"
+                              : "bg-gray-200 text-gray-800"
+                          }`}
+                        >
+                          {item.status}
+                        </span>
+                      </td>
+
                       <td className="py-4 px-4 flex items-center gap-3">
                         {/* Edit */}
                         <div className="relative group">
@@ -180,11 +208,6 @@ export default function GoalTable({
             <option value={20}>20</option>
             <option value={50}>50</option>
           </select>
-
-          {/* Dropdown Arrow Icon */}
-          {/* <span className="absolute right-2 top-2.5 pointer-events-none text-gray-400">
-            ▼
-          </span> */}
         </div>
       </div>
 
@@ -232,7 +255,128 @@ export default function GoalTable({
       )}
 
       {/* Filter Dialog */}
-      <FilterDialog open={filterOpen} onClose={() => setFilterOpen(false)} />
+      <FilterDialog
+        open={filterOpen}
+        onClose={() => {
+          // Cancel clicked: reset dialog fields, trigger API with original/default filters
+          const defaultFilters = {
+            page: 1,
+            limit: 10,
+            search: "",
+            fromDate: "",
+            toDate: "",
+            deadline_date: "",
+            status: "",
+          };
+
+          // Option 1: Restore previous applied filters (no API call)
+          // setTempFilters(filters);
+          // setFilterOpen(false);
+
+          // Option 2: Reset filters to default and trigger API call
+          setTempFilters(defaultFilters); // reset dialog inputs
+          setFilters(defaultFilters); // triggers API call with default values
+          setFilterOpen(false);
+        }}
+        onApply={() => {
+          // Apply clicked: take the temp values and call API
+          setFilters({
+            page: 1, // reset page
+            limit: tempFilters.limit,
+            search: tempFilters.search,
+            fromDate: tempFilters.fromDate,
+            toDate: tempFilters.toDate,
+            deadline_date: tempFilters.deadline_date,
+            status: tempFilters.status,
+          }); // triggers API
+          setFilterOpen(false);
+        }}
+        className="absolute top-[380px] right-[80px] bg-[#2E2E48] text-white p-6 rounded-2xl 
+    shadow-2xl border border-gray-700 w-[360px]
+    data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp"
+      >
+        <>
+          {/* Date Fields */}
+          <div className="flex items-center gap-4">
+            <div>
+              <label className="block text-sm text-gray-300 mb-1">
+                From Date
+              </label>
+              <input
+                type="date"
+                name="fromDate"
+                value={tempFilters.fromDate}
+                onChange={(e) =>
+                  setTempFilters((prev) => ({
+                    ...prev,
+                    [e.target.name]: e.target.value,
+                  }))
+                }
+                className="w-full bg-[#3a3a5c] border border-gray-600 rounded-lg px-2 py-2 text-white focus:outline-none"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm text-gray-300 mb-1">
+                To Date
+              </label>
+              <input
+                type="date"
+                name="toDate"
+                value={tempFilters.toDate}
+                onChange={(e) =>
+                  setTempFilters((prev) => ({
+                    ...prev,
+                    [e.target.name]: e.target.value,
+                  }))
+                }
+                className="w-full bg-[#3a3a5c] border border-gray-600 rounded-lg px-2 py-2 text-white focus:outline-none"
+              />
+            </div>
+          </div>
+
+          {/* Target Date */}
+          <div>
+            <label className="block text-sm text-gray-300 mb-1">
+              Target Date
+            </label>
+            <input
+              type="date"
+              name="deadline_date"
+              value={tempFilters.deadline_date}
+              onChange={(e) =>
+                setTempFilters((prev) => ({
+                  ...prev,
+                  [e.target.name]: e.target.value,
+                }))
+              }
+              className="w-full bg-[#3a3a5c] border border-gray-600 rounded-lg px-2 py-2 text-white focus:outline-none"
+            />
+          </div>
+          <div>
+            <label className="block text-sm text-gray-300 mb-1 font-medium">
+              Status
+            </label>
+            <select
+              name="status"
+              value={tempFilters.status}
+              onChange={(e) =>
+                setTempFilters((prev) => ({
+                  ...prev,
+                  [e.target.name]: e.target.value,
+                }))
+              }
+              className="w-full bg-[#3a3a5c] border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none text-sm"
+            >
+              <option value="" disabled>
+                Select Status
+              </option>
+              <option value="PENDING">Pending</option>
+              <option value="COMPLETED">Completed</option>
+            </select>
+          </div>
+        </>
+      </FilterDialog>
 
       {/* Delete Dialog */}
       <DeleteDialog

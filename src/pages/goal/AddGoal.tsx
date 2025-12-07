@@ -98,7 +98,7 @@ export default function AddGoal({ editingId }: { editingId: string | null }) {
                 onChange={handleChange}
                 placeholder="Enter your goal"
                 className="w-full h-11 px-4 rounded-lg border border-gray-400 
-                bg-[rgba(255,255,255,0.15)] text-white text-sm placeholder-white
+                bg-[rgba(255,255,255,0.15)] text-white text-sm placeholder- bg-[rgba(255,255,255,0.15)] font-sm
                 focus:outline-none focus:ring-2 focus:ring-green-400 transition-all duration-200"
               />
             </div>
@@ -119,7 +119,7 @@ export default function AddGoal({ editingId }: { editingId: string | null }) {
                 onChange={handleChange}
                 placeholder="Enter amount"
                 className="w-full h-11 px-4 rounded-lg border border-gray-400 
-                bg-[rgba(255,255,255,0.15)] text-white text-sm placeholder-white
+                bg-[rgba(255,255,255,0.15)] text-white text-sm placeholder- bg-[rgba(255,255,255,0.15)]
                 focus:outline-none focus:ring-2 focus:ring-green-400 transition-all duration-200"
               />
             </div>
@@ -128,7 +128,7 @@ export default function AddGoal({ editingId }: { editingId: string | null }) {
             <div className="flex flex-col flex-1">
               <label
                 htmlFor="deadline_date"
-                className="text-sm text-white mb-2 font-medium"
+                className="text-sm mb-2 font-medium"
               >
                 Target Date/Deadline <span className="text-red-600">*</span>
               </label>
@@ -139,7 +139,7 @@ export default function AddGoal({ editingId }: { editingId: string | null }) {
                 value={data?.deadline_date}
                 onChange={handleChange}
                 className="w-full h-11 px-4 rounded-lg border border-gray-400 
-                bg-[rgba(255,255,255,0.15)] text-white text-sm placeholder-white
+                bg-[rgba(255,255,255,0.15)] text-sm placeholder- bg-[rgba(255,255,255,0.15)]
                 focus:outline-none focus:ring-2 focus:ring-green-400 transition-all duration-200"
               />
             </div>
@@ -160,7 +160,7 @@ export default function AddGoal({ editingId }: { editingId: string | null }) {
                 placeholder="Add notes"
                 rows={1}
                 className="w-full h-11 px-4 rounded-lg border border-gray-400 
-                bg-[rgba(255,255,255,0.15)] text-white text-sm placeholder-white
+                bg-[rgba(255,255,255,0.15)] text-white text-sm placeholder- bg-[rgba(255,255,255,0.15)]
                 focus:outline-none focus:ring-2 focus:ring-green-400 transition-all duration-200"
               ></textarea>
             </div>

@@ -47,4 +47,6 @@ export interface GoalData {
   deadline_date: Date;
   notes: string;
   _id: string;
+  status: string;
+  allocated_amount: number;
 }

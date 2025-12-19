@@ -9,12 +9,14 @@ import {
   type updateIncomePayload,
 } from "../../api/income/income-hooks";
 import { useParams } from "react-router-dom";
+import { useFindAllGoal } from "../../api/goal/goal-hooks";
+import type { GoalDataTypes } from "../../types/response-types";
 
 // type IncomeProps = {
 //   id: string;
 // };
 
-export default function AddIncome() {
+export default function AddIncome({ editingId }: { editingId: string | null }) {
   const [openDialog, setOpenDialog] = useState(false);
   const { id } = useParams<string>();
 
@@ -31,7 +33,11 @@ export default function AddIncome() {
 
   //get income data by id
   console.log("id----", id);
-  const { data: incomeById } = useGetIncomeById(id);
+  const { data: incomeById } = useGetIncomeById(editingId);
+
+  //get all goals
+  const { data: GoalData } = useFindAllGoal();
+  console.log(GoalData?.data && GoalData?.data?.length > 0, "GoalData");
 
   // Fetch data by ID and update state
   useEffect(() => {
@@ -87,45 +93,66 @@ export default function AddIncome() {
     >
   ) => {
     const { name, value } = event.target;
-
+    console.log("name value is-----", name, value);
     setData((prev) => ({
       ...prev,
       [name]: value, // ✔ always store as string
     }));
+
+    console.log("data is---", data);
   };
+  console.log("data is---", data);
 
-  const handleSubmit = () => {
-    if (!data.income_date) {
-      alert("Please choose a date");
-      return;
-    }
-
+  // Modify handleSubmit to accept overrides so dialog can submit correct values immediately
+  const handleSubmit = (overrides?: Partial<updateIncomePayload>) => {
     const payload: updateIncomePayload = {
-      income_category: data.income_category,
-      income_amount: Number(data.income_amount) || 0,
-      notes: data.notes,
-      payment_receive_mode: data.payment_receive_mode,
-      income_date: new Date(data.income_date),
-      saving_contribution: choice === "yes",
-      goal_contribute_amount: Number(data.goal_contribute_amount) || 0,
-      goal_id: data.goal_id,
+      income_category: overrides?.income_category ?? data.income_category,
+      income_amount:
+        overrides?.income_amount ?? (Number(data.income_amount) || 0),
+      notes: overrides?.notes ?? data.notes,
+      payment_receive_mode:
+        overrides?.payment_receive_mode ?? data.payment_receive_mode,
+      income_date: overrides?.income_date ?? new Date(data.income_date),
+      saving_contribution: overrides?.saving_contribution ?? choice === "yes",
+      goal_contribute_amount:
+        Number(
+          overrides?.goal_contribute_amount ??
+            Number(data.goal_contribute_amount)
+        ) || 0,
+      goal_id: overrides?.goal_id ?? data.goal_id,
       id: incomeById?.data?._id,
     };
+
     if (incomeById?.data?._id) {
       updateIncome(payload);
     } else {
       mutate(payload);
+      console.log("the final payload is----", payload);
     }
   };
 
   const DialogGoalBody = () => {
+    // local states so user interactions inside dialog don't immediately mutate parent until Save
     const [localChoice, setLocalChoice] = useState<"yes" | "no" | null>(choice);
-    const [localGoalId, setLocalGoalId] = useState(data.goal_id);
-    const [localAmount, setLocalAmount] = useState(data.goal_contribute_amount);
+    const [localGoalId, setLocalGoalId] = useState<string>(data.goal_id ?? "");
+    const [localAmount, setLocalAmount] = useState<string>(
+      data.goal_contribute_amount ? String(data.goal_contribute_amount) : ""
+    );
+
+    // keep dialog locals in sync when dialog opens or parent data changes
+    useEffect(() => {
+      if (openDialog) {
+        setLocalChoice(choice);
+        setLocalGoalId(data.goal_id ?? "");
+        setLocalAmount(
+          data.goal_contribute_amount ? String(data.goal_contribute_amount) : ""
+        );
+      }
+    }, [openDialog, data, choice]);
 
     const handleSave = () => {
+      // propagate local values to parent
       setChoice(localChoice);
-
       setData((prev) => ({
         ...prev,
         goal_id: localGoalId,
@@ -133,8 +160,14 @@ export default function AddIncome() {
         saving_contribution: localChoice === "yes",
       }));
 
+      // close dialog then submit using explicit overrides so payload is correct immediately
       setOpenDialog(false);
-      handleSubmit();
+
+      handleSubmit({
+        goal_id: localGoalId,
+        goal_contribute_amount: Number(localAmount) || 0,
+        saving_contribution: localChoice === "yes",
+      });
     };
 
     return (
@@ -161,7 +194,11 @@ export default function AddIncome() {
               name="saving"
               value="no"
               checked={localChoice === "no"}
-              onChange={() => setLocalChoice("no")}
+              onChange={() => {
+                setLocalChoice("no");
+                setLocalGoalId("");
+                setLocalAmount("");
+              }}
             />
             No
           </label>
@@ -169,35 +206,80 @@ export default function AddIncome() {
 
         {localChoice === "yes" && (
           <>
-            <div className="flex flex-col gap-3 mt-2">
-              <label className="text-sm">Choose Saving Goal</label>
-              <select
-                className="h-11 w-full px-4 pr-10 rounded-lg border border-gray-400 
-                bg-[rgba(255,255,255,0.15)] text-white text-sm"
-                value={localGoalId}
-                onChange={(e) => setLocalGoalId(e.target.value)}
+            <div className="flex flex-col w-[350px] mb-4 relative">
+              <label
+                htmlFor="category"
+                className="text-sm text-white mb-2 font-medium"
               >
-                <option value="">Select a goal</option>
-                <option value="Emergency">Emergency Fund</option>
-                <option value="Vacation">Vacation</option>
-                <option value="Vehicle">New Vehicle</option>
-                <option value="Others">Others</option>
-              </select>
+                Choose Goal <span className="text-red-600">*</span>
+              </label>
+
+              <div className="relative w-[260px]">
+                <select
+                  id="category"
+                  name="goal_id"
+                  className="h-11 w-full px-4 pr-10 rounded-lg border border-gray-400
+      bg-[rgba(255,255,255,0.15)] text-white text-sm
+      focus:outline-none focus:ring-2 focus:ring-green-400
+      transition-all duration-200 appearance-none"
+                  style={{
+                    backgroundColor: "rgba(255,255,255,0.15)",
+                    color: "white",
+                  }}
+                  value={localGoalId}
+                  onChange={(e) => setLocalGoalId(e.target.value)}
+                >
+                  <option value="">Select goal</option>
+                  {GoalData?.data && GoalData?.data?.length > 0 ? (
+                    GoalData?.data.map((item: GoalDataTypes, index: number) => (
+                      <option
+                        value={item?._id}
+                        key={index}
+                        style={{
+                          backgroundColor: "rgba(255,255,255,0.15)",
+                          color: "white",
+                        }}
+                        className="h-11 w-full px-4 pr-10 rounded-lg border border-gray-400
+      bg-[rgba(255,255,255,0.15)] "
+                      >
+                        {item?.goal_name}
+                      </option>
+                    ))
+                  ) : (
+                    <option
+                      disabled
+                      className="bg-gray-800 text-gray-400 text-center"
+                    >
+                      No goals available...
+                    </option>
+                  )}
+                </select>
+
+                {/* Custom ▼ icon */}
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-300 pointer-events-none">
+                  <MdKeyboardArrowDown size={20} />
+                </span>
+              </div>
             </div>
 
-            <label className="text-sm text-white mb-2 font-medium">
-              Saving Amount <span className="text-red-600">*</span>
-            </label>
-            <input
-              type="text"
-              value={localAmount}
-              onChange={(e) =>
-                setLocalAmount(e.target.value.replace(/[^0-9]/g, ""))
-              }
-              placeholder="Enter amount"
-              className="h-11 px-4 rounded-lg border border-gray-400 
+            {localGoalId !== "" && (
+              <>
+                <label className="text-sm text-white mb-2 font-medium">
+                  Saving Amount <span className="text-red-600">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="goal_contribute_amount"
+                  value={localAmount}
+                  onChange={(e) =>
+                    setLocalAmount(e.target.value.replace(/[^0-9]/g, ""))
+                  }
+                  placeholder="Enter amount"
+                  className="h-11 px-4 rounded-lg border border-gray-400 
               bg-[rgba(255,255,255,0.15)] text-white text-sm placeholder-white"
-            />
+                />
+              </>
+            )}
           </>
         )}
 

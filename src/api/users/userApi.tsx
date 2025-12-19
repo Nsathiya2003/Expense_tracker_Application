@@ -35,9 +35,6 @@ export interface UpdateUserPayload {
   address?: string;
 }
 
-//get userId...
-const userId = localStorage.getItem("user_id");
-
 export const UserApi = {
   createUser: (body: CreateUserPayload) =>
     handleRequest(apiClient.post("user/create", body)),
@@ -47,7 +44,8 @@ export const UserApi = {
     handleRequest(apiClient.post("/user/forgot-password", body)),
   resetPassword: (body: ResetPasswordPayload) =>
     handleRequest(apiClient.post("/user/reset-password", body)),
-  updateUser: (body: FormData) =>
+  updateUser: (body: FormData, userId: string | null) =>
     handleRequest(apiClient.put(`/user/update/${userId}`, body)),
-  getUser: () => handleRequest(apiClient.get(`/user/get/${userId}`)),
+  getUser: (userId: string | null) =>
+    handleRequest(apiClient.get(`/user/get/${userId}`)),
 };

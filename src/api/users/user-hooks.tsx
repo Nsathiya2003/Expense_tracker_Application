@@ -86,9 +86,9 @@ export const useResetPassword = () => {
   });
 };
 
-export const useUpdateUser = () => {
+export const useUpdateUser = (userId: string | null) => {
   return useMutation({
-    mutationFn: (body: FormData) => UserApi.updateUser(body),
+    mutationFn: (body: FormData) => UserApi.updateUser(body, userId),
 
     onSuccess: (data) => {
       toast.success(`${data?.message}` || "User update successfully");
@@ -100,11 +100,11 @@ export const useUpdateUser = () => {
   });
 };
 
-export const useGetUser = () => {
+export const useGetUser = (userId: string | null) => {
   return useQuery({
     queryKey: ["user"],
 
-    queryFn: () => UserApi.getUser(),
+    queryFn: () => UserApi.getUser(userId),
     staleTime: 1000 * 60 * 5, // 5 minutes cache
     refetchOnWindowFocus: false,
   });

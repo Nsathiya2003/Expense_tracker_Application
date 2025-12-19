@@ -1,4 +1,4 @@
-import type { GoalData } from "./types";
+import type { GoalData, GoalHistoryData, IncomeData } from "./types";
 
 export type IncomeItem = {
   _id: string;
@@ -19,6 +19,38 @@ export interface GoalFilterResponse {
   status: boolean;
   message: string;
   data: GoalData[];
+  pagination: {
+    page: number;
+    limit: number;
+    totalRecords: number;
+    totalPages: number;
+    hasNextPage: boolean;
+    hasPrevPage: boolean;
+  };
+}
+
+export interface GoalDataTypes {
+  _id: string;
+  goal_name: string;
+}
+export interface GoalHistoryFilterResponse {
+  status: boolean;
+  message: string;
+  data: GoalHistoryData[];
+  pagination: {
+    page: number;
+    limit: number;
+    totalRecords: number;
+    totalPages: number;
+    hasNextPage: boolean;
+    hasPrevPage: boolean;
+  };
+}
+
+export interface GoalIncomeFilterResponse {
+  status: boolean;
+  message: string;
+  data: IncomeData[];
   pagination: {
     page: number;
     limit: number;

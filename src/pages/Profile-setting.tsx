@@ -8,8 +8,13 @@ export default function ProfileSetting() {
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
-  const { mutate, isPending } = useUpdateUser();
-  const { data: userData } = useGetUser();
+  //get userId...
+  const userId = localStorage.getItem("user_id");
+
+  const { mutate, isPending } = useUpdateUser(userId);
+  const { data: userData } = useGetUser(userId);
+  console.log({ isPending });
+  console.log({ userData });
 
   const [data, setData] = useState({
     username: "",

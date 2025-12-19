@@ -34,11 +34,13 @@ export interface IncomeData {
   income_date: Date;
   payment_mode: string;
   notes: string;
-  saving_contribution: string;
-  goal_id: string;
+  saving_contribution: boolean;
   goal_contribute_amount: number;
   _id: string;
   payment_receive_mode: string;
+  goal_id: {
+    goal_name: string;
+  };
 }
 
 export interface GoalData {
@@ -49,4 +51,17 @@ export interface GoalData {
   _id: string;
   status: string;
   allocated_amount: number;
+}
+
+export interface GoalHistoryData {
+  id: string;
+  goal_id: {
+    goal_name: string;
+    target_amount: string;
+    allocated_amount: number;
+    deadline_date: Date;
+  };
+  allocated_amount: number;
+  income_type: string;
+  createdAt: Date;
 }

@@ -6,7 +6,10 @@ import {
   type UpdateGoalPayload,
 } from "./goalApi";
 import { toast } from "react-toastify";
-import type { GoalFilterResponse } from "../../types/response-types";
+import type {
+  GoalFilterResponse,
+  GoalHistoryFilterResponse,
+} from "../../types/response-types";
 
 export const useCreateGoal = (resetForm: () => void) => {
   const queryClient = useQueryClient();
@@ -86,6 +89,14 @@ export const useGoalFilter = (filters: filter_body) => {
   return useQuery<GoalFilterResponse>({
     queryKey: ["goal", filters],
     queryFn: () => GoalApi.filterGoal(filters),
+    staleTime: 1000 * 60,
+  });
+};
+
+export const useViewGoalHistory = (filters: filter_body) => {
+  return useQuery<GoalHistoryFilterResponse>({
+    queryKey: ["goalHistory", filters],
+    queryFn: () => GoalApi.ViewGoalHistory(filters),
     staleTime: 1000 * 60,
   });
 };

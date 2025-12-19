@@ -29,4 +29,6 @@ export const GoalApi = {
     handleRequest(apiClient.delete(`/goal/delete/${id}`)),
   filterGoal: (body: filter_body) =>
     handleRequest(apiClient.post("/goal/filter", body)),
+  ViewGoalHistory: (body: filter_body) =>
+    handleRequest(apiClient.post("/goal/viewGoalHistory", body)),
 };

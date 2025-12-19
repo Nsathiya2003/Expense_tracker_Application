@@ -12,12 +12,19 @@ export interface CreateIncomePayload {
   goal_contribute_amount: number;
 }
 
+export interface filterIncomePayload {
+  page: number;
+  limit: number;
+}
+
 export const incomeApi = {
   createIncome: (body: CreateIncomePayload) =>
     handleRequest(apiClient.post("/income/create", body)),
   getIncome: () => handleRequest(apiClient.get("/income/find")),
-  getIncomeById: (id: string | undefined) =>
+  getIncomeById: (id: string | null) =>
     handleRequest(apiClient.get(`/income/get/${id}`)),
   updateIncome: (body: CreateIncomePayload, id: string | null) =>
     handleRequest(apiClient.put(`/income/update/${id}`, body)),
+  useFilterIncome: (body: filterIncomePayload) =>
+    handleRequest(apiClient.post("/income/filter", body)),
 };

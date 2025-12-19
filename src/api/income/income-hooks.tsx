@@ -1,6 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { incomeApi, type CreateIncomePayload } from "./incomeApi";
+import {
+  incomeApi,
+  type CreateIncomePayload,
+  type filterIncomePayload,
+} from "./incomeApi";
 import { toast } from "react-toastify";
+import type { GoalIncomeFilterResponse } from "../../types/response-types";
 
 export interface updateIncomePayload extends CreateIncomePayload {
   id: string;
@@ -36,7 +41,7 @@ export const useGetIncome = () => {
   });
 };
 
-export const useGetIncomeById = (id: string | undefined) => {
+export const useGetIncomeById = (id: string | null) => {
   return useQuery({
     queryKey: ["incomeById"],
     queryFn: () => incomeApi.getIncomeById(id),
@@ -65,5 +70,12 @@ export const useUpdateIncome = (resetForm: () => void) => {
         `${error?.message}` || "something went wrong add your income"
       );
     },
+  });
+};
+export const useIncomeFilter = (filters: filterIncomePayload) => {
+  return useQuery<GoalIncomeFilterResponse>({
+    queryKey: ["income", filters],
+    queryFn: () => incomeApi.useFilterIncome(filters),
+    staleTime: 1000 * 60,
   });
 };

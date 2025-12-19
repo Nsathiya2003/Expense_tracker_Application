@@ -166,7 +166,7 @@ export default function GoalTable({
                             onClick={viewHistory}
                           />
                           <span className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                            View
+                            View history
                           </span>
                         </div>
                       </td>
@@ -187,6 +187,7 @@ export default function GoalTable({
           </tbody>
         </table>
       </div>
+
       {/* Page Limit Dropdown - Right aligned */}
       <div className="flex justify-end items-center gap-3 mb-4">
         <span className="text-gray-400 text-sm">Rows per page:</span>

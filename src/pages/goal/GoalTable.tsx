@@ -62,6 +62,14 @@ export default function GoalTable({
     setDeleteId(item?._id);
   };
 
+  // delete mutation (top-level hook)
+  const deleteMutation = useDeleteGoal({
+    onSuccess: () => {
+      setDeleteDialog(false);
+      setDeleteId(null);
+    },
+  });
+
   return (
     <div className="overflow-x-auto text-gray-200">
       <div className="flex flex-wrap items-center justify-between mb-6">
@@ -383,9 +391,7 @@ export default function GoalTable({
       <DeleteDialog
         open={deleteDialog}
         onClose={() => setDeleteDialog(false)}
-        deleteConfirmed={useDeleteGoal({
-          onSuccess: () => setDeleteDialog(false),
-        })}
+        onDelete={(id: string) => deleteMutation.mutate(id)}
         deleteId={deleteId}
       />
     </div>

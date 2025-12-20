@@ -29,4 +29,5 @@ export const incomeApi = {
     handleRequest(apiClient.delete(`/income/delete/${id}`)),
   useFilterIncome: (body: filterIncomePayload) =>
     handleRequest(apiClient.post("/income/filter", body)),
+  getIncomeBalance: () => handleRequest(apiClient.get("/income/incomeBalance")),
 };

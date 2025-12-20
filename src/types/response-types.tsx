@@ -32,6 +32,8 @@ export interface GoalFilterResponse {
 export interface GoalDataTypes {
   _id: string;
   goal_name: string;
+  allocated_amount: number;
+  target_amount: number;
 }
 export interface GoalHistoryFilterResponse {
   status: boolean;
@@ -58,5 +60,7 @@ export interface GoalIncomeFilterResponse {
     totalPages: number;
     hasNextPage: boolean;
     hasPrevPage: boolean;
+    totalIncomeAmount: number;
+    totalGoalContribution: number;
   };
 }

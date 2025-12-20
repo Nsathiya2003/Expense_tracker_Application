@@ -1,297 +1,718 @@
-// export default function AddIncome() {
-//   return (
-//     <>
-//       <div className="h-min-screen p-2">
-//         <h1 className="text-[#548f54] text-bold text-xl font-semibold px-8">
-//           Add Income
-//         </h1>
-//         <div className=" rounded-2xl p-4 w-[450px] mx-4">
-//           {/* Row 1 */}
-//           <div className="flex flex-row gap-8 mb-4">
-//             <div className="flex flex-col w-full">
-//               <label
-//                 htmlFor="category"
-//                 className="text-sm text-white-600 mb-2 font-medium "
-//               >
-//                 Choose Category<span className="text-red-600 p-2">*</span>
-//               </label>
-//               <select
-//                 id="gender"
-//                 className="w-[350px] h-11 px-4 rounded-lg border border-gray-300
-//              bg-[rgba(255,255,255,0.15)]"
-//               >
-//                 <option>Select Gender</option>
-//                 <option value="Salery" className="bg-[rgba(255,255,255,0.15)]">
-//                   Salery
-//                 </option>
-//                 <option value="Business">Business</option>
-//                 <option value="Investments">Investments</option>
-//                 <option value="Freelancing">Freelancing</option>
-//                 <option value="Freelancing">Others</option>
-//               </select>
-//             </div>
-//           </div>
+import React, { useEffect, useState, useCallback, useMemo } from "react";
+import { MdKeyboardArrowDown, MdCheckCircle } from "react-icons/md";
+import * as Dialog from "@radix-ui/react-dialog";
+import { FiX, FiAlertCircle } from "react-icons/fi";
+import {
+  useCreateExpense,
+  useGetExpenseById,
+  useUpdateExpense,
+  type updateExpensePayload,
+} from "../../api/expense/expense-hooks";
 
-import { MdKeyboardArrowDown } from "react-icons/md";
+interface FormData {
+  expense_category: string;
+  expense_amount: string;
+  expense_date: string;
+  payment_mode: string;
+  notes: string;
+  budget_category: string;
+  is_recurring: boolean;
+  tags: string;
+}
 
-//           {/* Row 2 */}
-//           <div className="flex flex-row gap-8 mb-4">
-//             <div className="flex flex-col w-full">
-//               <label
-//                 htmlFor="income_amount"
-//                 className="text-sm text-white-600 mb-2 font-medium"
-//               >
-//                 Income Amount<span className="text-red-600">*</span>
-//               </label>
-//               <input
-//                 type="text"
-//                 id="income_amount"
-//                 placeholder="Enter your amount"
-//                 className="w-[350px] h-11 px-4 rounded-lg border border-gray-300
-//              bg-[rgba(255,255,255,0.15)] backdrop-blur-md
-//              text-white-600 text-sm placeholder-text-white
-//              focus:outline-none focus:ring-2 focus:ring-blue-400
-//              transition-all duration-200"
-//               />
-//             </div>
-//           </div>
+interface ValidationErrors {
+  expense_category?: string;
+  expense_amount?: string;
+  expense_date?: string;
+  payment_mode?: string;
+}
 
-//           {/* Row 3 */}
-//           <div className="flex flex-row gap-8 mb-4">
-//             <div className="flex flex-col w-full">
-//               <label
-//                 htmlFor="income_date"
-//                 className="text-sm text-white-600 mb-2 font-medium"
-//               >
-//                 Date <span className="text-red-600">*</span>
-//               </label>
-//               <input
-//                 type="date"
-//                 id="income_date"
-//                 className="w-[350px] h-11 px-4 rounded-lg border border-gray-300
-//              bg-[rgba(255,255,255,0.15)] backdrop-blur-md
-//              text-white-600 text-sm placeholder-text-white
-//              focus:outline-none focus:ring-2 focus:ring-blue-400
-//              transition-all duration-200"
-//               />
-//             </div>
-//           </div>
+const INITIAL_FORM_STATE: FormData = {
+  expense_category: "",
+  expense_amount: "",
+  expense_date: "",
+  payment_mode: "",
+  notes: "",
+  budget_category: "",
+  is_recurring: false,
+  tags: "",
+};
 
-//           {/* Row 4 */}
-//           <div className="flex flex-row gap-8 mb-4">
-//             <div className="flex flex-col w-full">
-//               <label
-//                 htmlFor="payment_mode"
-//                 className="text-sm text-white-600 mb-2 font-medium"
-//               >
-//                 Choose Payment Mode<span className="text-red-600 p-2">*</span>
-//               </label>
-//               <select
-//                 id="payment_mode"
-//                 className="w-[350px] h-11 px-4 rounded-lg border border-gray-300
-//              bg-[rgba(255,255,255,0.15)] backdrop-blur-md
-//              text-white-600 text-sm placeholder-text-white
-//              focus:outline-none focus:ring-2 focus:ring-blue-400
-//              transition-all duration-200"
-//               >
-//                 <option
-//                   value=""
-//                   className="w-[350px] h-11 px-4 rounded-lg border border-gray-300
-//              bg-[rgba(255,255,255,0.15)] backdrop-blur-md
-//              text-white-600 text-sm placeholder-text-white
-//              focus:outline-none focus:ring-2 focus:ring-blue-400
-//              transition-all duration-200"
-//                 >
-//                   Select Payment Mode
-//                 </option>
-//                 <option value="Cash" className="bg-[rgba(255,255,255,0.15)]">
-//                   Cash
-//                 </option>
-//                 <option value="Account" className="bg-[rgba(255,255,255,0.15)]">
-//                   Account
-//                 </option>
-//                 <option value="G-pay" className="bg-[rgba(255,255,255,0.15)]">
-//                   G-pay
-//                 </option>
-//                 <option value="Phone-pay">Phone-pay</option>
-//                 <option value="Freelancing">Others</option>
-//               </select>
-//             </div>
-//           </div>
-//           {/* Address Field */}
-//           <div className="flex flex-col w-full">
-//             <label
-//               htmlFor="address"
-//               className="text-sm text-white-600 mb-2 font-medium"
-//             >
-//               Notes(optional)
-//             </label>
-//             <div className="flex items-end justify-between gap-8">
-//               <textarea
-//                 name="address"
-//                 id="address"
-//                 placeholder="Address"
-//                 rows={4}
-//                 className="w-[350px] h-20 px-4 rounded-lg border border-gray-300
-//              bg-[rgba(255,255,255,0.15)] backdrop-blur-md
-//              text-white-600 text-sm placeholder-text-white
-//              focus:outline-none focus:ring-2 focus:ring-blue-400
-//              transition-all duration-200 p-2"
-//               ></textarea>
+const validateForm = (data: FormData): ValidationErrors => {
+  const errors: ValidationErrors = {};
 
-//               {/* Save Button on the same row — right aligned */}
-//             </div>
-//           </div>
-//           <div className=" flex justify-center items-center">
-//             <button className="bg-[#548f54] hover:bg-[#5B3256] text-white font-medium py-2 px-6 my-4 rounded-lg shadow-md transition-all duration-200">
-//               Save
-//             </button>
-//           </div>
-//         </div>
-//       </div>
-//     </>
-//   );
-// }
+  if (!data.expense_category?.trim()) {
+    errors.expense_category = "Category is required";
+  }
 
-export default function AddExpense() {
+  if (!data.expense_amount?.trim()) {
+    errors.expense_amount = "Amount is required";
+  } else if (Number(data.expense_amount) <= 0) {
+    errors.expense_amount = "Amount must be greater than 0";
+  } else if (Number(data.expense_amount) > 10000000) {
+    errors.expense_amount = "Amount cannot exceed 1 crore";
+  }
+
+  if (!data.expense_date?.trim()) {
+    errors.expense_date = "Date is required";
+  } else if (new Date(data.expense_date) > new Date()) {
+    errors.expense_date = "Date cannot be in the future";
+  }
+
+  if (!data.payment_mode?.trim()) {
+    errors.payment_mode = "Payment mode is required";
+  }
+
+  return errors;
+};
+
+export default function AddExpense({
+  editingId,
+}: {
+  editingId: string | null;
+}) {
+  const [openDialog, setOpenDialog] = useState(false);
+  const [currentEditingId, setCurrentEditingId] = useState<string | null>(
+    editingId
+  );
+  const [data, setData] = useState<FormData>(INITIAL_FORM_STATE);
+  const [errors, setErrors] = useState<ValidationErrors>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const isMainFieldsValid = useMemo(() => {
+    if (!data) return false;
+    if (!data.expense_category?.trim()) return false;
+    if (!data.expense_amount?.trim()) return false;
+    const amountNum = Number(data.expense_amount || 0);
+    if (isNaN(amountNum) || amountNum <= 0) return false;
+    if (!data.expense_date?.trim()) return false;
+    if (new Date(data.expense_date) > new Date()) return false;
+    if (!data.payment_mode?.trim()) return false;
+    return true;
+  }, [data]);
+
+  const { data: expenseById } = useGetExpenseById(currentEditingId);
+
+  useEffect(() => {
+    setCurrentEditingId(editingId);
+  }, [editingId]);
+
+  useEffect(() => {
+    if (expenseById?.data) {
+      const expenseData = expenseById.data;
+      setData({
+        expense_amount: String(expenseData.expense_amount || ""),
+        expense_category: expenseData.expense_category || "",
+        expense_date: expenseData.expense_date
+          ? new Date(expenseData.expense_date).toISOString().split("T")[0]
+          : "",
+        payment_mode: expenseData.payment_mode || "",
+        notes: expenseData.notes || "",
+        budget_category: expenseData.budget_category || "",
+        is_recurring: expenseData.is_recurring || false,
+        tags: expenseData.tags
+          ? Array.isArray(expenseData.tags)
+            ? expenseData.tags.join(", ")
+            : expenseData.tags
+          : "",
+      });
+    }
+  }, [expenseById?.data]);
+
+  const resetForm = useCallback(() => {
+    setData(INITIAL_FORM_STATE);
+    setCurrentEditingId(null);
+    setErrors({});
+    setIsSubmitting(false);
+  }, []);
+
+  const handleClearAll = useCallback(() => {
+    resetForm();
+  }, [resetForm]);
+
+  const { mutate: createExpense } = useCreateExpense(resetForm);
+  const { mutate: updateExpense } = useUpdateExpense(resetForm);
+
+  const handleChange = useCallback(
+    (
+      event: React.ChangeEvent<
+        HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+      >
+    ) => {
+      const target = event.target as
+        | HTMLInputElement
+        | HTMLTextAreaElement
+        | HTMLSelectElement;
+      const { name, value } = target;
+      const type = (target as HTMLInputElement).type;
+      if (type === "checkbox") {
+        setData((prev) => ({
+          ...prev,
+          [name]: (event.target as HTMLInputElement).checked,
+        }));
+      } else {
+        setData((prev) => ({
+          ...prev,
+          [name]:
+            name === "expense_amount" ? value.replace(/[^0-9]/g, "") : value,
+        }));
+      }
+      if (errors[name as keyof ValidationErrors]) {
+        setErrors((prev) => ({
+          ...prev,
+          [name]: undefined,
+        }));
+      }
+    },
+    [errors]
+  );
+
+  const handleSubmit = useCallback(
+    (overrides?: Partial<updateExpensePayload>) => {
+      const submitData: FormData = {
+        ...data,
+      };
+
+      const validationErrors = validateForm(submitData);
+
+      if (Object.keys(validationErrors).length > 0) {
+        setErrors(validationErrors);
+        return;
+      }
+
+      setIsSubmitting(true);
+      const payload: updateExpensePayload = {
+        expense_category: overrides?.expense_category ?? data.expense_category,
+        expense_amount:
+          overrides?.expense_amount ?? (Number(data.expense_amount) || 0),
+        notes: overrides?.notes ?? data.notes,
+        payment_mode: overrides?.payment_mode ?? data.payment_mode,
+        expense_date: overrides?.expense_date ?? new Date(data.expense_date),
+        budget_category:
+          (overrides?.budget_category ?? data.budget_category) || undefined,
+        is_recurring: overrides?.is_recurring ?? data.is_recurring,
+        tags:
+          overrides?.tags ??
+          (data.tags
+            ? data.tags
+                .split(",")
+                .map((t) => t.trim())
+                .filter((t) => t)
+            : undefined),
+        id: currentEditingId || "",
+      };
+
+      console.log("Submitting payload:", payload);
+
+      if (currentEditingId) {
+        updateExpense(payload, {
+          onSettled: () => setIsSubmitting(false),
+        });
+      } else {
+        createExpense(payload, {
+          onSettled: () => setIsSubmitting(false),
+        });
+      }
+    },
+    [data, currentEditingId, updateExpense, createExpense]
+  );
+
+  const ErrorMessage = ({ message }: { message?: string }) => {
+    if (!message) return null;
+    return (
+      <div className="flex items-center gap-2 text-red-400 text-xs mt-2 animate-pulse">
+        <FiAlertCircle size={14} className="flex-shrink-0 text-red-500" />
+        <span className="font-medium">{message}</span>
+      </div>
+    );
+  };
+
+  const SuccessIndicator = ({ show }: { show?: boolean }) => {
+    if (!show) return null;
+    return (
+      <div className="flex items-center gap-2 text-green-400 text-xs mt-2 animate-pulse">
+        <MdCheckCircle size={14} className="flex-shrink-0" />
+        <span className="font-medium">Valid</span>
+      </div>
+    );
+  };
+
   return (
     <div className="min-h-full">
-      <h1 className="text-[#548f54] text-2xl font-semibold mb-4 px-2">
-        Add Expense
-      </h1>
+      <div className="flex items-center gap-3 mb-6">
+        <h1 className="text-[#c17a6b] text-2xl font-bold">Expense Details</h1>
+        {currentEditingId && (
+          <span className="bg-blue-500 bg-opacity-20 text-blue-300 px-3 py-1 rounded-full text-xs font-medium">
+            Editing Mode
+          </span>
+        )}
+      </div>
 
-      <div className="rounded-2xl p-4 shadow-lg w-full max-w-[1200px] mx-auto bg-[rgba(255,255,255,0.05)]">
-        {/* Input Fields */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+      <div className="rounded-2xl p-6 shadow-lg w-full max-w-[1200px] mx-auto bg-[rgba(255,255,255,0.05)] border border-gray-700">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           {/* Category */}
-          <div className="flex flex-col w-full sm:w-[250px] md:w-[300px] lg:w-[260px] relative">
-            <label
-              htmlFor="category"
-              className="text-sm text-white mb-2 font-medium"
-            >
-              Choose Category <span className="text-red-600">*</span>
+          <div className="flex flex-col">
+            <label className="text-sm text-white mb-2 font-medium flex items-center gap-2">
+              Category <span className="text-red-600">*</span>
+              {data.expense_category && !errors.expense_category && (
+                <span className="text-green-400 text-xs">(✓)</span>
+              )}
             </label>
-
-            <div className="relative">
+            <div className="relative group">
               <select
-                id="category"
-                className="h-11 w-full px-4 pr-10 rounded-lg border border-gray-400
-      bg-[rgba(255,255,255,0.15)] text-white text-sm
-      focus:outline-none focus:ring-2 focus:ring-green-400
-      transition-all duration-200 appearance-none"
+                name="expense_category"
+                value={data.expense_category}
+                onChange={handleChange}
+                className={`h-11 w-full px-4 pr-10 rounded-lg border transition-all text-sm
+                  appearance-none focus:outline-none shadow-sm
+                  ${
+                    errors.expense_category
+                      ? "border-red-500 bg-red-500 bg-opacity-10 focus:ring-2 focus:ring-red-500 text-red-200"
+                      : "border-gray-400 bg-[rgba(255,255,255,0.15)] text-white focus:ring-2 focus:ring-green-400 hover:border-green-400"
+                  }`}
+                style={{
+                  backgroundColor: errors.expense_category
+                    ? "rgba(239, 68, 68, 0.1)"
+                    : "rgba(255,255,255,0.15)",
+                  color: errors.expense_category ? "#fecaca" : "white",
+                }}
+              >
+                <option
+                  value=""
+                  style={{ backgroundColor: "#2E2E48", color: "white" }}
+                >
+                  Select Category
+                </option>
+                <option
+                  value="Food"
+                  style={{ backgroundColor: "#2E2E48", color: "white" }}
+                >
+                  Food
+                </option>
+                <option
+                  value="Transport"
+                  style={{ backgroundColor: "#2E2E48", color: "white" }}
+                >
+                  Transport
+                </option>
+                <option
+                  value="Entertainment"
+                  style={{ backgroundColor: "#2E2E48", color: "white" }}
+                >
+                  Entertainment
+                </option>
+                <option
+                  value="Utilities"
+                  style={{ backgroundColor: "#2E2E48", color: "white" }}
+                >
+                  Utilities
+                </option>
+                <option
+                  value="Healthcare"
+                  style={{ backgroundColor: "#2E2E48", color: "white" }}
+                >
+                  Healthcare
+                </option>
+                <option
+                  value="Others"
+                  style={{ backgroundColor: "#2E2E48", color: "white" }}
+                >
+                  Others
+                </option>
+              </select>
+              <span
+                className={`absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none transition-colors ${
+                  errors.expense_category ? "text-red-400" : "text-gray-300"
+                }`}
+              >
+                <MdKeyboardArrowDown size={20} />
+              </span>
+            </div>
+            {errors.expense_category ? (
+              <ErrorMessage message={errors.expense_category} />
+            ) : data.expense_category ? (
+              <SuccessIndicator show={true} />
+            ) : null}
+          </div>
+
+          {/* Expense Amount */}
+          <div className="flex flex-col">
+            <label className="text-sm text-white mb-2 font-medium flex items-center gap-2">
+              Amount <span className="text-red-600">*</span>
+              {data.expense_amount && !errors.expense_amount && (
+                <span className="text-green-400 text-xs">(✓)</span>
+              )}
+            </label>
+            <div className="relative">
+              <span className="absolute left-3 top-3 text-red-400 font-medium pointer-events-none">
+                ₹
+              </span>
+              <input
+                type="text"
+                name="expense_amount"
+                value={data.expense_amount}
+                onChange={handleChange}
+                placeholder="0"
+                className={`h-11 w-full px-4 pl-8 rounded-lg border transition-all text-white text-sm placeholder-gray-400 shadow-sm
+                  ${
+                    errors.expense_amount
+                      ? "border-red-500 bg-red-500 bg-opacity-10 focus:ring-2 focus:ring-red-500"
+                      : "border-gray-400 bg-[rgba(255,255,255,0.15)] focus:ring-2 focus:ring-green-400 hover:border-green-400"
+                  }
+                  focus:outline-none`}
+              />
+            </div>
+            {errors.expense_amount ? (
+              <ErrorMessage message={errors.expense_amount} />
+            ) : data.expense_amount ? (
+              <SuccessIndicator show={true} />
+            ) : null}
+          </div>
+
+          {/* Date */}
+          <div className="flex flex-col">
+            <label className="text-sm text-white mb-2 font-medium flex items-center gap-2">
+              Date <span className="text-red-600">*</span>
+              {data.expense_date && !errors.expense_date && (
+                <span className="text-green-400 text-xs">(✓)</span>
+              )}
+            </label>
+            <input
+              type="date"
+              name="expense_date"
+              value={data.expense_date}
+              onChange={handleChange}
+              className={`h-11 px-4 rounded-lg border transition-all text-white text-sm shadow-sm
+                ${
+                  errors.expense_date
+                    ? "border-red-500 bg-red-500 bg-opacity-10 focus:ring-2 focus:ring-red-500"
+                    : "border-gray-400 bg-[rgba(255,255,255,0.15)] focus:ring-2 focus:ring-green-400 hover:border-green-400"
+                }
+                focus:outline-none`}
+            />
+            {errors.expense_date ? (
+              <ErrorMessage message={errors.expense_date} />
+            ) : data.expense_date ? (
+              <SuccessIndicator show={true} />
+            ) : null}
+          </div>
+
+          {/* Payment Mode */}
+          <div className="flex flex-col">
+            <label className="text-sm text-white mb-2 font-medium flex items-center gap-2">
+              Payment Mode <span className="text-red-600">*</span>
+              {data.payment_mode && !errors.payment_mode && (
+                <span className="text-green-400 text-xs">(✓)</span>
+              )}
+            </label>
+            <div className="relative group">
+              <select
+                name="payment_mode"
+                value={data.payment_mode}
+                onChange={handleChange}
+                className={`h-11 w-full px-4 pr-10 rounded-lg border transition-all text-sm
+                  appearance-none focus:outline-none shadow-sm
+                  ${
+                    errors.payment_mode
+                      ? "border-red-500 bg-red-500 bg-opacity-10 focus:ring-2 focus:ring-red-500 text-red-200"
+                      : "border-gray-400 bg-[rgba(255,255,255,0.15)] text-white focus:ring-2 focus:ring-green-400 hover:border-green-400"
+                  }`}
+                style={{
+                  backgroundColor: errors.payment_mode
+                    ? "rgba(239, 68, 68, 0.1)"
+                    : "rgba(255,255,255,0.15)",
+                  color: errors.payment_mode ? "#fecaca" : "white",
+                }}
+              >
+                <option
+                  value=""
+                  style={{ backgroundColor: "#2E2E48", color: "white" }}
+                >
+                  Select Mode
+                </option>
+                <option
+                  value="Cash"
+                  style={{ backgroundColor: "#2E2E48", color: "white" }}
+                >
+                  Cash
+                </option>
+                <option
+                  value="Google Pay"
+                  style={{ backgroundColor: "#2E2E48", color: "white" }}
+                >
+                  Google Pay
+                </option>
+                <option
+                  value="Phone Pay"
+                  style={{ backgroundColor: "#2E2E48", color: "white" }}
+                >
+                  Phone Pay
+                </option>
+                <option
+                  value="Account"
+                  style={{ backgroundColor: "#2E2E48", color: "white" }}
+                >
+                  Account
+                </option>
+                <option
+                  value="Others"
+                  style={{ backgroundColor: "#2E2E48", color: "white" }}
+                >
+                  Others
+                </option>
+              </select>
+              <span
+                className={`absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none transition-colors ${
+                  errors.payment_mode ? "text-red-400" : "text-gray-300"
+                }`}
+              >
+                <MdKeyboardArrowDown size={20} />
+              </span>
+            </div>
+            {errors.payment_mode ? (
+              <ErrorMessage message={errors.payment_mode} />
+            ) : data.payment_mode ? (
+              <SuccessIndicator show={true} />
+            ) : null}
+          </div>
+
+          {/* Notes */}
+          <div className="flex flex-col lg:col-span-4">
+            <label className="text-sm text-white mb-2 font-medium">
+              Notes <span className="text-gray-400 text-xs">(Optional)</span>
+            </label>
+            <textarea
+              name="notes"
+              value={data.notes}
+              onChange={handleChange}
+              rows={2}
+              placeholder="Add any notes here..."
+              className="w-full px-4 py-2 rounded-lg border border-gray-400 
+                bg-[rgba(255,255,255,0.15)] text-white text-sm placeholder-gray-400
+                focus:outline-none focus:ring-2 focus:ring-green-400 transition-all shadow-sm hover:border-green-400"
+            />
+          </div>
+
+          {/* Budget Category */}
+          <div className="flex flex-col">
+            <label className="text-sm text-white mb-2 font-medium">
+              Budget Category{" "}
+              <span className="text-gray-400 text-xs">(Optional)</span>
+            </label>
+            <div className="relative group">
+              <select
+                name="budget_category"
+                value={data.budget_category}
+                onChange={handleChange}
+                className={`h-11 w-full px-4 pr-10 rounded-lg border transition-all text-sm
+                  appearance-none focus:outline-none shadow-sm
+                  border-gray-400 bg-[rgba(255,255,255,0.15)] text-white focus:ring-2 focus:ring-green-400 hover:border-green-400`}
                 style={{
                   backgroundColor: "rgba(255,255,255,0.15)",
                   color: "white",
                 }}
               >
-                <option value="">Select Category</option>
-                <option value="Salary" className="bg-[#2E2E48] text-white">
-                  Salary
+                <option
+                  value=""
+                  style={{ backgroundColor: "#2E2E48", color: "white" }}
+                >
+                  Select Budget Category
                 </option>
-                <option value="Business" className="bg-[#2E2E48] text-white">
-                  Business
+                <option
+                  value="Essential"
+                  style={{ backgroundColor: "#2E2E48", color: "white" }}
+                >
+                  Essential
                 </option>
-                <option value="Investments" className="bg-[#2E2E48] text-white">
-                  Investments
+                <option
+                  value="Non-Essential"
+                  style={{ backgroundColor: "#2E2E48", color: "white" }}
+                >
+                  Non-Essential
                 </option>
-                <option value="Freelancing" className="bg-[#2E2E48] text-white">
-                  Freelancing
-                </option>
-                <option value="Others" className="bg-[#2E2E48] text-white">
-                  Others
+                <option
+                  value="Savings"
+                  style={{ backgroundColor: "#2E2E48", color: "white" }}
+                >
+                  Savings
                 </option>
               </select>
-
-              {/* Arrow Icon */}
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-300 pointer-events-none">
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none transition-colors text-gray-300">
                 <MdKeyboardArrowDown size={20} />
               </span>
             </div>
           </div>
 
-          {/* Income Amount */}
-          <div className="flex flex-col">
-            <label
-              htmlFor="income_amount"
-              className="text-sm text-white mb-2 font-medium"
-            >
-              Income Amount <span className="text-red-600">*</span>
+          {/* Recurring Expense */}
+          <div className="flex flex-col justify-center">
+            <label className="text-sm text-white mb-2 font-medium flex items-center gap-2 h-5">
+              <input
+                type="checkbox"
+                name="is_recurring"
+                checked={data.is_recurring}
+                onChange={handleChange}
+                className="w-4 h-4 rounded border-gray-400 bg-[rgba(255,255,255,0.15)] cursor-pointer accent-green-400"
+              />
+              <span>Recurring Expense</span>
+            </label>
+            <p className="text-xs text-gray-400 ml-6">
+              Mark if this is a recurring expense
+            </p>
+          </div>
+
+          {/* Tags */}
+          <div className="flex flex-col lg:col-span-2">
+            <label className="text-sm text-white mb-2 font-medium">
+              Tags{" "}
+              <span className="text-gray-400 text-xs">
+                (Optional, comma-separated)
+              </span>
             </label>
             <input
               type="text"
-              id="income_amount"
-              placeholder="Enter your amount"
-              className="h-11 px-4 rounded-lg border border-gray-400 
-              bg-[rgba(255,255,255,0.15)] text-white text-sm placeholder-white
-              focus:outline-none focus:ring-2 focus:ring-green-400 transition-all duration-200"
+              name="tags"
+              value={data.tags}
+              onChange={handleChange}
+              placeholder="e.g., work, personal, urgent"
+              className="h-11 w-full px-4 rounded-lg border border-gray-400 bg-[rgba(255,255,255,0.15)] text-white text-sm placeholder-gray-400
+                focus:outline-none focus:ring-2 focus:ring-green-400 transition-all shadow-sm hover:border-green-400"
             />
-          </div>
-
-          {/* Date */}
-          <div className="flex flex-col">
-            <label
-              htmlFor="income_date"
-              className="text-sm text-white mb-2 font-medium"
-            >
-              Date <span className="text-red-600">*</span>
-            </label>
-            <input
-              type="date"
-              id="income_date"
-              className="h-11 px-4 rounded-lg border border-gray-400 
-              bg-[rgba(255,255,255,0.15)] text-white text-sm
-              focus:outline-none focus:ring-2 focus:ring-green-400 transition-all duration-200"
-            />
-          </div>
-
-          {/* Payment Mode */}
-          <div className="flex flex-col">
-            <label
-              htmlFor="payment_mode"
-              className="text-sm text-white mb-2 font-medium"
-            >
-              Choose Payment Mode <span className="text-red-600">*</span>
-            </label>
-            <select
-              id="payment_mode"
-              className="h-11 px-4 rounded-lg border border-gray-400 bg-[rgba(255,255,255,0.15)]
-              text-white text-sm focus:outline-none focus:ring-2 focus:ring-green-400 transition-all duration-200"
-            >
-              <option>Select Payment Mode</option>
-              <option value="Cash">Cash</option>
-              <option value="Account">Account</option>
-              <option value="GPay">GPay</option>
-              <option value="PhonePe">PhonePe</option>
-              <option value="Others">Others</option>
-            </select>
-          </div>
-
-          {/* Notes */}
-          <div className="flex flex-col lg:col-span-2">
-            <label
-              htmlFor="notes"
-              className="text-sm text-white mb-2 font-medium"
-            >
-              Notes (Optional)
-            </label>
-            <textarea
-              id="notes"
-              placeholder="Add any notes here..."
-              rows={3}
-              className="w-full px-4 py-2 rounded-lg border border-gray-400 
-              bg-[rgba(255,255,255,0.15)] text-white text-sm placeholder-white
-              focus:outline-none focus:ring-2 focus:ring-green-400 transition-all duration-200"
-            ></textarea>
+            <p className="text-xs text-gray-400 mt-1">
+              {data.tags
+                ? `${
+                    data.tags.split(",").filter((t) => t.trim()).length
+                  } tag(s)`
+                : "No tags added"}
+            </p>
           </div>
         </div>
 
-        {/* Save Button */}
-        <div className="flex justify-start">
-          <button className="bg-[#548f54] hover:bg-[#5B3256] text-white font-medium py-2 px-6 rounded-lg shadow-md transition-all duration-200">
-            Save
+        {/* Action Buttons */}
+        <div className="flex gap-3">
+          <button
+            onClick={() => setOpenDialog(true)}
+            disabled={!isMainFieldsValid || isSubmitting}
+            title={
+              !isMainFieldsValid
+                ? "Fill required fields before proceeding"
+                : undefined
+            }
+            className="bg-[#c17a6b] hover:bg-[#d48976] disabled:bg-gray-600 disabled:opacity-50 
+              text-white font-medium py-2 px-6 rounded-lg shadow-md transition flex items-center gap-2"
+          >
+            {currentEditingId ? "Update Expense" : "Add Expense"}
+          </button>
+          <button
+            onClick={handleClearAll}
+            disabled={isSubmitting}
+            className="bg-[#5B3256] hover:bg-[#703a68] disabled:bg-gray-600 disabled:opacity-50 
+              text-white font-medium py-2 px-6 rounded-lg shadow-md transition"
+          >
+            Clear All
           </button>
         </div>
       </div>
+
+      {/* Dialog */}
+      <Dialog.Root open={openDialog} onOpenChange={setOpenDialog}>
+        <Dialog.Portal>
+          <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm" />
+
+          <Dialog.Content
+            className="fixed top-1/2 left-1/2 w-[420px] -translate-x-1/2 -translate-y-1/2 
+              bg-[#2E2E48] rounded-2xl shadow-2xl p-6 text-white
+              data-[state=open]:animate-in data-[state=closed]:animate-out
+              border border-gray-700"
+          >
+            <div className="flex justify-between items-center mb-4">
+              <Dialog.Title className="text-lg font-semibold">
+                Confirm Expense
+              </Dialog.Title>
+              <Dialog.Close asChild>
+                <button className="text-gray-400 hover:text-white transition">
+                  <FiX size={22} />
+                </button>
+              </Dialog.Close>
+            </div>
+
+            <div className="flex flex-col gap-4">
+              <div className="bg-red-500 bg-opacity-10 border border-red-500 rounded-lg p-3">
+                <p className="text-sm font-medium text-red-100">
+                  Review your expense details before saving.
+                </p>
+              </div>
+
+              <div className="space-y-2 bg-gray-800 bg-opacity-50 p-4 rounded-lg">
+                <p className="text-sm text-gray-300">
+                  <span className="font-medium text-white">Category:</span>{" "}
+                  {data.expense_category}
+                </p>
+                <p className="text-sm text-gray-300">
+                  <span className="font-medium text-white">Amount:</span> ₹
+                  {Number(data.expense_amount).toLocaleString("en-IN")}
+                </p>
+                <p className="text-sm text-gray-300">
+                  <span className="font-medium text-white">Date:</span>{" "}
+                  {new Date(data.expense_date).toLocaleDateString("en-IN", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </p>
+                <p className="text-sm text-gray-300">
+                  <span className="font-medium text-white">Mode:</span>{" "}
+                  {data.payment_mode}
+                </p>
+                {data.budget_category && (
+                  <p className="text-sm text-gray-300">
+                    <span className="font-medium text-white">
+                      Budget Category:
+                    </span>{" "}
+                    {data.budget_category}
+                  </p>
+                )}
+                {data.is_recurring && (
+                  <p className="text-sm text-amber-300 flex items-center gap-2">
+                    <span className="font-medium">⚠ Recurring Expense</span>
+                  </p>
+                )}
+                {data.tags && (
+                  <p className="text-sm text-gray-300">
+                    <span className="font-medium text-white">Tags:</span>{" "}
+                    {data.tags
+                      .split(",")
+                      .map((t) => t.trim())
+                      .filter((t) => t)
+                      .join(", ")}
+                  </p>
+                )}
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setOpenDialog(false);
+                  handleSubmit();
+                }}
+                disabled={isSubmitting}
+                className="bg-[#c17a6b] hover:bg-[#d48976] disabled:bg-gray-600 disabled:opacity-50 w-full h-11 rounded-lg text-white font-medium transition flex items-center justify-center gap-2"
+              >
+                {isSubmitting ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <MdCheckCircle size={18} />
+                    Confirm & Save
+                  </>
+                )}
+              </button>
+            </div>
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
     </div>
   );
 }

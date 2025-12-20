@@ -6,6 +6,7 @@ import {
 } from "./incomeApi";
 import { toast } from "react-toastify";
 import type { GoalIncomeFilterResponse } from "../../types/response-types";
+import type { AxiosError } from "axios";
 
 export interface updateIncomePayload extends CreateIncomePayload {
   id: string;
@@ -17,16 +18,17 @@ export const useCreateIncome = (resetForm: () => void) => {
     mutationFn: (body: CreateIncomePayload) => incomeApi.createIncome(body),
 
     onSuccess: (data) => {
-      toast.success(`${data?.message}` || "your income was added");
-      setTimeout(() => {
-        queryClient.invalidateQueries({ queryKey: ["income"] });
-      }, 3000);
+      toast.success(data?.message || "Income added successfully");
+      // Invalidate income queries to refetch data
+      queryClient.invalidateQueries({ queryKey: ["income"] });
+      queryClient.invalidateQueries({ queryKey: ["incomeFilter"] });
       resetForm();
     },
 
-    onError: (error) => {
+    onError: (error: AxiosError<{ message: string }>) => {
       toast.error(
-        `${error?.message}` || "something went wrong add your income"
+        error?.response?.data?.message ||
+          "Failed to add income. Please try again."
       );
     },
   });
@@ -43,11 +45,11 @@ export const useGetIncome = () => {
 
 export const useGetIncomeById = (id: string | null) => {
   return useQuery({
-    queryKey: ["incomeById"],
+    queryKey: ["incomeById", id],
     queryFn: () => incomeApi.getIncomeById(id),
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
-    enabled: !!id,
+    enabled: !!id, // Only run query if id exists
   });
 };
 
@@ -58,24 +60,49 @@ export const useUpdateIncome = (resetForm: () => void) => {
       incomeApi.updateIncome(body, body?.id),
 
     onSuccess: (data) => {
-      toast.success(`${data?.message}` || "your income was added");
-      setTimeout(() => {
-        queryClient.invalidateQueries({ queryKey: ["income"] });
-      }, 3000);
+      toast.success(data?.message || "Income updated successfully");
+      // Invalidate income queries to refetch data
+      queryClient.invalidateQueries({ queryKey: ["income"] });
+      queryClient.invalidateQueries({ queryKey: ["incomeFilter"] });
+      queryClient.invalidateQueries({ queryKey: ["incomeById"] });
       resetForm();
     },
 
-    onError: (error) => {
+    onError: (error: AxiosError<{ message: string }>) => {
       toast.error(
-        `${error?.message}` || "something went wrong add your income"
+        error?.response?.data?.message ||
+          "Failed to update income. Please try again."
       );
     },
   });
 };
+
+export const useDeleteIncome = ({ onSuccess }: { onSuccess?: () => void }) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => incomeApi.deleteIncome(id),
+    onSuccess: (data) => {
+      toast.success(data?.message || "Income deleted successfully");
+      setTimeout(() => {
+        queryClient.invalidateQueries({ queryKey: ["income"] });
+        queryClient.invalidateQueries({ queryKey: ["incomeFilter"] });
+      }, 500);
+      if (onSuccess) onSuccess();
+    },
+    onError: (error: AxiosError<{ message: string }>) => {
+      toast.error(
+        error?.response?.data?.message ||
+          "Failed to delete income. Please try again."
+      );
+    },
+  });
+};
+
 export const useIncomeFilter = (filters: filterIncomePayload) => {
   return useQuery<GoalIncomeFilterResponse>({
-    queryKey: ["income", filters],
+    queryKey: ["incomeFilter", filters],
     queryFn: () => incomeApi.useFilterIncome(filters),
-    staleTime: 1000 * 60,
+    staleTime: 1000 * 60, // Cache for 1 minute
+    refetchOnWindowFocus: false,
   });
 };

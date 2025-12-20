@@ -25,6 +25,8 @@ export const incomeApi = {
     handleRequest(apiClient.get(`/income/get/${id}`)),
   updateIncome: (body: CreateIncomePayload, id: string | null) =>
     handleRequest(apiClient.put(`/income/update/${id}`, body)),
+  deleteIncome: (id: string) =>
+    handleRequest(apiClient.delete(`/income/delete/${id}`)),
   useFilterIncome: (body: filterIncomePayload) =>
     handleRequest(apiClient.post("/income/filter", body)),
 };

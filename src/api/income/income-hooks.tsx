@@ -106,3 +106,12 @@ export const useIncomeFilter = (filters: filterIncomePayload) => {
     refetchOnWindowFocus: false,
   });
 };
+
+export const useIncomeBalance = () => {
+  return useQuery({
+    queryKey: ["income"],
+    queryFn: () => incomeApi.getIncomeBalance(),
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
+  });
+};

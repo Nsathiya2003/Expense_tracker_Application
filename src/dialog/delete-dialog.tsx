@@ -1,32 +1,29 @@
-import type { useDeleteGoal } from "../api/goal/goal-hooks";
-
 export const DeleteDialog = ({
   open,
   onClose,
-  deleteConfirmed,
+  onDelete,
   deleteId,
 }: {
   open: boolean;
   onClose: () => void;
-  deleteConfirmed: ReturnType<typeof useDeleteGoal>;
+  // onDelete should accept the id to delete; receives deleteId when user confirms
+  onDelete: (id: string) => void;
   deleteId: string | null;
 }) => {
-  const { mutate } = deleteConfirmed;
-
   const handleDelete = () => {
-    if (deleteId) mutate(deleteId);
+    if (deleteId) onDelete(deleteId);
   };
 
   return (
     <>
       {open && (
         <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
-          <div className="bg-[#2d2d50] p-6 rounded-2xl w-[320px] shadow-lg border border-gray-600 animate-fadeIn">
+          <div className="bg-[#2d2d50] p-6 rounded-2xl w-[360px] shadow-lg border border-gray-600 animate-fadeIn">
             <p className="text-lg font-semibold mb-3 text-white">
               Confirm Delete
             </p>
             <p className="text-sm text-gray-300 mb-5">
-              Are you sure you want to delete ?
+              Are you sure you want to delete this item?
             </p>
             <div className="flex justify-end gap-3">
               <button

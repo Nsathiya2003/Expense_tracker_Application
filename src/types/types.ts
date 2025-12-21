@@ -66,3 +66,16 @@ export interface GoalHistoryData {
   income_type: string;
   createdAt: Date;
 }
+
+export interface BudgetData {
+  budget_category: string;
+  budget_amount: number;
+  budget_month: string;
+  budget_start_date: Date;
+  notes: string;
+  need_Notification: boolean;
+  budget_exceeded: boolean;
+  budget_reaches: boolean;
+  reach_percentage: string;
+  _id: string;
+}

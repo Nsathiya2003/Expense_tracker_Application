@@ -7,9 +7,9 @@ export interface CreateBudgetPayload {
   budget_month: string;
   budget_start_date: Date;
   notes: string;
-  need_Notification: boolean;
-  budget_Exceeded: boolean;
-  budget_Reaches: boolean;
+  need_notification: boolean;
+  budget_exceeded: boolean;
+  budget_reaches: boolean;
   reach_percentage: string;
 }
 

@@ -237,9 +237,9 @@ interface FormData {
   budget_month: string;
   budget_start_date: string;
   notes: string;
-  need_Notification: boolean;
-  budget_Exceeded: boolean;
-  budget_Reaches: boolean;
+  need_notification: boolean;
+  budget_exceeded: boolean;
+  budget_reaches: boolean;
   reach_percentage: string;
 }
 
@@ -257,9 +257,9 @@ const INITIAL_FORM_STATE: FormData = {
   budget_month: "",
   budget_start_date: "",
   notes: "",
-  need_Notification: true,
-  budget_Exceeded: true,
-  budget_Reaches: false,
+  need_notification: true,
+  budget_exceeded: true,
+  budget_reaches: false,
   reach_percentage: "",
 };
 
@@ -309,36 +309,50 @@ export default function AddBudget({ editingId }: { editingId: string | null }) {
     return true;
   }, [data]);
 
-  const { data: expenseById } = useGetBudgetById(currentEditingId);
+  const { data: budgetId } = useGetBudgetById(currentEditingId);
 
   useEffect(() => {
     setCurrentEditingId(editingId);
   }, [editingId]);
 
   useEffect(() => {
-    if (expenseById?.data) {
-      const expenseData = expenseById.data;
+    if (budgetId?.data) {
+      const budgetData = budgetId.data;
       setData({
-        budget_amount: String(expenseData.budget_amount || ""),
-        budget_category: expenseData.budget_category || "",
-        budget_month: "jan",
-        budget_start_date: expenseData.budget_start_date
-          ? new Date(expenseData.budget_start_date).toISOString().split("T")[0]
+        budget_amount: String(budgetData.budget_amount || ""),
+        budget_category: budgetData.budget_category || "",
+        budget_month: budgetData.budget_month || "",
+        budget_start_date: budgetData.budget_start_date
+          ? new Date(budgetData.budget_start_date).toISOString().split("T")[0]
           : "",
-        notes: expenseData.notes || "",
-        need_Notification: true,
-        budget_Exceeded: true,
-        budget_Reaches: false,
-        reach_percentage: "",
+        notes: budgetData.notes || "",
+        need_notification: budgetData.need_notification || false,
+        budget_exceeded: budgetData.budget_exceeded || false,
+        budget_reaches: budgetData.budget_reaches || false,
+        reach_percentage: budgetData.reach_percentage || "",
       });
+      if (budgetId?.data) {
+        const bd = budgetId.data;
+        if (bd.budget_reaches === true) {
+          setNotifyType("percentage");
+          setNotifyPercent(Number(bd.reach_percentage || 80));
+        } else {
+          setNotifyType("exceed");
+        }
+      }
+      // setNotifyPercent(
+      //   budgetData.reach_percentage ? Number(budgetData.reach_percentage) : 80
+      // );
     }
-  }, [expenseById?.data]);
+  }, [budgetId?.data]);
 
   const resetForm = useCallback(() => {
     setData(INITIAL_FORM_STATE);
     setCurrentEditingId(null);
     setErrors({});
     setIsSubmitting(false);
+    setNotifyPercent(80);
+    setNotifyType(notifyType === "percentage" ? "exceed" : "percentage");
   }, []);
 
   const handleClearAll = useCallback(() => {
@@ -394,6 +408,7 @@ export default function AddBudget({ editingId }: { editingId: string | null }) {
         setErrors(validationErrors);
         return;
       }
+      console.log("Form data is valid. Proceeding to submit...", notifyType);
 
       setIsSubmitting(true);
       const payload: updateBudgetPayload = {
@@ -404,12 +419,11 @@ export default function AddBudget({ editingId }: { editingId: string | null }) {
         budget_month: overrides?.budget_month ?? data.budget_month,
         budget_start_date:
           overrides?.budget_start_date ?? new Date(data.budget_start_date),
-        need_Notification:
-          overrides?.need_Notification ?? data.need_Notification,
-        budget_Exceeded: notifyType === "exceed" ? true : false,
-        budget_Reaches: notifyType === "percentage" ? true : false,
-        reach_percentage: String(overrides?.budget_Reaches ?? notifyPercent),
-
+        need_notification: true,
+        budget_exceeded: notifyType === "exceed",
+        budget_reaches: notifyType === "percentage",
+        reach_percentage:
+          notifyType === "percentage" ? String(notifyPercent) : "",
         id: currentEditingId || "",
       };
 
@@ -425,7 +439,14 @@ export default function AddBudget({ editingId }: { editingId: string | null }) {
         });
       }
     },
-    [data, currentEditingId, updateBudget, createBudget]
+    [
+      data,
+      currentEditingId,
+      updateBudget,
+      createBudget,
+      notifyType,
+      notifyPercent,
+    ]
   );
 
   const ErrorMessage = ({ message }: { message?: string }) => {
@@ -607,6 +628,12 @@ export default function AddBudget({ editingId }: { editingId: string | null }) {
                   color: errors.budget_month ? "#fecaca" : "white",
                 }}
               >
+                <option
+                  value=""
+                  style={{ backgroundColor: "#2E2E48", color: "white" }}
+                >
+                  Choose Month
+                </option>
                 {Months &&
                   Months.length > 0 &&
                   Months.map((item) => (
@@ -691,7 +718,6 @@ export default function AddBudget({ editingId }: { editingId: string | null }) {
                   value="exceed"
                   checked={notifyType === "exceed"}
                   onChange={(e) => setNotifyType(e.target.value)}
-                  className="accent-[#548f54] hover:cursor-pointer"
                 />
                 <span>Only when I exceed the limit</span>
               </label>
@@ -703,19 +729,21 @@ export default function AddBudget({ editingId }: { editingId: string | null }) {
                   value="percentage"
                   checked={notifyType === "percentage"}
                   onChange={(e) => setNotifyType(e.target.value)}
-                  className="accent-[#548f54] hover:cursor-pointer"
                 />
-                <span>When spending reaches</span>
                 <input
                   type="text"
                   min="1"
                   max="100"
+                  disabled={notifyType !== "percentage"}
                   value={notifyPercent}
                   onChange={(e) => setNotifyPercent(Number(e.target.value))}
-                  className="w-16 px-2 py-1 rounded bg-[rgba(255,255,255,0.15)]
-  border-b border-gray-400 text-white text-sm text-center
-  focus:outline-none focus:border-green-400 transition-all duration-200"
+                  className={`w-16 px-2 py-1 rounded text-center text-black ${
+                    notifyType !== "percentage"
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
+                  }`}
                 />
+
                 <span>%</span>
               </label>
             </div>

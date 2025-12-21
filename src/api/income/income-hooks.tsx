@@ -22,6 +22,7 @@ export const useCreateIncome = (resetForm: () => void) => {
       // Invalidate income queries to refetch data
       queryClient.invalidateQueries({ queryKey: ["income"] });
       queryClient.invalidateQueries({ queryKey: ["incomeFilter"] });
+
       resetForm();
     },
 
@@ -102,14 +103,14 @@ export const useIncomeFilter = (filters: filterIncomePayload) => {
   return useQuery<GoalIncomeFilterResponse>({
     queryKey: ["incomeFilter", filters],
     queryFn: () => incomeApi.useFilterIncome(filters),
-    staleTime: 1000 * 60, // Cache for 1 minute
+    staleTime: 1000 * 60,
     refetchOnWindowFocus: false,
   });
 };
 
 export const useIncomeBalance = () => {
   return useQuery({
-    queryKey: ["income"],
+    queryKey: ["incomeBalance"],
     queryFn: () => incomeApi.getIncomeBalance(),
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,

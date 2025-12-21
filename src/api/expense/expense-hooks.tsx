@@ -20,6 +20,8 @@ export const useCreateExpense = (resetForm: () => void) => {
       toast.success(data?.message || "Expense added successfully");
       queryClient.invalidateQueries({ queryKey: ["expense"] });
       queryClient.invalidateQueries({ queryKey: ["expenseFilter"] });
+      queryClient.invalidateQueries({ queryKey: ["incomeBalance"] });
+
       resetForm();
     },
 
@@ -62,6 +64,8 @@ export const useUpdateExpense = (resetForm: () => void) => {
       queryClient.invalidateQueries({ queryKey: ["expense"] });
       queryClient.invalidateQueries({ queryKey: ["expenseFilter"] });
       queryClient.invalidateQueries({ queryKey: ["expenseById"] });
+      queryClient.invalidateQueries({ queryKey: ["incomeBalance"] });
+
       resetForm();
     },
 

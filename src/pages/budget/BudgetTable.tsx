@@ -5,13 +5,15 @@ import React, { useState, useCallback, useMemo } from "react";
 import FilterDialog from "../../dialog/filter";
 import { IoIosArrowForward } from "react-icons/io";
 import { IoIosArrowBack } from "react-icons/io";
-import { useIncomeFilter } from "../../api/income/income-hooks";
 import TableLoader from "../../utils/TableLoader";
 import { DeleteDialog } from "../../dialog/delete-dialog";
-import { useDeleteIncome } from "../../api/income/income-hooks";
-import type { IncomeData } from "../../types/types";
+import type { BudgetData } from "../../types/types";
 import { useFindAllGoal } from "../../api/goal/goal-hooks";
 import type { GoalDataTypes } from "../../types/response-types";
+import {
+  useBudgetFilter,
+  useDeleteBudget,
+} from "../../api/budget/budget-hooks";
 
 export interface FilterState {
   page: number;
@@ -47,10 +49,10 @@ export default function BudgetTable({
   const [tempFilters, setTempFilters] = useState<FilterState>({ ...filters });
 
   // Get income data
-  const { data: filterData, isLoading } = useIncomeFilter(filters);
+  const { data: filterData, isLoading } = useBudgetFilter(filters);
   const { data: GoalData } = useFindAllGoal();
   // Delete mutation
-  const deleteMutation = useDeleteIncome({
+  const deleteMutation = useDeleteBudget({
     onSuccess: () => {
       setDeleteDialog(false);
       setDeleteId(null);
@@ -58,7 +60,7 @@ export default function BudgetTable({
   });
 
   // Memoized income data
-  const incomeData = useMemo(() => filterData?.data || [], [filterData?.data]);
+  const budgetData = useMemo(() => filterData?.data || [], [filterData?.data]);
   const paginatedData = useMemo(
     () => filterData?.pagination || null,
     [filterData?.pagination]
@@ -70,12 +72,12 @@ export default function BudgetTable({
   const hasPrevPage = filterData?.pagination?.hasPrevPage;
   const hasNextPage = filterData?.pagination?.hasNextPage;
 
-  console.log({ incomeData });
+  console.log({ budgetData });
 
   // Calculate summary stats
 
-  const totalIncome = Number(paginatedData?.totalIncomeAmount);
-  const totalContributed = Number(paginatedData?.totalGoalContribution);
+  const totalBudget = Number(paginatedData?.totalBudgetAmount);
+  const totalBudgetExceededCounts = Number(paginatedData?.budgetExceededCounts);
   const recordCount = Number(paginatedData?.totalRecords);
 
   // Handle page change
@@ -136,9 +138,9 @@ export default function BudgetTable({
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <div className="bg-gradient-to-br from-green-500 to-green-600 bg-opacity-20 border border-green-500 border-opacity-30 rounded-lg p-4">
-          <p className="text-white-300 text-sm font-medium">Total Income</p>
+          <p className="text-white-300 text-sm font-medium">Total Budget</p>
           <p className="text-green-100 text-2xl font-bold mt-1">
-            ₹{totalIncome > 0 && totalIncome.toLocaleString("en-IN")}
+            ₹{totalBudget > 0 && totalBudget.toLocaleString("en-IN")}
           </p>
         </div>
         <div className="bg-gradient-to-br from-blue-500 to-blue-600 bg-opacity-20 border border-blue-500 border-opacity-30 rounded-lg p-4">
@@ -146,7 +148,7 @@ export default function BudgetTable({
             Contributed to Goals
           </p>
           <p className="text-blue-100 text-2xl font-bold mt-1">
-            ₹{totalContributed.toLocaleString("en-IN")}
+            ₹{totalBudgetExceededCounts.toLocaleString("en-IN")}
           </p>
         </div>
         <div className="bg-gradient-to-br from-orange-500 to-orange-500 bg-opacity-20 border border-orange-600 border-opacity-40 rounded-lg p-4">
@@ -161,7 +163,7 @@ export default function BudgetTable({
       <div className="flex flex-wrap items-center justify-between mb-6 gap-3">
         <h1 className="text-[#54af54] font-bold text-2xl tracking-wide flex items-center gap-2">
           <span className="text-3xl">💰</span>
-          View Income
+          View Budget
         </h1>
 
         {/* Search Box and Filter Icon */}
@@ -208,8 +210,8 @@ export default function BudgetTable({
           <tbody>
             {isLoading ? (
               <TableLoader />
-            ) : incomeData.length > 0 ? (
-              incomeData.map((item: IncomeData, index: number) => (
+            ) : budgetData.length > 0 ? (
+              budgetData.map((item: BudgetData, index: number) => (
                 <tr
                   key={item._id}
                   className={`border-b border-gray-700 hover:bg-[rgba(84,175,84,0.1)] transition ${
@@ -220,28 +222,33 @@ export default function BudgetTable({
                 >
                   <td className="py-4 px-4 font-semibold text-white">
                     <span className="bg-blue-500 bg-opacity-20 text-blue-300 px-3 py-1 rounded-full text-xs font-medium">
-                      {item.income_category || "N/A"}
+                      {item.budget_category || "N/A"}
                     </span>
                   </td>
                   <td className="py-4 px-4 font-bold text-green-400">
-                    ₹{item.income_amount?.toLocaleString("en-IN") || 0}
+                    ₹{item.budget_amount?.toLocaleString("en-IN") || 0}
                   </td>
                   <td className="py-4 px-4 font-semibold text-white">
                     <span className="bg-blue-500 bg-opacity-20 text-blue-300 px-3 py-1 rounded-full text-xs font-medium">
-                      {item.income_category || "N/A"}
+                      {item.budget_month || "N/A"}
                     </span>
                   </td>
                   <td className="py-4 px-4 text-gray-300 text-sm">
                     <span className="bg-gray-700 bg-opacity-50 px-2 py-1 rounded">
-                      {new Date(item.income_date).toLocaleDateString("en-IN", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}
+                      {new Date(item.budget_start_date).toLocaleDateString(
+                        "en-IN",
+                        {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        }
+                      )}
                     </span>
                   </td>
                   <td className="py-4 px-4 font-bold text-green-400">
-                    Exceeded
+                    {!item.budget_exceeded
+                      ? `Percentage - ${item.reach_percentage}`
+                      : `Exceeded`}
                   </td>
                   <td className="py-4 px-4">
                     <div className="flex justify-center items-center gap-2">
@@ -288,7 +295,7 @@ export default function BudgetTable({
       {/* Page Limit Dropdown */}
       <div className="flex justify-between items-center my-6 flex-wrap gap-3">
         <div className="text-gray-400 text-sm">
-          Showing {incomeData.length} of {filters.limit} records
+          Showing {budgetData.length} of {filters.limit} records
         </div>
         <div className="flex items-center gap-3">
           <span className="text-gray-400 text-sm">Rows per page:</span>

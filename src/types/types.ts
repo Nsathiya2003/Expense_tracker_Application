@@ -41,6 +41,7 @@ export interface IncomeData {
   goal_id: {
     goal_name: string;
   };
+  current_income_amount: number;
 }
 
 export interface GoalData {

@@ -126,8 +126,6 @@ export default function AddIncome({
   // Get all goals
   const { data: GoalData } = useFindAllGoal();
 
-  console.log("GoalData in AddIncome:", GoalData?.data[0]?.allocated_amount);
-
   // Sync editingId prop with local state
   useEffect(() => {
     setCurrentEditingId(editingId);

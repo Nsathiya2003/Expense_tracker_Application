@@ -192,13 +192,18 @@ export default function IncomeTable({
           <thead className="bg-gradient-to-r from-[#2E2E48] to-[#3E3E5E] text-white uppercase text-xs tracking-wider">
             <tr>
               <th className="py-4 px-4 text-left font-semibold">Category</th>
-              <th className="py-4 px-4 text-left font-semibold">Amount</th>
               <th className="py-4 px-4 text-left font-semibold">
-                Contribution
+                Total Amount
               </th>
-              <th className="py-4 px-4 text-left font-semibold">Goal</th>
-              <th className="py-4 px-4 text-right font-semibold">Amount</th>
-              <th className="py-4 px-4 text-left font-semibold">Date</th>
+              <th className="py-4 px-4 text-left font-semibold">Balance</th>
+              <th className="py-4 px-4 text-left font-semibold">
+                Goal Contribution
+              </th>
+              <th className="py-4 px-4 text-left font-semibold">Goal Name</th>
+              <th className="py-4 px-4 text-left font-semibold">
+                Contributed Amount
+              </th>
+              <th className="py-4 px-4 text-left font-semibold">Income Date</th>
               <th className="py-4 px-4 text-center font-semibold">Actions</th>
             </tr>
           </thead>
@@ -224,6 +229,9 @@ export default function IncomeTable({
                   <td className="py-4 px-4 font-bold text-green-400">
                     ₹{item.income_amount?.toLocaleString("en-IN") || 0}
                   </td>
+                  <td className="py-4 px-4 font-bold text-green-400">
+                    ₹{item.current_income_amount?.toLocaleString("en-IN") || 0}
+                  </td>
                   <td className="py-4 px-4">
                     <span
                       className={`px-3 py-1.5 rounded-full text-xs font-bold transition ${
@@ -245,7 +253,7 @@ export default function IncomeTable({
                       <span className="text-gray-500">—</span>
                     )}
                   </td>
-                  <td className="py-4 px-4 text-right font-bold text-amber-400">
+                  <td className="py-4 px-4 text-center font-bold text-amber-400">
                     ₹
                     {(item.goal_contribute_amount || 0).toLocaleString("en-IN")}
                   </td>

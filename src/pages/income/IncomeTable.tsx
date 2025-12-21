@@ -13,7 +13,7 @@ import type { IncomeData } from "../../types/types";
 import { useFindAllGoal } from "../../api/goal/goal-hooks";
 import type { GoalDataTypes } from "../../types/response-types";
 
-interface FilterState {
+export interface FilterState {
   page: number;
   limit: number;
   search: string;

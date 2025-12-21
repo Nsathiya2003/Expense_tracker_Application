@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useGetIncome } from "../api/income/income-hooks";
+import { useGetIncome, useIncomeBalance } from "../api/income/income-hooks";
 import { useGetExpense } from "../api/expense/expense-hooks";
 import { IoWalletOutline } from "react-icons/io5";
 import { MdTrendingUp, MdTrendingDown } from "react-icons/md";
@@ -8,6 +8,9 @@ export default function CurrentBalance() {
   // Fetch all income and expense data
   const { data: incomeData } = useGetIncome();
   const { data: expenseData } = useGetExpense();
+
+  //get income balance
+  const { data: incomeBalanceData } = useIncomeBalance();
 
   // Calculate totals
   const totalIncome = useMemo(() => {
@@ -51,7 +54,7 @@ export default function CurrentBalance() {
         </div>
         <div className="space-y-2">
           <p className={`text-3xl font-bold ${getBalanceColor()}`}>
-            ₹{currentBalance.toLocaleString("en-IN")}
+            ₹{incomeBalanceData?.data?.balanceAmount}
           </p>
           <div className="w-full bg-gray-700 bg-opacity-40 rounded-full h-1.5 overflow-hidden">
             <div
@@ -79,7 +82,7 @@ export default function CurrentBalance() {
           <p className="text-white text-sm font-medium">Total Income</p>
         </div>
         <p className="text-green-200 text-2xl font-bold">
-          ₹{totalIncome.toLocaleString("en-IN")}
+          ₹{incomeBalanceData?.data?.totalIncome}
         </p>
         <p className="text-gray-400 text-xs mt-1">All recorded income</p>
       </div>
@@ -88,10 +91,10 @@ export default function CurrentBalance() {
       <div className="bg-gradient-to-br from-red-500 to-red-700 bg-opacity-10 border border-red-400 border-opacity-40 rounded-xl p-4 shadow-md">
         <div className="flex items-center gap-2 mb-2">
           <MdTrendingDown size={18} className="text-red-300" />
-          <p className="text-white text-sm font-medium">Total Expenses</p>
+          <p className="text-white text-sm font-medium">Total Spend</p>
         </div>
         <p className="text-red-200 text-2xl font-bold">
-          ₹{totalExpense.toLocaleString("en-IN")}
+          ₹{incomeBalanceData?.data?.totalExpense}
         </p>
         <p className="text-gray-400 text-xs mt-1">All recorded expenses</p>
       </div>

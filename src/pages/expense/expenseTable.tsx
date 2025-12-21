@@ -56,7 +56,11 @@ export default function ExpenseTable({
   //get income balance
   const { data: incomeBalanceData, isPending } = useIncomeBalance();
 
-  console.log("Income Balance Data:", isPending, incomeBalanceData);
+  console.log(
+    "Income Balance Data:",
+    isPending,
+    incomeBalanceData?.data?.balanceAmount
+  );
 
   // Delete mutation
   const deleteMutation = useDeleteExpense({

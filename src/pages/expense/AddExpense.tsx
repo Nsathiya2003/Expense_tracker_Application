@@ -547,7 +547,7 @@ export default function AddExpense({
           <div className="flex flex-col justify-center">
             <label className="text-sm text-white mb-2 font-medium flex items-center gap-2 h-5">
               <input
-                type="checkbox"
+                type="radio"
                 name="is_recurring"
                 checked={data.is_recurring}
                 onChange={handleChange}

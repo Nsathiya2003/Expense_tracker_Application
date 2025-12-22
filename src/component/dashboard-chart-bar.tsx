@@ -8,44 +8,110 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-
-const data = [
-  { month: "Jan", income: 4000, expense: 2400 },
-  { month: "Feb", income: 3000, expense: 1398 },
-  { month: "Mar", income: 2000, expense: 9800 },
-  { month: "Apr", income: 2780, expense: 3908 },
-  { month: "May", income: 1890, expense: 4800 },
-  { month: "Jun", income: 2390, expense: 3800 },
-  { month: "Jul", income: 3490, expense: 4300 },
-  { month: "Aug", income: 4000, expense: 2400 },
-  { month: "Sep", income: 3000, expense: 1398 },
-  { month: "Oct", income: 2000, expense: 9800 },
-  { month: "Nov", income: 2780, expense: 3908 },
-  { month: "Dec", income: 1890, expense: 8000 },
-];
+import { useMonthlyExpenseIncome } from "../api/dashboard/dashboard-hooks";
 
 export default function IncomeExpenseChart() {
+  const { data: chartData, isLoading, isError } = useMonthlyExpenseIncome();
+
+  // -------- Loading state --------
+  if (isLoading) {
+    return (
+      <div className="bg-[#2E362E] p-5 m-4 rounded-2xl w-full sm:w-[400px] lg:w-[480px] mt-6 animate-pulse">
+        <div className="h-4 w-40 bg-gray-600 rounded mb-4" />
+        <div className="h-[220px] bg-gray-700/40 rounded-xl" />
+      </div>
+    );
+  }
+
+  // -------- Error state --------
+  if (isError) {
+    return (
+      <div className="bg-[#2E362E] p-5 m-4 rounded-2xl w-full sm:w-[400px] lg:w-[480px] mt-6">
+        <p className="text-sm text-red-400">
+          Failed to load monthly chart data.
+        </p>
+      </div>
+    );
+  }
+
+  const data = chartData?.data || [];
+
   return (
-    <div className="bg-[#2E362E] p-4 m-4 rounded-2xl w-full sm:w-[400px] lg:w-[480px] mt-6">
-      <h2 className="text-lg font-semibold mb-3 text-start text-[#00C8DC]">
-        Monthly Income vs Expense
-      </h2>
-      <ResponsiveContainer width="100%" height={220}>
-        <BarChart data={data} margin={{ top: 10, right: 20, left: 0, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#3f3f63" />
-          <XAxis dataKey="month" stroke="#ccc" fontSize={11} />
-          <YAxis stroke="#ccc" fontSize={11} />
+    <div
+      className="bg-gradient-to-br from-[#2E362E] to-[#1F251F]
+      p-5 m-4 rounded-2xl w-full sm:w-[400px] lg:w-[480px] mt-6
+      shadow-md hover:shadow-lg transition-all"
+    >
+      {/* Header */}
+      <div className="mb-4">
+        <h2 className="text-base font-semibold text-[#00C8DC]">
+          Income vs Expense
+        </h2>
+        <p className="text-xs text-gray-400">
+          Monthly comparison for the current year
+        </p>
+      </div>
+
+      {/* Chart */}
+      <ResponsiveContainer width="100%" height={240}>
+        <BarChart
+          data={data}
+          margin={{ top: 10, right: 10, left: -10, bottom: 0 }}
+        >
+          <CartesianGrid
+            strokeDasharray="3 3"
+            stroke="#3A423A"
+            vertical={false}
+          />
+
+          <XAxis
+            dataKey="month"
+            stroke="#9CA3AF"
+            fontSize={11}
+            tickLine={false}
+            axisLine={false}
+          />
+
+          <YAxis
+            stroke="#9CA3AF"
+            fontSize={11}
+            tickLine={false}
+            axisLine={false}
+          />
+
           <Tooltip
+            cursor={{ fill: "rgba(255,255,255,0.04)" }}
             contentStyle={{
-              backgroundColor: "#1e1e30",
+              backgroundColor: "#1F251F",
               borderRadius: "10px",
               border: "none",
               fontSize: "12px",
+              color: "#fff",
             }}
+            formatter={(value) => [`₹${value.toLocaleString()}`, ""]}
           />
-          <Legend wrapperStyle={{ fontSize: "12px" }} />
-          <Bar dataKey="income" fill="rgba(34,197,94,0.8)" radius={[6, 6, 0, 0]} barSize={18} />
-          <Bar dataKey="expense" fill="rgba(230, 162, 162, 0.8)" radius={[6, 6, 0, 0]} barSize={18} />
+
+          <Legend
+            verticalAlign="top"
+            align="right"
+            wrapperStyle={{ fontSize: "12px" }}
+          />
+
+          <Bar
+            dataKey="income"
+            name="Income"
+            fill="rgba(34,197,94,0.85)"
+            radius={[6, 6, 0, 0]}
+            barSize={14}
+          />
+
+          <Bar
+            dataKey="expense"
+            name="Expense"
+            fill="rgba(239,68,68,0.8)"
+            radius={[6, 6, 0, 0]}
+            barSize={14}
+          />
         </BarChart>
       </ResponsiveContainer>
     </div>

@@ -7,9 +7,12 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { spendData } from "../data/spend-history-items";
+import { useSpendHistory } from "../api/dashboard/dashboard-hooks";
+// import { spendData } from "../data/spend-history-items";
 
 export default function SpendHistory() {
+  //fetch from api
+  const { data: spendDataResponse } = useSpendHistory();
   return (
     <div className="bg-[#2E362E] p-4 m-4 rounded-2xl w-full sm:w-[400px] lg:w-[620px] mt-6">
       <h2 className="text-xl font-semibold mb-4 text-white">
@@ -18,7 +21,7 @@ export default function SpendHistory() {
 
       <ResponsiveContainer width="100%" height={200}>
         <AreaChart
-          data={spendData}
+          data={spendDataResponse?.data || []}
           margin={{ top: 10, right: 20, left: 0, bottom: 0 }}
         >
           {/* 💚 Full light green area fill */}

@@ -283,7 +283,7 @@ export default function BudgetTable({
                 >
                   <div className="flex flex-col items-center gap-2">
                     <p className="text-3xl">📭</p>
-                    <p>No income records found</p>
+                    <p>No budget records found</p>
                   </div>
                 </td>
               </tr>
@@ -292,16 +292,20 @@ export default function BudgetTable({
         </table>
       </div>
 
-      {/* Page Limit Dropdown */}
-      <div className="flex justify-between items-center my-6 flex-wrap gap-3">
-        <div className="text-gray-400 text-sm">
-          Showing {budgetData.length} of {filters.limit} records
+      {/* Page Limit Dropdown & Results Display */}
+      <div className="flex justify-between items-center my-6 flex-wrap gap-4 px-2">
+        <div className="text-gray-400 text-sm font-medium">
+          Showing{" "}
+          <span className="text-white font-semibold">{budgetData.length}</span>{" "}
+          of{" "}
+          <span className="text-[#548f54] font-semibold">{filters.limit}</span>{" "}
+          records
         </div>
         <div className="flex items-center gap-3">
           <span className="text-gray-400 text-sm">Rows per page:</span>
           <div className="relative">
             <select
-              className="bg-gray-800 hover:bg-gray-700 text-white px-3 py-2 rounded-lg pr-8 pl-3 cursor-pointer border border-gray-600 hover:border-gray-500 transition"
+              className="bg-gray-800 hover:bg-gray-700 text-white px-3 py-2 rounded-lg pr-8 pl-3 cursor-pointer border border-gray-600 hover:border-gray-500 transition focus:outline-none focus:ring-2 focus:ring-[#548f54] focus:ring-opacity-50"
               value={filters.limit}
               onChange={(e) => handleLimitChange(Number(e.target.value))}
             >
@@ -310,9 +314,9 @@ export default function BudgetTable({
               <option value={20}>20</option>
               <option value={50}>50</option>
             </select>
-            {/* <span className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+            <span className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
               <MdKeyboardArrowDown size={18} />
-            </span> */}
+            </span>
           </div>
         </div>
       </div>

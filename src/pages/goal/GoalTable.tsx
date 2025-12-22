@@ -1,22 +1,21 @@
 import { BiEdit } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
 import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
-import { IoEye } from "react-icons/io5";
+// import { IoEye } from "react-icons/io5";
 import { useState } from "react";
 import FilterDialog from "../../dialog/filter";
-import { useNavigate } from "react-router-dom";
 import { useDeleteGoal, useGoalFilter } from "../../api/goal/goal-hooks";
 import type { GoalData } from "../../types/types";
 import TableLoader from "../../utils/TableLoader";
 import { DeleteDialog } from "../../dialog/delete-dialog";
-import { FiFilter } from "react-icons/fi";
+// import { FiFilter } from "react-icons/fi";
 
 export default function GoalTable({
   onEdit,
 }: {
   onEdit: (id: string) => void;
 }) {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [filterOpen, setFilterOpen] = useState(false);
   const [deleteDialog, setDeleteDialog] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
@@ -40,9 +39,9 @@ export default function GoalTable({
   const hasPrevPage = filterData?.pagination?.hasPrevPage;
   const hasNextPage = filterData?.pagination?.hasNextPage;
 
-  const handleFilter = () => {
-    setFilterOpen(true);
-  };
+  // const handleFilter = () => {
+  //   setFilterOpen(true);
+  // };
 
   // --- Handlers ---
   const handlePageChange = (newPage: number) => {
@@ -55,7 +54,7 @@ export default function GoalTable({
 
   console.log(filters, "filters----");
 
-  const viewHistory = () => navigate("/goal-history");
+  // const viewHistory = () => navigate("/goal-history");
 
   const handleDelete = (item: GoalData) => {
     setDeleteDialog(true);
@@ -73,13 +72,14 @@ export default function GoalTable({
   return (
     <div className="overflow-x-auto text-gray-200">
       <div className="flex flex-wrap items-center justify-between mb-6">
-        <h1 className="text-[#54af54] font-semibold text-2xl tracking-wide">
+        <h1 className="text-[#548f54] font-semibold text-2xl tracking-wide">
           View Goals
         </h1>
 
-        {/* Search Box */}
+        {/* Search Box + Filter Icon */}
         <div className="flex items-center gap-3">
-          <div className="flex items-center border border-gray-600 rounded-lg bg-[rgba(255,255,255,0.1)] backdrop-blur-md overflow-hidden">
+          {/* Search Input */}
+          <div className="flex items-center border border-gray-600 rounded-lg bg-[rgba(255,255,255,0.1)] backdrop-blur-md overflow-hidden mt-10">
             <input
               type="text"
               name="search"
@@ -90,26 +90,30 @@ export default function GoalTable({
               className="w-[250px] h-11 px-4 bg-transparent text-white placeholder:text-gray-400 focus:outline-none"
             />
           </div>
-          <FiFilter
-            className="text-[#54af54] text-2xl cursor-pointer hover:text-[#6ecf6e] transition"
+
+          {/* Filter Icon */}
+          {/* <FiFilter
+            className="text-[#548f54] text-2xl cursor-pointer hover:text-[#6ecf6e] transition"
             onClick={handleFilter}
-          />
+          /> */}
         </div>
       </div>
 
-      {/* Table */}
-      <div className="bg-[rgba(255,255,255,0.05)] border border-gray-700 shadow-lg backdrop-blur-md">
+      {/* Table Container */}
+      <div className="bg-[rgba(255,255,255,0.05)] border border-gray-700 shadow-lg backdrop-blur-md rounded-2xl overflow-hidden">
         <table className="w-full text-sm">
           <thead className="bg-[#2E2E48] text-white uppercase text-xs tracking-wider">
             <tr>
-              <th className="py-2 px-4 text-left font-semibold">Goal Name</th>
-              <th className="py-2 px-4 text-left font-semibold">Goal Amount</th>
-              <th className="py-2 px-4 text-left font-semibold">
+              <th className="py-4 px-4 text-left font-semibold">Goal Name</th>
+              <th className="py-4 px-4 text-left font-semibold">
+                Target Amount
+              </th>
+              <th className="py-4 px-4 text-left font-semibold">
                 Allocated Amount
               </th>
-              <th className="py-2 px-4 text-left font-semibold">Target Date</th>
-              <th className="py-2 px-4 text-left font-semibold">Goal Status</th>
-              <th className="py-2 px-4 text-left font-semibold">Action</th>
+              <th className="py-4 px-4 text-left font-semibold">Target Date</th>
+              <th className="py-4 px-4 text-left font-semibold">Status</th>
+              <th className="py-4 px-4 text-center font-semibold">Action</th>
             </tr>
           </thead>
 
@@ -122,71 +126,82 @@ export default function GoalTable({
                   goals.map((item: GoalData, index: number) => (
                     <tr
                       key={item._id}
-                      className={`border-b border-gray-700 hover:bg-[rgba(255,255,255,0.1)] transition ${
+                      className={`border-b border-gray-700 hover:bg-[rgba(255,255,255,0.08)] transition-colors ${
                         index % 2 === 0 ? "bg-[rgba(255,255,255,0.03)]" : ""
                       }`}
                     >
-                      <td className="py-4 px-4">{item.goal_name}</td>
-                      <td className="py-4 px-4">{item.target_amount}</td>
-                      <td className="py-4 px-4">{item.allocated_amount}</td>
-                      <td className="py-4 px-4">
-                        {new Date(item?.deadline_date).toLocaleDateString()}
+                      <td className="py-4 px-4 font-medium text-white">
+                        {item.goal_name}
+                      </td>
+                      <td className="py-4 px-4 text-green-400 font-semibold">
+                        ₹{item.target_amount?.toLocaleString()}
+                      </td>
+                      <td className="py-4 px-4 text-blue-400">
+                        ₹{item.allocated_amount?.toLocaleString()}
+                      </td>
+                      <td className="py-4 px-4 text-gray-300">
+                        {new Date(item?.deadline_date).toLocaleDateString(
+                          "en-IN"
+                        )}
                       </td>
                       <td className="py-4 px-4">
                         <span
-                          className={`inline-block text-xs font-medium px-2 py-1 rounded-full ${
+                          className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${
                             item.status === "PENDING"
-                              ? "bg-red-200 text-red-800"
+                              ? "bg-red-500 bg-opacity-20 text-red-300 border border-red-500 border-opacity-40"
                               : item.status === "COMPLETED"
-                              ? "bg-green-200 text-green-800"
-                              : "bg-gray-200 text-gray-800"
+                              ? "bg-green-500 bg-opacity-20 text-green-300 border border-green-500 border-opacity-40"
+                              : "bg-gray-500 bg-opacity-20 text-gray-300 border border-gray-500 border-opacity-40"
                           }`}
                         >
                           {item.status}
                         </span>
                       </td>
 
-                      <td className="py-4 px-4 flex items-center gap-3">
+                      <td className="py-4 px-4 flex items-center justify-center gap-4">
                         {/* Edit */}
                         <div className="relative group">
                           <BiEdit
-                            className="text-blue-400 text-xl cursor-pointer hover:text-blue-300"
+                            className="text-blue-400 text-lg cursor-pointer hover:text-blue-300 transition-colors"
                             onClick={() => onEdit(item._id)}
+                            title="Edit"
                           />
-                          <span className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                            Edit
+                          <span className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs rounded-lg px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg border border-gray-700">
+                            Edit Goal
                           </span>
                         </div>
                         {/* Delete */}
                         <div className="relative group">
                           <MdDelete
-                            className="text-red-500 text-xl cursor-pointer hover:text-red-400"
+                            className="text-red-500 text-lg cursor-pointer hover:text-red-400 transition-colors"
                             onClick={() => handleDelete(item)}
+                            title="Delete"
                           />
-                          <span className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                            Delete
+                          <span className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs rounded-lg px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg border border-gray-700">
+                            Delete Goal
                           </span>
                         </div>
                         {/* View */}
-                        <div className="relative group">
+                        {/* <div className="relative group">
                           <IoEye
-                            className="text-green-500 text-xl cursor-pointer hover:text-green-400"
+                            className="text-green-500 text-lg cursor-pointer hover:text-green-400 transition-colors"
                             onClick={viewHistory}
+                            title="View History"
                           />
-                          <span className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                            View history
+                          <span className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs rounded-lg px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg border border-gray-700">
+                            View History
                           </span>
-                        </div>
+                        </div> */}
                       </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
                     <td
-                      colSpan={4}
-                      className="text-center py-6 text-gray-400 text-base"
+                      colSpan={6}
+                      className="text-center py-8 text-gray-400 text-base"
                     >
-                      No data found...
+                      No goals found. Create your first goal to get started!
                     </td>
                   </tr>
                 )}
@@ -196,13 +211,13 @@ export default function GoalTable({
         </table>
       </div>
 
-      {/* Page Limit Dropdown - Right aligned */}
-      <div className="flex justify-end items-center gap-3 mb-4">
+      {/* Page Limit Dropdown */}
+      <div className="flex justify-start items-center gap-3 mt-6 mb-4">
         <span className="text-gray-400 text-sm">Rows per page:</span>
 
         <div className="relative">
           <select
-            className="bg-gray-800 text-white mt-2 px-3 py-1.5 rounded-lg pr-6 pl-2 cursor-pointer border border-gray-600 hover:border-gray-400 transition"
+            className="bg-gray-800 text-white px-3 py-1.5 rounded-lg pr-8 pl-3 cursor-pointer border border-gray-600 hover:border-gray-400 transition focus:outline-none focus:ring-2 focus:ring-[#548f54] focus:ring-opacity-50"
             value={filters.limit}
             onChange={(e) =>
               setFilters((prev) => ({
@@ -222,14 +237,14 @@ export default function GoalTable({
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex justify-center items-center gap-2 mt-6">
+        <div className="flex justify-center items-center gap-2 mt-8 mb-6">
           {/* Prev Button */}
           <IoIosArrowBack
             onClick={() => hasPrevPage && handlePageChange(filters.page - 1)}
             className={`text-2xl cursor-pointer transition ${
               !hasPrevPage
                 ? "text-gray-500 cursor-not-allowed"
-                : "text-gray-300 hover:text-white"
+                : "text-gray-300 hover:text-[#548f54]"
             }`}
           />
 
@@ -240,10 +255,10 @@ export default function GoalTable({
               <button
                 key={pageNum}
                 onClick={() => handlePageChange(pageNum)}
-                className={`px-3 py-1 rounded-lg text-sm transition ${
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${
                   filters.page === pageNum
-                    ? "bg-[#54af54] text-white"
-                    : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                    ? "bg-[#548f54] text-white shadow-lg"
+                    : "bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white"
                 }`}
               >
                 {pageNum}
@@ -257,7 +272,7 @@ export default function GoalTable({
             className={`text-2xl cursor-pointer transition ${
               !hasNextPage
                 ? "text-gray-500 cursor-not-allowed"
-                : "text-gray-300 hover:text-white"
+                : "text-gray-300 hover:text-[#548f54]"
             }`}
           />
         </div>

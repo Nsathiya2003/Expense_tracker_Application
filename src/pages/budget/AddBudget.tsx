@@ -216,20 +216,20 @@ import {
   useUpdateBudget,
 } from "../../api/budget/budget-hooks";
 
-const Months = [
-  "JAN",
-  "FEB",
-  "MAR",
-  "APR",
-  "MAY",
-  "JUN",
-  "JUL",
-  "AUG",
-  "SEP",
-  "OCT",
-  "NOV",
-  "DEC",
-];
+// const Months = [
+//   "JAN",
+//   "FEB",
+//   "MAR",
+//   "APR",
+//   "MAY",
+//   "JUN",
+//   "JUL",
+//   "AUG",
+//   "SEP",
+//   "OCT",
+//   "NOV",
+//   "DEC",
+// ];
 
 interface FormData {
   budget_category: string;
@@ -495,7 +495,7 @@ export default function AddBudget({ editingId }: { editingId: string | null }) {
                 name="budget_category"
                 value={data.budget_category}
                 onChange={handleChange}
-                className={`h-11 w-full px-4 pr-10 rounded-lg border transition-all text-sm
+                className={`h-11 w-full px-6 pr-10 rounded-lg border transition-all text-sm
                   appearance-none focus:outline-none shadow-sm
                   ${
                     errors.budget_category
@@ -585,7 +585,7 @@ export default function AddBudget({ editingId }: { editingId: string | null }) {
                 value={data.budget_amount}
                 onChange={handleChange}
                 placeholder="0"
-                className={`h-11 w-full px-4 pl-8 rounded-lg border transition-all text-white text-sm placeholder-gray-400 shadow-sm
+                className={`h-11 w-full px-6 pl-8 rounded-lg border transition-all text-white text-sm placeholder-gray-400 shadow-sm
                   ${
                     errors.budget_amount
                       ? "border-red-500 bg-red-500 bg-opacity-10 focus:ring-2 focus:ring-red-500"
@@ -602,7 +602,7 @@ export default function AddBudget({ editingId }: { editingId: string | null }) {
           </div>
 
           {/* Month */}
-          <div className="flex flex-col">
+          {/* <div className="flex flex-col">
             <label className="text-sm text-white mb-2 font-medium flex items-center gap-2">
               Choose Month <span className="text-red-600">*</span>
               {data.budget_month && !errors.budget_month && (
@@ -658,7 +658,7 @@ export default function AddBudget({ editingId }: { editingId: string | null }) {
             ) : data.budget_month ? (
               <SuccessIndicator show={true} />
             ) : null}
-          </div>
+          </div> */}
 
           {/* Date */}
           <div className="flex flex-col">
@@ -689,7 +689,7 @@ export default function AddBudget({ editingId }: { editingId: string | null }) {
           </div>
 
           {/* Notes */}
-          <div className="flex flex-col lg:col-span-4">
+          <div className="flex flex-col lg:col-span-3">
             <label className="text-sm text-white mb-2 font-medium">
               Notes <span className="text-gray-400 text-xs">(Optional)</span>
             </label>

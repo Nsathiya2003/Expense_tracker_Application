@@ -64,3 +64,13 @@ export interface GoalIncomeFilterResponse {
     totalGoalContribution: number;
   };
 }
+
+export interface DashboardSummaryCard {
+  totalUsers: number;
+  totalIncome: number;
+  totalExpenses: number;
+  totalBudgets: number;
+  totalIncomeAmount: number;
+  totalExpenseAmount: number;
+  totalBudgetAmount: number;
+}

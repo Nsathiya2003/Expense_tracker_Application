@@ -12,7 +12,7 @@ import ViewPage from "./pages/income/ViewIncome";
 import ViewExpense from "./pages/expense/ViewExpense";
 import ViewBudget from "./pages/budget/ViewBudget";
 import ViewGoal from "./pages/goal/viewGoal";
-import GoalHistory from "./pages/goal/viewGoal-history";
+// import GoalHistory from "./pages/goal/viewGoal-history";
 import { ViewAllNotification } from "./pages/notification/view-all-notification";
 import { ToastContainer } from "react-toastify";
 
@@ -36,7 +36,7 @@ function App() {
             <Route path="/transaction/expense" element={<ViewExpense />} />
             <Route path="/transaction/budget" element={<ViewBudget />} />
             <Route path="/goal" element={<ViewGoal />}></Route>
-            <Route path="/goal-history" element={<GoalHistory />}></Route>
+            {/* <Route path="/goal-history" element={<GoalHistory />}></Route> */}
             <Route
               path="/notification"
               element={<ViewAllNotification />}

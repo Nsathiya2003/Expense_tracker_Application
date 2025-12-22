@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BsArrowLeftShort } from "react-icons/bs";
+// import { BsArrowLeftShort } from "react-icons/bs";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 import { SidebarItems } from "../data/Sidebar-items";
@@ -14,10 +14,10 @@ export default function SideBar() {
     setOpenSubMenu(openSubMenu === index ? null : index);
   };
 
-  const handleChangeMenu = () => {
-    setOpenSubMenu(null);
-    setOpen(!open);
-  };
+  // const handleChangeMenu = () => {
+  //   setOpenSubMenu(null);
+  //   setOpen(!open);
+  // };
 
   return (
     <div
@@ -26,12 +26,12 @@ export default function SideBar() {
       }`}
     >
       {/* Toggle Button */}
-      <BsArrowLeftShort
+      {/* <BsArrowLeftShort
         className={`text-white font-bold text-3xl bg-[#2C2C2C] rounded-full absolute -right-3 border-2 border-white cursor-pointer transition-all duration-300 ${
           !open && "rotate-180"
         }`}
         onClick={handleChangeMenu}
-      />
+      /> */}
 
       {/* Logo */}
       <div

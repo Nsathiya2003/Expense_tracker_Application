@@ -25,3 +25,15 @@ body {
 .animate-fadeIn {
   animation: fadeIn 0.25s ease-in-out;
 }
+
+.label-dark {
+  @apply text-sm font-medium text-gray-300 mb-1 block;
+}
+
+.input-dark {
+  @apply w-full h-10 px-3 rounded-md
+  bg-[#0f1115] border border-[#2f3547]
+  text-sm text-gray-100
+  focus:outline-none focus:ring-2 focus:ring-[#4f46e5]
+  focus:border-[#4f46e5] transition;
+}

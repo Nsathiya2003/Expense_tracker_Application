@@ -3,6 +3,7 @@ import { MdKeyboardArrowDown, MdCheckCircle } from "react-icons/md";
 import * as Dialog from "@radix-ui/react-dialog";
 import { FiX, FiAlertCircle } from "react-icons/fi";
 import {
+  useCheckBudgetLimit,
   useCreateExpense,
   useGetExpenseById,
   useUpdateExpense,
@@ -78,6 +79,10 @@ export default function AddExpense({
   const [data, setData] = useState<FormData>(INITIAL_FORM_STATE);
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showBudgetWarning, setShowBudgetWarning] = useState(false);
+  const [pendingPayload, setPendingPayload] =
+    useState<updateExpensePayload | null>(null);
+  const [budgetWarningMessage, setBudgetWarningMessage] = useState<string>("");
 
   const isMainFieldsValid = useMemo(() => {
     if (!data) return false;
@@ -167,12 +172,23 @@ export default function AddExpense({
     [errors]
   );
 
+  const proceedExpenseSave = (payload: updateExpensePayload) => {
+    if (currentEditingId) {
+      updateExpense(payload, {
+        onSettled: () => setIsSubmitting(false),
+      });
+    } else {
+      createExpense(payload, {
+        onSettled: () => setIsSubmitting(false),
+      });
+    }
+  };
+
+  const { mutate: checkBudgetLimit } = useCheckBudgetLimit();
+
   const handleSubmit = useCallback(
     (overrides?: Partial<updateExpensePayload>) => {
-      const submitData: FormData = {
-        ...data,
-      };
-
+      const submitData: FormData = { ...data };
       const validationErrors = validateForm(submitData);
 
       if (Object.keys(validationErrors).length > 0) {
@@ -181,6 +197,7 @@ export default function AddExpense({
       }
 
       setIsSubmitting(true);
+
       const payload: updateExpensePayload = {
         expense_category: overrides?.expense_category ?? data.expense_category,
         expense_amount:
@@ -202,19 +219,32 @@ export default function AddExpense({
         id: currentEditingId || "",
       };
 
-      console.log("Submitting payload:", payload);
+      checkBudgetLimit(
+        {
+          category: payload.expense_category,
+          expense_amount: payload.expense_amount,
+        },
+        {
+          onSuccess: (res) => {
+            if (res?.alert) {
+              // store payload & show popup
+              setPendingPayload(payload);
+              setBudgetWarningMessage(res.message || "Budget limit warning");
+              setShowBudgetWarning(true);
+              setIsSubmitting(false);
+              return;
+            }
 
-      if (currentEditingId) {
-        updateExpense(payload, {
-          onSettled: () => setIsSubmitting(false),
-        });
-      } else {
-        createExpense(payload, {
-          onSettled: () => setIsSubmitting(false),
-        });
-      }
+            // No alert → proceed directly
+            proceedExpenseSave(payload);
+          },
+          onError: () => {
+            setIsSubmitting(false);
+          },
+        }
+      );
     },
-    [data, currentEditingId, updateExpense, createExpense]
+    [data, currentEditingId]
   );
 
   const ErrorMessage = ({ message }: { message?: string }) => {
@@ -612,6 +642,42 @@ export default function AddExpense({
           </button>
         </div>
       </div>
+      {showBudgetWarning && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-gray-900 rounded-xl p-6 w-[400px]">
+            <h3 className="text-lg font-semibold text-yellow-400 mb-2">
+              Budget Warning ⚠️
+            </h3>
+
+            <p className="text-sm text-gray-300 mb-6">{budgetWarningMessage}</p>
+
+            <div className="flex justify-end gap-3">
+              <button
+                className="px-4 py-2 rounded-md bg-gray-700 hover:bg-gray-600"
+                onClick={() => {
+                  setShowBudgetWarning(false);
+                  setPendingPayload(null);
+                }}
+              >
+                Cancel
+              </button>
+
+              <button
+                className="px-4 py-2 rounded-md bg-red-600 hover:bg-red-700 text-white"
+                onClick={() => {
+                  if (pendingPayload) {
+                    proceedExpenseSave(pendingPayload);
+                  }
+                  setShowBudgetWarning(false);
+                  setPendingPayload(null);
+                }}
+              >
+                Proceed Anyway
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Dialog */}
       <Dialog.Root open={openDialog} onOpenChange={setOpenDialog}>

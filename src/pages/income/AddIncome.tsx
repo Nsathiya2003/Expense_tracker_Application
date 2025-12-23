@@ -10,6 +10,7 @@ import {
 } from "../../api/income/income-hooks";
 import { useFindAllGoal } from "../../api/goal/goal-hooks";
 import type { GoalData } from "../../types/types";
+import { useNavigate } from "react-router-dom";
 
 interface FormData {
   income_category: string;
@@ -106,6 +107,8 @@ export default function AddIncome({
   const [choice, setChoice] = useState<"yes" | "no" | null>(null);
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const navigate = useNavigate();
 
   // Determine if main required fields are filled and valid (independent of dialog)
   const isMainFieldsValid = useMemo(() => {
@@ -360,6 +363,10 @@ export default function AddIncome({
       setDialogErrors({});
     }, []);
 
+    const handleAddGoal = () => {
+      navigate("/goal");
+    };
+
     return (
       <div className="flex flex-col gap-4">
         <div className="bg-blue-500 bg-opacity-10 border border-blue-500 rounded-lg p-3">
@@ -398,107 +405,67 @@ export default function AddIncome({
         </div>
 
         {localChoice === "yes" && (
-          <div className="space-y-3 bg-gray-800 bg-opacity-50 p-4 rounded-lg">
-            {/* Goal Selection */}
-            <div className="flex flex-col">
-              <label className="text-sm text-white mb-2 font-medium">
-                Choose Goal <span className="text-red-600">*</span>
-              </label>
+          <div className="flex flex-col">
+            <label className="text-sm text-white mb-2 font-medium">
+              Choose Goal <span className="text-red-600">*</span>
+            </label>
 
-              <div className="relative">
-                <select
-                  className={`h-11 w-full px-4 pr-10 rounded-lg border transition-all text-sm
-                    focus:outline-none appearance-none
-                    ${
-                      dialogErrors.goal_id
-                        ? "border-red-500 bg-red-500 bg-opacity-10 focus:ring-2 focus:ring-red-500 text-red-200"
-                        : "border-gray-400 bg-[rgba(255,255,255,0.15)] text-white focus:ring-2 focus:ring-green-400"
-                    }`}
-                  style={{
-                    backgroundColor: dialogErrors.goal_id
-                      ? "rgba(239, 68, 68, 0.1)"
-                      : "rgba(255,255,255,0.15)",
-                    color: dialogErrors.goal_id ? "#fecaca" : "white",
-                  }}
-                  value={localGoalId}
-                  onChange={(e) => {
-                    setLocalGoalId(e.target.value);
-                    if (dialogErrors.goal_id) {
-                      setDialogErrors((prev) => ({
-                        ...prev,
-                        goal_id: undefined,
-                      }));
-                    }
-                  }}
-                >
+            <div className="relative">
+              <select
+                className={`h-11 w-full px-4 pr-10 rounded-lg border transition-all text-sm
+        focus:outline-none appearance-none
+        ${
+          dialogErrors.goal_id
+            ? "border-red-500 bg-red-500 bg-opacity-10 focus:ring-2 focus:ring-red-500 text-red-200"
+            : "border-gray-400 bg-[rgba(255,255,255,0.15)] text-white focus:ring-2 focus:ring-green-400"
+        }`}
+                value={localGoalId}
+                onChange={(e) => {
+                  setLocalGoalId(e.target.value);
+                  if (dialogErrors.goal_id) {
+                    setDialogErrors((prev) => ({
+                      ...prev,
+                      goal_id: undefined,
+                    }));
+                  }
+                }}
+                disabled={!GoalData?.data || GoalData.data.length === 0}
+              >
+                <option value="">Select a goal</option>
+
+                {GoalData?.data?.map((item: GoalData) => (
                   <option
-                    value=""
+                    key={item._id}
+                    value={item._id}
                     style={{ backgroundColor: "#2E2E48", color: "white" }}
                   >
-                    Select a goal
+                    {item.goal_name} – ₹{item.allocated_amount}
                   </option>
-                  {GoalData?.data && GoalData.data.length > 0 ? (
-                    GoalData.data.map((item: GoalData) => (
-                      <option
-                        value={item._id}
-                        key={item._id}
-                        style={{ backgroundColor: "#2E2E48", color: "white" }}
-                      >
-                        {item.goal_name} - ₹{item.allocated_amount}
-                      </option>
-                    ))
-                  ) : (
-                    <option
-                      disabled
-                      style={{ backgroundColor: "#2E2E48", color: "white" }}
-                    >
-                      No goals available
-                    </option>
-                  )}
-                </select>
+                ))}
+              </select>
 
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                  <MdKeyboardArrowDown size={20} />
-                </span>
-              </div>
-              <ErrorMessage message={dialogErrors.goal_id} />
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                <MdKeyboardArrowDown size={20} />
+              </span>
             </div>
 
-            {/* Contribution Amount */}
-            {localGoalId && (
-              <div className="flex flex-col">
-                <label className="text-sm text-white mb-2 font-medium">
-                  Contribution Amount <span className="text-red-600">*</span>
-                </label>
-                <div className="relative">
-                  <span className="absolute left-3 top-3 text-green-400 font-medium">
-                    ₹
-                  </span>
-                  <input
-                    type="text"
-                    value={localAmount}
-                    onChange={(e) => {
-                      setLocalAmount(e.target.value.replace(/[^0-9]/g, ""));
-                      if (dialogErrors.goal_contribute_amount) {
-                        setDialogErrors((prev) => ({
-                          ...prev,
-                          goal_contribute_amount: undefined,
-                        }));
-                      }
-                    }}
-                    placeholder="Enter amount"
-                    className={`h-11 w-full px-4 pl-8 rounded-lg border transition-all text-white text-sm placeholder-gray-400
-                      ${
-                        dialogErrors.goal_contribute_amount
-                          ? "border-red-500 bg-red-500 bg-opacity-10 focus:ring-2 focus:ring-red-500"
-                          : "border-gray-400 bg-[rgba(255,255,255,0.15)] focus:ring-2 focus:ring-green-400"
-                      }
-                      focus:outline-none`}
-                  />
-                </div>
-                <ErrorMessage message={dialogErrors.goal_contribute_amount} />
+            {/* Empty State UI */}
+            {GoalData?.data?.length === 0 && (
+              <div className="mt-3 flex items-center justify-between bg-gray-900 bg-opacity-60 border border-dashed border-gray-600 rounded-lg p-3">
+                <p className="text-sm text-gray-300">
+                  No goals found.Create one to save!
+                </p>
+                <button
+                  type="button"
+                  onClick={handleAddGoal} // open modal or navigate
+                  className="text-sm px-3 py-1.5 rounded-md bg-green-600 hover:bg-green-700 text-white transition"
+                >
+                  + Add Goal
+                </button>
               </div>
             )}
+
+            <ErrorMessage message={dialogErrors.goal_id} />
           </div>
         )}
 

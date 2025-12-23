@@ -4,13 +4,13 @@ import { handleRequest } from "../requestHandler";
 export interface CreateBudgetPayload {
   budget_category: string;
   budget_amount: number;
+  notes: string;
   budget_month: string;
   budget_start_date: Date;
-  notes: string;
   need_notification: boolean;
   budget_exceeded: boolean;
   budget_reaches: boolean;
-  reach_percentage: string;
+  reach_percentage?: number;
 }
 
 export interface filterBudgetPayload {

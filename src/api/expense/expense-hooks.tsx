@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   expenseApi,
+  type CheckBudgetLimitPayload,
   type CreateExpensePayload,
   type filterExpensePayload,
 } from "./expenseApi";
@@ -25,11 +26,13 @@ export const useCreateExpense = (resetForm: () => void) => {
       resetForm();
     },
 
-    onError: (error: AxiosError<{ message: string }>) => {
-      toast.error(
-        error?.response?.data?.message ||
-          "Failed to add expense. Please try again."
-      );
+    onError: (error: unknown) => {
+      const apiError = error as {
+        message?: string;
+        status?: number;
+      };
+
+      toast.error(apiError?.message || "Something went wrong");
     },
   });
 };
@@ -105,5 +108,12 @@ export const useExpenseFilter = (filters: filterExpensePayload) => {
     queryFn: () => expenseApi.useFilterExpense(filters),
     staleTime: 1000 * 60,
     refetchOnWindowFocus: false,
+  });
+};
+
+export const useCheckBudgetLimit = () => {
+  return useMutation({
+    mutationFn: (body: CheckBudgetLimitPayload) =>
+      expenseApi.checkBudgetLimit(body),
   });
 };

@@ -20,6 +20,11 @@ export interface filterExpensePayload {
   toDate?: string;
 }
 
+export interface CheckBudgetLimitPayload {
+  expense_amount: number;
+  category: string;
+}
+
 export const expenseApi = {
   createExpense: (body: CreateExpensePayload) =>
     handleRequest(apiClient.post("/expense/create", body)),
@@ -32,4 +37,6 @@ export const expenseApi = {
     handleRequest(apiClient.delete(`/expense/delete/${id}`)),
   useFilterExpense: (body: filterExpensePayload) =>
     handleRequest(apiClient.post("/expense/filter", body)),
+  checkBudgetLimit: (body: CheckBudgetLimitPayload) =>
+    handleRequest(apiClient.post("/expense/checkBudgetLimit", body)),
 };

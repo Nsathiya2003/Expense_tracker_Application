@@ -82,7 +82,13 @@ export default function AddExpense({
   const [showBudgetWarning, setShowBudgetWarning] = useState(false);
   const [pendingPayload, setPendingPayload] =
     useState<updateExpensePayload | null>(null);
-  const [budgetWarningMessage, setBudgetWarningMessage] = useState<string>("");
+  const [budgetAlert, setBudgetAlert] = useState<{
+    type: "percentage" | "exceeded";
+    message: string;
+    details: string;
+    usedPercentage?: number;
+    exceededBy?: number;
+  } | null>(null);
 
   const isMainFieldsValid = useMemo(() => {
     if (!data) return false;
@@ -227,9 +233,15 @@ export default function AddExpense({
         {
           onSuccess: (res) => {
             if (res?.alert) {
-              // store payload & show popup
+              // store payload & show popup with alert details
               setPendingPayload(payload);
-              setBudgetWarningMessage(res.message || "Budget limit warning");
+              setBudgetAlert({
+                type: res.type,
+                message: res.message || "Budget limit warning",
+                details: res.details || "",
+                usedPercentage: res.usedPercentage,
+                exceededBy: res.exceededBy,
+              });
               setShowBudgetWarning(true);
               setIsSubmitting(false);
               return;
@@ -642,37 +654,104 @@ export default function AddExpense({
           </button>
         </div>
       </div>
-      {showBudgetWarning && (
+      {showBudgetWarning && budgetAlert && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-gray-900 rounded-xl p-6 w-[400px]">
-            <h3 className="text-lg font-semibold text-yellow-400 mb-2">
-              Budget Warning ⚠️
-            </h3>
+          <div className="bg-[#2E2E48] rounded-xl p-6 w-[420px] border border-gray-700">
+            {/* Alert Card */}
+            <div
+              className={`rounded-lg p-4 mb-6 border-l-4 ${
+                budgetAlert.type === "percentage"
+                  ? "bg-yellow-500 bg-opacity-10 border-yellow-500"
+                  : "bg-red-500 bg-opacity-10 border-red-500"
+              }`}
+            >
+              <div className="flex items-start gap-3">
+                <FiAlertCircle
+                  size={24}
+                  className={`flex-shrink-0 mt-0.5 ${
+                    budgetAlert.type === "percentage"
+                      ? "text-yellow-400"
+                      : "text-red-400"
+                  }`}
+                />
+                <div className="flex-1">
+                  <h3
+                    className={`font-semibold text-sm mb-1 ${
+                      budgetAlert.type === "percentage"
+                        ? "text-yellow-300"
+                        : "text-red-300"
+                    }`}
+                  >
+                    {budgetAlert.message}
+                  </h3>
+                  <p className="text-xs text-gray-300">{budgetAlert.details}</p>
 
-            <p className="text-sm text-gray-300 mb-6">{budgetWarningMessage}</p>
+                  {/* Progress indicator for percentage */}
+                  {budgetAlert.type === "percentage" &&
+                    budgetAlert.usedPercentage !== undefined && (
+                      <div className="mt-3">
+                        <div className="w-full bg-gray-700 rounded-full h-2">
+                          <div
+                            className="bg-yellow-500 h-2 rounded-full transition-all"
+                            style={{
+                              width: `${Math.min(
+                                budgetAlert.usedPercentage,
+                                100
+                              )}%`,
+                            }}
+                          />
+                        </div>
+                        <p className="text-xs text-yellow-300 mt-1 font-medium">
+                          {budgetAlert.usedPercentage}% used
+                        </p>
+                      </div>
+                    )}
 
-            <div className="flex justify-end gap-3">
+                  {/* Exceeded amount for exceeded type */}
+                  {budgetAlert.type === "exceeded" &&
+                    budgetAlert.exceededBy !== undefined && (
+                      <div className="mt-3 bg-red-600 bg-opacity-20 px-3 py-2 rounded border border-red-500 border-opacity-30">
+                        <p className="text-xs text-red-200 font-semibold">
+                          Exceeds by: ₹
+                          {budgetAlert.exceededBy.toLocaleString("en-IN")}
+                        </p>
+                      </div>
+                    )}
+                </div>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-3 justify-end">
               <button
-                className="px-4 py-2 rounded-md bg-gray-700 hover:bg-gray-600"
+                className="px-4 py-2 rounded-md bg-gray-700 hover:bg-gray-600 text-white text-sm font-medium transition"
                 onClick={() => {
                   setShowBudgetWarning(false);
                   setPendingPayload(null);
+                  setBudgetAlert(null);
                 }}
               >
                 Cancel
               </button>
 
               <button
-                className="px-4 py-2 rounded-md bg-red-600 hover:bg-red-700 text-white"
+                className={`px-4 py-2 rounded-md text-white text-sm font-medium transition ${
+                  budgetAlert.type === "percentage"
+                    ? "bg-yellow-600 hover:bg-yellow-700"
+                    : "bg-red-600 hover:bg-red-700"
+                }`}
                 onClick={() => {
                   if (pendingPayload) {
                     proceedExpenseSave(pendingPayload);
                   }
                   setShowBudgetWarning(false);
                   setPendingPayload(null);
+                  setBudgetAlert(null);
                 }}
               >
-                Proceed Anyway
+                {budgetAlert.type === "percentage"
+                  ? "Continue Anyway"
+                  : "Proceed Anyway"}
               </button>
             </div>
           </div>

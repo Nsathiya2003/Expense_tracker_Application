@@ -197,7 +197,7 @@ export default function BudgetTable({
               <th className="py-4 px-4 text-left font-semibold">
                 Budget Amount
               </th>
-              <th className="py-4 px-4 text-left font-semibold">Month</th>
+              {/* <th className="py-4 px-4 text-left font-semibold">Month</th> */}
               <th className="py-4 px-4 text-left font-semibold">Start Date</th>
               <th className="py-4 px-4 text-left font-semibold">
                 Notification Type
@@ -228,11 +228,11 @@ export default function BudgetTable({
                   <td className="py-4 px-4 font-bold text-green-400">
                     ₹{item.budget_amount?.toLocaleString("en-IN") || 0}
                   </td>
-                  <td className="py-4 px-4 font-semibold text-white">
+                  {/* <td className="py-4 px-4 font-semibold text-white">
                     <span className="bg-blue-500 bg-opacity-20 text-blue-300 px-3 py-1 rounded-full text-xs font-medium">
                       {item.budget_month || "N/A"}
                     </span>
-                  </td>
+                  </td> */}
                   <td className="py-4 px-4 text-gray-300 text-sm">
                     <span className="bg-gray-700 bg-opacity-50 px-2 py-1 rounded">
                       {new Date(item.budget_start_date).toLocaleDateString(

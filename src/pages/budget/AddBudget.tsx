@@ -352,7 +352,8 @@ export default function AddBudget({ editingId }: { editingId: string | null }) {
     setErrors({});
     setIsSubmitting(false);
     setNotifyPercent(80);
-    setNotifyType(notifyType === "percentage" ? "exceed" : "percentage");
+    // reset to sensible default
+    setNotifyType("exceed");
   }, []);
 
   const handleClearAll = useCallback(() => {
@@ -413,17 +414,19 @@ export default function AddBudget({ editingId }: { editingId: string | null }) {
       setIsSubmitting(true);
       const payload: updateBudgetPayload = {
         budget_category: overrides?.budget_category ?? data.budget_category,
-        budget_amount:
-          overrides?.budget_amount ?? (Number(data.budget_amount) || 0),
+        budget_amount: overrides?.budget_amount ?? Number(data.budget_amount),
         notes: overrides?.notes ?? data.notes,
         budget_month: overrides?.budget_month ?? data.budget_month,
         budget_start_date:
           overrides?.budget_start_date ?? new Date(data.budget_start_date),
+
         need_notification: true,
-        budget_exceeded: notifyType === "exceed",
+        // set explicit booleans so backend receives consistent flags
+        budget_exceeded: notifyType !== "percentage",
         budget_reaches: notifyType === "percentage",
+        // always include a numeric reach_percentage (0 when not using percentage)
         reach_percentage:
-          notifyType === "percentage" ? String(notifyPercent) : "",
+          notifyType === "percentage" ? Number(notifyPercent) : 0,
         id: currentEditingId || "",
       };
 
@@ -717,7 +720,13 @@ export default function AddBudget({ editingId }: { editingId: string | null }) {
                   name="notify"
                   value="exceed"
                   checked={notifyType === "exceed"}
-                  onChange={(e) => setNotifyType(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value as "exceed" | "percentage";
+                    setNotifyType(value);
+                    if (value === "exceed") {
+                      setNotifyPercent(0);
+                    }
+                  }}
                 />
                 <span>Only when I exceed the limit</span>
               </label>
@@ -728,15 +737,33 @@ export default function AddBudget({ editingId }: { editingId: string | null }) {
                   name="notify"
                   value="percentage"
                   checked={notifyType === "percentage"}
-                  onChange={(e) => setNotifyType(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value as "exceed" | "percentage";
+                    setNotifyType(value);
+                    // ensure a sensible default when switching to percentage
+                    if (
+                      value === "percentage" &&
+                      (!notifyPercent || notifyPercent === 0)
+                    ) {
+                      setNotifyPercent(80);
+                    }
+                  }}
                 />
                 <input
                   type="text"
-                  min="1"
-                  max="100"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  min={1}
+                  max={100}
                   disabled={notifyType !== "percentage"}
                   value={notifyPercent}
-                  onChange={(e) => setNotifyPercent(Number(e.target.value))}
+                  onChange={(e) => {
+                    const v = Number(e.target.value);
+                    const normalized = Number.isNaN(v)
+                      ? 0
+                      : Math.max(0, Math.min(100, Math.floor(v)));
+                    setNotifyPercent(normalized);
+                  }}
                   className={`w-16 px-2 py-1 rounded text-center text-black ${
                     notifyType !== "percentage"
                       ? "opacity-50 cursor-not-allowed"

@@ -1,3 +1,4 @@
+import type { NotificationItem } from "../pages/notification/view-all-notification";
 import type { GoalData, GoalHistoryData, IncomeData } from "./types";
 
 export type IncomeItem = {
@@ -73,4 +74,18 @@ export interface DashboardSummaryCard {
   totalIncomeAmount: number;
   totalExpenseAmount: number;
   totalBudgetAmount: number;
+}
+
+export interface NotificationTypeResponse {
+  status: boolean;
+  message: string;
+  data: NotificationItem[];
+  pagination: {
+    page: number;
+    limit: number;
+    totalRecords: number;
+    totalPages: number;
+    hasNextPage: boolean;
+    hasPrevPage: boolean;
+  };
 }

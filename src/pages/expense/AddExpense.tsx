@@ -162,6 +162,7 @@ export default function AddExpense({
           [name]: (event.target as HTMLInputElement).checked,
         }));
       } else {
+        console.log("Name:", name, "Value:", value);
         setData((prev) => ({
           ...prev,
           [name]:
@@ -177,6 +178,9 @@ export default function AddExpense({
     },
     [errors]
   );
+
+  console.log("Recurring:", data.is_recurring);
+  console.log("data----", data);
 
   const proceedExpenseSave = (payload: updateExpensePayload) => {
     if (currentEditingId) {
@@ -213,7 +217,7 @@ export default function AddExpense({
         expense_date: overrides?.expense_date ?? new Date(data.expense_date),
         budget_category:
           (overrides?.budget_category ?? data.budget_category) || undefined,
-        is_recurring: overrides?.is_recurring ?? data.is_recurring,
+        is_recurring: Boolean(data.is_recurring),
         tags:
           overrides?.tags ??
           (data.tags

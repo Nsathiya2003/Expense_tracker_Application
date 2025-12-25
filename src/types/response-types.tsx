@@ -1,4 +1,3 @@
-import type { NotificationItem } from "../pages/notification/view-all-notification";
 import type { GoalData, GoalHistoryData, IncomeData } from "./types";
 
 export type IncomeItem = {
@@ -88,4 +87,12 @@ export interface NotificationTypeResponse {
     hasNextPage: boolean;
     hasPrevPage: boolean;
   };
+}
+export interface NotificationItem {
+  _id: string;
+  title: string;
+  message: string;
+  fullMessage: string;
+  read: boolean;
+  createdAt: string;
 }

@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { IoAddCircleSharp } from "react-icons/io5";
 import { useGetUser, useUpdateUser } from "../api/users/user-hooks";
 import { baseImgUrl } from "../api/apiClient";
-import RegisterImage from "../assets/expense3.png";
+import RegisterImage from "../assets/expense2.png";
 
 export default function ProfileSetting() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -92,9 +92,9 @@ export default function ProfileSetting() {
   };
 
   return (
-    <div className="flex h-[610px] bg-white overflow-hidden">
+    <div className="flex h-[610px] bg-gray-800 overflow-hidden">
       {/* ================= LEFT SIDEBAR IMAGE ================= */}
-      <div className="hidden md:flex w-[35%] h-full items-center justify-center bg-white">
+      <div className="hidden md:flex w-[35%] h-full items-center justify-center bg-gray-600">
         <img
           src={RegisterImage}
           alt="Profile Illustration"
@@ -103,7 +103,7 @@ export default function ProfileSetting() {
       </div>
 
       {/* ================= RIGHT CONTENT ================= */}
-      <div className="flex flex-col items-start justify-center w-full md:w-[65%] p-6 bg-white">
+      <div className="flex flex-col items-start justify-center w-full md:w-[65%] p-6 bg-gray-800">
         {/* ================= PROFILE HEADER ================= */}
         <div className="flex flex-row items-center mb-10">
           <div className="relative w-40 h-40">
@@ -131,7 +131,7 @@ export default function ProfileSetting() {
 
             <button
               onClick={handleIconClick}
-              className="absolute bottom-2 right-2 rounded-full p-1 bg-white shadow hover:scale-105 transition"
+              className="absolute bottom-2 right-2 rounded-full p-1 bg-gray-600 shadow hover:scale-105 transition"
             >
               <IoAddCircleSharp className="text-2xl text-blue-500" />
             </button>
@@ -151,7 +151,7 @@ export default function ProfileSetting() {
             {/* Row 1 */}
             <div className="flex gap-8 mb-4">
               <div className="w-full">
-                <label className="text-sm font-medium text-gray-700 mb-1 block">
+                <label className="text-sm font-medium text-white mb-1 block">
                   First Name <span className="text-red-600">*</span>
                 </label>
                 <input
@@ -160,14 +160,14 @@ export default function ProfileSetting() {
                   value={data.username}
                   onChange={handleChange}
                   placeholder="Enter your first name"
-                  className="w-full h-11 px-4 rounded-lg border border-gray-300 bg-white
-                text-gray-800 text-sm placeholder-gray-400
+                  className="w-full h-11 px-4 rounded-lg border border-gray-300 bg-gray-600
+                text-white text-sm placeholder-gray-400
                 focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
               </div>
 
               <div className="w-full">
-                <label className="text-sm font-medium text-gray-700 mb-1 block">
+                <label className="text-sm font-medium text-white mb-1 block">
                   Last Name <span className="text-red-600">*</span>
                 </label>
                 <input
@@ -176,8 +176,8 @@ export default function ProfileSetting() {
                   value={data.lastName}
                   onChange={handleChange}
                   placeholder="Enter your last name"
-                  className="w-full h-11 px-4 rounded-lg border border-gray-300 bg-white
-                text-gray-800 text-sm placeholder-gray-400
+                  className="w-full h-11 px-4 rounded-lg border border-gray-300 bg-gray-600
+                text-white text-sm placeholder-gray-400
                 focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
               </div>
@@ -186,7 +186,7 @@ export default function ProfileSetting() {
             {/* Row 2 */}
             <div className="flex gap-8 mb-4">
               <div className="w-full">
-                <label className="text-sm font-medium text-gray-700 mb-1 block">
+                <label className="text-sm font-medium text-white mb-1 block">
                   Phone Number <span className="text-red-600">*</span>
                 </label>
                 <input
@@ -195,14 +195,14 @@ export default function ProfileSetting() {
                   value={data.mobileNumber}
                   onChange={handleChange}
                   placeholder="Enter your phone number"
-                  className="w-full h-11 px-4 rounded-lg border border-gray-300 bg-white
-                text-gray-800 text-sm placeholder-gray-400
+                  className="w-full h-11 px-4 rounded-lg border border-gray-300 bg-gray-600
+                text-white text-sm placeholder-gray-400
                 focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
               </div>
 
               <div className="w-full">
-                <label className="text-sm font-medium text-gray-700 mb-1 block">
+                <label className="text-sm font-medium text-white mb-1 block">
                   Email ID <span className="text-red-600">*</span>
                 </label>
                 <input
@@ -211,8 +211,8 @@ export default function ProfileSetting() {
                   value={data.emailId}
                   onChange={handleChange}
                   placeholder="Enter your email"
-                  className="w-full h-11 px-4 rounded-lg border border-gray-300 bg-white
-                text-gray-800 text-sm placeholder-gray-400
+                  className="w-full h-11 px-4 rounded-lg border border-gray-300 bg-gray-600
+                text-white text-sm placeholder-gray-400
                 focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
               </div>
@@ -221,7 +221,7 @@ export default function ProfileSetting() {
             {/* Row 3 */}
             <div className="flex gap-8 mb-4">
               <div className="w-full">
-                <label className="text-sm font-medium text-gray-700 mb-1 block">
+                <label className="text-sm font-medium text-white mb-1 block">
                   Age
                 </label>
                 <input
@@ -230,22 +230,23 @@ export default function ProfileSetting() {
                   value={data.age}
                   onChange={handleChange}
                   placeholder="Enter your age"
-                  className="w-full h-11 px-4 rounded-lg border border-gray-300 bg-white
-                text-gray-800 text-sm placeholder-gray-400
+                  className="w-full h-11 px-4 rounded-lg border border-gray-300 bg-gray-600
+                text-white text-sm placeholder-gray-400
                 focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
               </div>
 
               <div className="w-full">
-                <label className="text-sm font-medium text-gray-700 mb-1 block">
+                <label className="text-sm font-medium text-white mb-1 block">
                   Gender
                 </label>
                 <select
                   name="gender"
                   value={data.gender}
                   onChange={handleChange}
-                  className="w-full h-11 px-4 rounded-lg border border-gray-300 bg-white
-                text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className="w-full h-11 px-4 rounded-lg border border-gray-300 bg-gray-600
+                text-white text-sm placeholder-gray-400
+                focus:outline-none focus:ring-2 focus:ring-blue-400"
                 >
                   <option value="">Select Gender</option>
                   <option value="Male">Male</option>
@@ -258,7 +259,7 @@ export default function ProfileSetting() {
             {/* Address + Button */}
             <div className="flex gap-8 items-end">
               <div className="w-full">
-                <label className="text-sm font-medium text-gray-700 mb-1 block">
+                <label className="text-sm font-medium text-white mb-1 block">
                   Address
                 </label>
                 <textarea
@@ -267,8 +268,8 @@ export default function ProfileSetting() {
                   value={data.address}
                   onChange={handleChange}
                   placeholder="Enter address"
-                  className="w-full px-4 py-2 rounded-lg border border-gray-300 bg-white
-                text-gray-800 text-sm placeholder-gray-400
+                  className="w-full h-11 px-4 rounded-lg border border-gray-300 bg-gray-600
+                text-white text-sm placeholder-gray-400
                 focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
               </div>

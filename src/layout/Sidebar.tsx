@@ -14,6 +14,8 @@ export default function SideBar() {
     setOpenSubMenu(openSubMenu === index ? null : index);
   };
 
+  console.log("setOpen:", setOpen);
+
   // const handleChangeMenu = () => {
   //   setOpenSubMenu(null);
   //   setOpen(!open);
@@ -25,15 +27,6 @@ export default function SideBar() {
         open ? "w-72" : "w-20"
       }`}
     >
-      {/* Toggle Button */}
-      {/* <BsArrowLeftShort
-        className={`text-white font-bold text-3xl bg-[#2C2C2C] rounded-full absolute -right-3 border-2 border-white cursor-pointer transition-all duration-300 ${
-          !open && "rotate-180"
-        }`}
-        onClick={handleChangeMenu}
-      /> */}
-
-      {/* Logo */}
       <div
         className={`transition-all duration-500 flex justify-center ${
           open ? "mt-2" : "mt-6"

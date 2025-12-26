@@ -5,6 +5,7 @@ import Cards from "../component/dashboard-cards";
 import IncomeExpenseChart from "../component/dashboard-chart-bar";
 import SpendHistory from "../component/spend-history";
 import WelcomeProfileComponent from "../component/welcome-profile";
+// import { useAppContext } from "../context/AppContext";
 // import { getFCMToken } from "../firebase/getFCMToken";
 // // import { useGetUser } from "../api/users/user-hooks";
 // import { onMessageListener } from "../firebase/firebase";

@@ -3,6 +3,7 @@ import type { LoginData } from "../types/types";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useLoginUser } from "../api/users/user-hooks";
 import LoginImage from "../assets/expense2.png";
+import { useAppContext } from "../context/AppContext";
 
 export default function Login() {
   const [data, setData] = useState<LoginData>({
@@ -12,6 +13,7 @@ export default function Login() {
 
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const { errorMsg } = useAppContext();
 
   const { mutate, isPending } = useLoginUser();
 
@@ -171,6 +173,7 @@ export default function Login() {
             >
               {isPending ? "Logging in..." : "Login"}
             </button>
+            {errorMsg}
           </form>
         </div>
       </div>

@@ -310,6 +310,8 @@ export default function AddIncome({
       return true;
     }, [localChoice, localGoalId, localAmount, data.income_amount]);
 
+    console.log("localChoice--", localChoice);
+
     useEffect(() => {
       if (openDialog) {
         setLocalChoice(choice);
@@ -356,12 +358,16 @@ export default function AddIncome({
       });
     }, [localChoice, localGoalId, localAmount, data]);
 
-    const handleNoChange = useCallback(() => {
+    const handleNoChange = () => {
       setLocalChoice("no");
       setLocalGoalId("");
-      setLocalAmount("");
+      setData((prev) => ({
+        ...prev,
+        goal_contribute_amount: "",
+        goal_id: "",
+      }));
       setDialogErrors({});
-    }, []);
+    };
 
     const handleAddGoal = () => {
       navigate("/goal");
@@ -466,6 +472,38 @@ export default function AddIncome({
             )}
 
             <ErrorMessage message={dialogErrors.goal_id} />
+          </div>
+        )}
+
+        {localChoice === "yes" && localGoalId && (
+          <div className="mt-4 flex flex-col">
+            <label className="text-sm text-white mb-2 font-medium">
+              Contribution Amount <span className="text-red-600">*</span>
+            </label>
+
+            <input
+              type="text"
+              value={localAmount}
+              onChange={(e) => {
+                setLocalAmount(e.target.value.replace(/[^0-9]/g, ""));
+                if (dialogErrors.goal_contribute_amount) {
+                  setDialogErrors((prev) => ({
+                    ...prev,
+                    goal_contribute_amount: undefined,
+                  }));
+                }
+              }}
+              placeholder="Enter amount"
+              className={`h-11 w-full px-4 rounded-lg border transition-all text-sm
+    focus:outline-none
+    ${
+      dialogErrors.goal_contribute_amount
+        ? "border-red-500 bg-red-500 bg-opacity-10 text-red-200 focus:ring-2 focus:ring-red-500"
+        : "border-gray-400 bg-[rgba(255,255,255,0.15)] text-white focus:ring-2 focus:ring-green-400"
+    }`}
+            />
+
+            <ErrorMessage message={dialogErrors.goal_contribute_amount} />
           </div>
         )}
 

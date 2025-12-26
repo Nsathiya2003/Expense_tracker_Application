@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
   CreateUserPayload,
   ForgotUserPayload,
@@ -8,6 +8,7 @@ import type {
 import { toast } from "react-toastify";
 import { UserApi } from "./userApi";
 import { useNavigate } from "react-router-dom";
+// import { useAppContext } from "../../context/AppContext";
 
 export const useCreateUser = () => {
   const navigate = useNavigate();
@@ -30,6 +31,7 @@ export const useCreateUser = () => {
 
 export const useLoginUser = () => {
   const navigate = useNavigate();
+  // const { setErrorMsg } = useAppContext();
   return useMutation({
     mutationFn: (body: LoginUserPayload) => UserApi.loginUser(body),
 
@@ -45,6 +47,8 @@ export const useLoginUser = () => {
     },
 
     onError: (error) => {
+      JSON.stringify(error);
+      // setErrorMsg(JSON.stringify(error));
       toast.error(`${error.message}` || "something went wrong");
     },
   });
@@ -87,11 +91,16 @@ export const useResetPassword = () => {
 };
 
 export const useUpdateUser = (userId: string | null) => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: (body: FormData) => UserApi.updateUser(body, userId),
 
     onSuccess: (data) => {
       toast.success(`${data?.message}` || "User update successfully");
+      setTimeout(() => {
+        queryClient.invalidateQueries({ queryKey: ["user"] });
+      }, 500);
     },
 
     onError: (error) => {

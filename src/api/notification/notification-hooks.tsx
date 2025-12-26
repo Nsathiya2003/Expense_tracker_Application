@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   notificationApi,
   type filterNotificationPayload,
@@ -14,15 +14,23 @@ export const useNotificationFilter = (filters: filterNotificationPayload) => {
   return useQuery<NotificationTypeResponse>({
     queryKey: ["notificationFilter", filters],
     queryFn: () => notificationApi.useNotificationFilter(filters),
-    staleTime: 1000 * 60,
+    refetchOnMount: "always",
+
+    staleTime: 0,
     refetchOnWindowFocus: false,
   });
 };
 
 export const useMarkNotificationAsRead = () => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (ids: string[]) => {
       await notificationApi.markAsRead({ ids });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["unread-notification-count"],
+      });
     },
   });
 };

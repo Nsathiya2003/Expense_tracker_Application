@@ -22,6 +22,9 @@ export const useCreateExpense = (resetForm: () => void) => {
       queryClient.invalidateQueries({ queryKey: ["expense"] });
       queryClient.invalidateQueries({ queryKey: ["expenseFilter"] });
       queryClient.invalidateQueries({ queryKey: ["incomeBalance"] });
+      queryClient.invalidateQueries({
+        queryKey: ["unread-notification-count"],
+      });
 
       resetForm();
     },

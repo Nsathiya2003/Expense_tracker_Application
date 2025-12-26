@@ -21,6 +21,8 @@ export interface MainLayoutProps {
 export interface AppContextType {
   open: boolean;
   setOpen: (value: boolean) => void;
+  // errorMsg: any;
+  // setErrorMsg: (value: any) => void;
 }
 
 export interface FilterAttributes {

@@ -1,58 +1,31 @@
-// import profile from '../assets/expense1.jpg';
-
-// import { useEffect } from "react";
 import Cards from "../component/dashboard-cards";
 import IncomeExpenseChart from "../component/dashboard-chart-bar";
 import SpendHistory from "../component/spend-history";
 import WelcomeProfileComponent from "../component/welcome-profile";
-// import { useAppContext } from "../context/AppContext";
-// import { getFCMToken } from "../firebase/getFCMToken";
-// // import { useGetUser } from "../api/users/user-hooks";
-// import { onMessageListener } from "../firebase/firebase";
 
 export default function Dashboard() {
-  //call an firebase function to get the token
-
-  //   const userId = localStorage.getItem("user_id");
-  //   const { data: userData } = useGetUser(userId);
-
-  // useEffect(() => {
-  //   const unsubscribe = onMessageListener((payload) => {
-  //     alert(payload.notification?.title);
-  //   });
-
-  //   return () => unsubscribe();
-  // }, []);
-
-  // useEffect(() => {
-  //   const saveToken = async () => {
-  //     const token = await getFCMToken();
-  //     console.log("Dashboard FCM token:", token);
-
-  //     if (token) {
-  //       await fetch("http://localhost:3000/api/notification/save-fcm-token", {
-  //         method: "POST",
-  //         headers: { "Content-Type": "application/json" },
-  //         body: JSON.stringify({ token }),
-  //       });
-  //     }
-  //   };
-
-  //   saveToken();
-  // }, []);
-
   return (
-    <>
-      <div className="flex justify-start ">
-        <div>
-          <WelcomeProfileComponent />
+    <div className="flex justify-center px-3 sm:px-6 lg:px-2">
+      <div className="w-full max-w-[1800px]">
+        {/* Profile */}
+        <WelcomeProfileComponent />
+
+        {/* -------------------- Row 1: Cards -------------------- */}
+        <div className="grid gap-4 sm:gap-6 lg:gap-2">
           <Cards />
-          <div className="flex flex-row">
-            <IncomeExpenseChart />
-            <SpendHistory />
-          </div>
+        </div>
+
+        {/* -------------------- Row 2: Charts -------------------- */}
+        <div
+          className="grid gap-2 sm:gap-6 mt-6 lg:ml-6 g-2"
+          style={{
+            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+          }}
+        >
+          <IncomeExpenseChart />
+          <SpendHistory />
         </div>
       </div>
-    </>
+    </div>
   );
 }

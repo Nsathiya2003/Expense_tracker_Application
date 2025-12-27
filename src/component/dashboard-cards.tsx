@@ -1,27 +1,27 @@
 import { useDashboardSummaryCards } from "../api/dashboard/dashboard-hooks";
-import { useAppContext } from "../context/AppContext";
 import { CardItems } from "../data/dashboard-card-items";
 
 export default function Cards() {
-  const { open } = useAppContext();
   const { data, isLoading, isError } = useDashboardSummaryCards();
 
+  /* -------------------- Loading -------------------- */
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 px-6">
+      <div className="flex flex-wrap gap-4 sm:gap-6 mt-4 sm:mt-6 lg:mt-8 px-3 sm:px-6 lg:px-10">
         {[1, 2, 3].map((_, i) => (
           <div
             key={i}
-            className="h-40 bg-[#2E362E]/70 rounded-xl animate-pulse"
+            className="flex-1 min-w-[300px] h-36 sm:h-40 bg-[#2E362E]/70 rounded-xl animate-pulse"
           />
         ))}
       </div>
     );
   }
 
+  /* -------------------- Error -------------------- */
   if (isError) {
     return (
-      <p className="text-red-500 mt-6 px-6">
+      <p className="text-red-500 mt-6 px-3 sm:px-6">
         Failed to load dashboard summary.
       </p>
     );
@@ -29,16 +29,15 @@ export default function Cards() {
 
   const summary = data?.data;
 
+  /* -------------------- Cards -------------------- */
   return (
     <div
-      className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 w-full px-6
-      ${open ? "lg:w-[1180px]" : "lg:w-[1184px]"}`}
+      className="grid gap-4 sm:gap-6 mt-10 sm:mt-6 lg:mt-8 px-3 sm:px-6 lg:px-8"
+      style={{ gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))" }}
     >
       {CardItems.map((item, index) => {
         const Icon = item.icon;
         const apiData = summary?.[item.key];
-
-        // fake progress (optional – replace with real calc later)
         const progress =
           item.key === "budget"
             ? Math.min(
@@ -50,24 +49,22 @@ export default function Cards() {
         return (
           <div
             key={index}
-            className="relative bg-gradient-to-br from-[#2E362E] to-[#1F251F]
-  text-white px-5 py-4 rounded-xl shadow-md
-  hover:shadow-lg transition-all duration-300"
+            className="bg-gradient-to-br from-[#2E362E] to-[#1F251F] text-white p-4 sm:p-5 lg:p-6 rounded-xl shadow-md h
+            over:shadow-lg transition-all"
           >
             {/* Header */}
             <div className="flex justify-between items-start mb-3">
               <div>
                 <h2
-                  className="text-base font-semibold leading-tight"
+                  className="text-sm sm:text-base lg:text-[15px] font-semibold"
                   style={{ color: item.color }}
                 >
                   {item.label}
                 </h2>
-                <p className="text-gray-400 text-sm leading-snug">
+                <p className="text-xs sm:text-sm text-gray-400">
                   {item.description}
                 </p>
               </div>
-
               <div
                 className="p-2 rounded-md"
                 style={{ backgroundColor: `${item.color}20` }}
@@ -76,40 +73,37 @@ export default function Cards() {
               </div>
             </div>
 
-            {/* Primary KPI */}
+            {/* Amount */}
             <div className="mb-2">
-              <p className="text-sm text-gray-400 mb-1">Total Amount</p>
+              <p className="text-xs sm:text-sm text-gray-400 mb-1">
+                Total Amount
+              </p>
               <h3
-                className="text-2xl font-bold leading-tight"
+                className="text-xl sm:text-2xl lg:text-[26px] font-bold"
                 style={{ color: item.color }}
               >
                 ₹{apiData?.total?.toLocaleString() ?? 0}
               </h3>
             </div>
 
-            {/* Secondary KPI */}
-            <div className="flex justify-between items-center mb-2">
-              <p className="text-sm text-gray-400">Records (30 days)</p>
-              <p className="text-sm font-semibold text-white">
-                {apiData?.count ?? 0}
-              </p>
+            {/* Records */}
+            <div className="flex justify-between items-center mb-2 text-xs sm:text-sm">
+              <span className="text-gray-400">Records (30 days)</span>
+              <span className="font-semibold">{apiData?.count ?? 0}</span>
             </div>
 
-            {/* Mini progress bar */}
-            <div className="mb-2">
+            {/* Progress */}
+            <div className="mb-3">
               <div className="h-1.5 bg-[#3A423A] rounded-full overflow-hidden">
                 <div
                   className="h-full rounded-full transition-all"
-                  style={{
-                    width: `${progress}%`,
-                    backgroundColor: item.color,
-                  }}
+                  style={{ width: `${progress}%`, backgroundColor: item.color }}
                 />
               </div>
             </div>
 
             {/* Footer */}
-            <div className="flex justify-between items-center text-sm text-gray-400">
+            <div className="flex justify-between items-center text-xs sm:text-sm text-gray-400">
               <span>Last 30 days</span>
               <span className="flex items-center gap-1">
                 <span

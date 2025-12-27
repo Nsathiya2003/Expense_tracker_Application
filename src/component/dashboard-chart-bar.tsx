@@ -1,32 +1,27 @@
 import {
-  BarChart,
   Bar,
-  XAxis,
-  YAxis,
+  BarChart,
   CartesianGrid,
-  Tooltip,
   Legend,
   ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
 } from "recharts";
 import { useMonthlyExpenseIncome } from "../api/dashboard/dashboard-hooks";
 
 export default function IncomeExpenseChart() {
   const { data: chartData, isLoading, isError } = useMonthlyExpenseIncome();
 
-  // -------- Loading state --------
   if (isLoading) {
     return (
-      <div className="bg-[#2E362E] p-5 m-4 rounded-2xl w-full sm:w-[400px] lg:w-[480px] mt-6 animate-pulse">
-        <div className="h-4 w-40 bg-gray-600 rounded mb-4" />
-        <div className="h-[220px] bg-gray-700/40 rounded-xl" />
-      </div>
+      <div className="flex-1 min-w-[260px] sm:min-w-[320px] lg:min-w-[300px] bg-[#2E362E] p-5 rounded-2xl mt-6 animate-pulse" />
     );
   }
 
-  // -------- Error state --------
   if (isError) {
     return (
-      <div className="bg-[#2E362E] p-5 m-4 rounded-2xl w-full sm:w-[400px] lg:w-[480px] mt-6">
+      <div className="flex-1 min-w-[280px] sm:min-w-[320px] lg:min-w-[400px] bg-[#2E362E] p-5 rounded-2xl mt-6">
         <p className="text-sm text-red-400">
           Failed to load monthly chart data.
         </p>
@@ -38,9 +33,8 @@ export default function IncomeExpenseChart() {
 
   return (
     <div
-      className="bg-gradient-to-br from-[#2E362E] to-[#1F251F]
-      p-5 m-4 rounded-2xl w-full sm:w-[400px] lg:w-[480px] mt-6
-      shadow-md hover:shadow-lg transition-all"
+      className="flex-1 min-w-[250px] sm:min-w-[320px] lg:min-w-[300px] bg-gradient-to-br 
+    from-[#2E362E] to-[#1F251F] p-5 rounded-2xl mt-6 m-2  shadow-md hover:shadow-lg transition-all"
     >
       {/* Header */}
       <div className="mb-4">
@@ -63,7 +57,6 @@ export default function IncomeExpenseChart() {
             stroke="#3A423A"
             vertical={false}
           />
-
           <XAxis
             dataKey="month"
             stroke="#9CA3AF"
@@ -71,14 +64,12 @@ export default function IncomeExpenseChart() {
             tickLine={false}
             axisLine={false}
           />
-
           <YAxis
             stroke="#9CA3AF"
             fontSize={11}
             tickLine={false}
             axisLine={false}
           />
-
           <Tooltip
             cursor={{ fill: "rgba(255,255,255,0.04)" }}
             contentStyle={{
@@ -90,13 +81,11 @@ export default function IncomeExpenseChart() {
             }}
             formatter={(value) => [`₹${value.toLocaleString()}`, ""]}
           />
-
           <Legend
             verticalAlign="top"
             align="right"
             wrapperStyle={{ fontSize: "12px" }}
           />
-
           <Bar
             dataKey="income"
             name="Income"
@@ -104,7 +93,6 @@ export default function IncomeExpenseChart() {
             radius={[6, 6, 0, 0]}
             barSize={14}
           />
-
           <Bar
             dataKey="expense"
             name="Expense"

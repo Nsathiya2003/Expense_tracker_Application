@@ -23,6 +23,10 @@ export interface AppContextType {
   setOpen: (value: boolean) => void;
   // errorMsg: any;
   // setErrorMsg: (value: any) => void;
+  data: {
+    username: string;
+  };
+  previewUrl: string | null;
 }
 
 export interface FilterAttributes {

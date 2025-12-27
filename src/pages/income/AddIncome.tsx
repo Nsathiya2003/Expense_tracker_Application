@@ -544,10 +544,12 @@ export default function AddIncome({
           </span>
         )}
       </div>
-
-      <div className="rounded-2xl p-6 shadow-lg w-full max-w-[1200px] mx-auto bg-[rgba(255,255,255,0.05)] border border-gray-700">
+      <div
+        className="rounded-2xl p-6 shadow-lg w-full max-w-7xl mx-auto
+  bg-[rgba(255,255,255,0.05)] border border-gray-700"
+      >
         {/* Input Fields Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 mb-6">
           {/* Category */}
           <div className="flex flex-col">
             <label className="text-sm text-white mb-2 font-medium flex items-center gap-2">
@@ -561,8 +563,8 @@ export default function AddIncome({
                 name="income_category"
                 value={data.income_category}
                 onChange={handleChange}
-                className={`h-11 w-full px-4 pr-10 rounded-lg border transition-all text-sm
-                  appearance-none focus:outline-none shadow-sm
+                className={`h-11 w-full min-w-0 px-4 pr-10 rounded-lg border transition-all text-sm
+    appearance-none focus:outline-none shadow-sm
                   ${
                     errors.income_category
                       ? "border-red-500 bg-red-500 bg-opacity-10 focus:ring-2 focus:ring-red-500 text-red-200"
@@ -636,7 +638,7 @@ export default function AddIncome({
               )}
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-3 text-green-400 font-medium pointer-events-none">
+              <span className="absolute left-2 top-3 text-green-400 font-medium pointer-events-none">
                 ₹
               </span>
               <input
@@ -644,8 +646,8 @@ export default function AddIncome({
                 name="income_amount"
                 value={data.income_amount}
                 onChange={handleChange}
-                placeholder="0"
-                className={`h-11 w-full px-4 pl-8 rounded-lg border transition-all text-white text-sm placeholder-gray-400 shadow-sm
+                className={`h-11 w-full min-w-0 px-4 pr-10 rounded-lg border transition-all text-sm
+    appearance-none focus:outline-none shadow-sm
                   ${
                     errors.income_amount
                       ? "border-red-500 bg-red-500 bg-opacity-10 focus:ring-2 focus:ring-red-500"
@@ -674,7 +676,8 @@ export default function AddIncome({
               name="income_date"
               value={data.income_date}
               onChange={handleChange}
-              className={`h-11 px-4 rounded-lg border transition-all text-white text-sm shadow-sm
+              className={`h-11 w-full min-w-0 px-4 pr-2 rounded-lg border transition-all text-sm
+    appearance-none focus:outline-none shadow-sm
                 ${
                   errors.income_date
                     ? "border-red-500 bg-red-500 bg-opacity-10 focus:ring-2 focus:ring-red-500"
@@ -702,8 +705,8 @@ export default function AddIncome({
                 name="payment_receive_mode"
                 value={data.payment_receive_mode}
                 onChange={handleChange}
-                className={`h-11 w-full px-4 pr-10 rounded-lg border transition-all text-sm
-                  appearance-none focus:outline-none shadow-sm
+                className={`h-11 w-full min-w-0 px-4 pr-10 rounded-lg border transition-all text-sm
+    appearance-none focus:outline-none shadow-sm  
                   ${
                     errors.payment_receive_mode
                       ? "border-red-500 bg-red-500 bg-opacity-10 focus:ring-2 focus:ring-red-500 text-red-200"
@@ -755,7 +758,7 @@ export default function AddIncome({
               </select>
               <span
                 className={`absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none transition-colors ${
-                  errors.payment_receive_mode ? "text-red-400" : "text-gray-300"
+                  errors.income_category ? "text-red-400" : "text-gray-300"
                 }`}
               >
                 <MdKeyboardArrowDown size={20} />
@@ -769,7 +772,7 @@ export default function AddIncome({
           </div>
 
           {/* Notes */}
-          <div className="flex flex-col lg:col-span-4">
+          <div className="flex flex-col lg:col-span-3 2xl:col-span-4">
             <label className="text-sm text-white mb-2 font-medium">
               Notes <span className="text-gray-400 text-xs">(Optional)</span>
             </label>
@@ -777,9 +780,9 @@ export default function AddIncome({
               name="notes"
               value={data.notes}
               onChange={handleChange}
-              rows={2}
               placeholder="Add any notes here..."
-              className="w-full px-4 py-2 rounded-lg border border-gray-400 
+              className="h-11 w-full lg:w-[600px] lg:h-20 min-w-0 px-4 pr-10 rounded-lg border transition-all text-sm
+    appearance-none focus:outline-none shadow-sm rounded-lg border border-gray-400 
                 bg-[rgba(255,255,255,0.15)] text-white text-sm placeholder-gray-400
                 focus:outline-none focus:ring-2 focus:ring-green-400 transition-all shadow-sm hover:border-green-400"
             />

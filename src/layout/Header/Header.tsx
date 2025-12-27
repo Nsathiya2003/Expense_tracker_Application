@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import profile from "../../assets/expense1.jpg";
 import { IoNotifications } from "react-icons/io5";
 import { IoIosLogOut } from "react-icons/io";
 import React, { useState } from "react";
@@ -8,6 +7,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { useUnreadNotification } from "../../pages/notification/unread-notication";
 import { useGetUser } from "../../api/users/user-hooks";
 import { baseImgUrl } from "../../api/apiClient";
+import { FaRegUserCircle } from "react-icons/fa";
 
 export default function Header() {
   const [notifyDialog, setNotifyDialog] = useState(false);
@@ -84,14 +84,10 @@ export default function Header() {
             <img
               src={previewUrl}
               alt="profile"
-              className="w-10 h-10 rounded-full object-cover"
+              className="w-10 h-10 rounded-full object-cover border-2 border-[#548f54]"
             />
           ) : (
-            <img
-              src={profile}
-              alt="profile"
-              className="w-10 h-10 rounded-full object-cover"
-            />
+            <FaRegUserCircle className="w-10 h-10 text-gray-700" />
           )}
         </div>
       </div>

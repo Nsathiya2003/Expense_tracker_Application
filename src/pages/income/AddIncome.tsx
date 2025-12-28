@@ -359,14 +359,17 @@ export default function AddIncome({
     }, [localChoice, localGoalId, localAmount, data]);
 
     const handleNoChange = () => {
-      setLocalChoice("no");
+      setLocalChoice("no"); // UI state
+      setChoice("no");
+      // Clear goal-related fields
       setLocalGoalId("");
-      setData((prev) => ({
+      setLocalAmount("");
+
+      setDialogErrors((prev) => ({
         ...prev,
-        goal_contribute_amount: "",
-        goal_id: "",
+        goal_id: undefined,
+        goal_contribute_amount: undefined,
       }));
-      setDialogErrors({});
     };
 
     const handleAddGoal = () => {
@@ -390,6 +393,7 @@ export default function AddIncome({
               checked={localChoice === "yes"}
               onChange={() => {
                 setLocalChoice("yes");
+                setChoice("yes");
                 setDialogErrors({});
               }}
               className="cursor-pointer"

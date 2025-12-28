@@ -4,7 +4,7 @@ import { useGetUser } from "../api/users/user-hooks";
 import { baseImgUrl } from "../api/apiClient";
 
 export function AppProvider({ children }: { children: ReactNode }) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   // const [errorMsg, setErrorMsg] = useState("");
   const userId = localStorage.getItem("user_id");
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);

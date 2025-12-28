@@ -484,7 +484,7 @@ export default function GoalTable({
 
   const totalGoals = Number(pagination?.totalRecords || 0);
   const completedGoals = goalData.filter(
-    (g) => g.status === "COMPLETED"
+    (g) => g.status === "completed"
   ).length;
   const pendingGoals = goalData.filter((g) => g.status === "PENDING").length;
 

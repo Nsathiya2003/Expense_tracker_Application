@@ -599,18 +599,19 @@ export default function AddExpense({
 
           {/* Recurring Expense */}
           <div className="flex flex-col justify-center">
-            <label className="text-sm text-white mb-2 font-medium flex items-center gap-2 h-5">
+            <label className="text-sm text-white mb-2 font-medium flex items-center gap-2 h-5 cursor-pointer">
               <input
-                type="radio"
+                type="checkbox"
                 name="is_recurring"
                 checked={data.is_recurring}
                 onChange={handleChange}
-                className="w-4 h-4 rounded border-gray-400 bg-[rgba(255,255,255,0.15)] cursor-pointer accent-green-400"
+                className="w-4 h-4 rounded-full border-gray-400 bg-[rgba(255,255,255,0.15)] cursor-pointer accent-green-400"
               />
               <span>Recurring Expense</span>
             </label>
+
             <p className="text-xs text-gray-400 ml-6">
-              Mark if this is a recurring expense
+              Enable this if the expense repeats regularly
             </p>
           </div>
 

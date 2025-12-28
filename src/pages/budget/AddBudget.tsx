@@ -303,6 +303,8 @@ export default function AddBudget({
   const [notifyType, setNotifyType] = useState("exceed");
   const [notifyPercent, setNotifyPercent] = useState(80);
 
+  console.log("notifyPercent---", notifyPercent);
+
   const isMainFieldsValid = useMemo(() => {
     if (!data) return false;
     if (!data.budget_category?.trim()) return false;

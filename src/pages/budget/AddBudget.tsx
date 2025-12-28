@@ -287,7 +287,12 @@ const validateForm = (data: FormData): ValidationErrors => {
   return errors;
 };
 
-export default function AddBudget({ editingId }: { editingId: string | null }) {
+export default function AddBudget({
+  editingId,
+}: {
+  editingId: string | null;
+  setEditingId?: (id: string | null) => void;
+}) {
   const [openDialog, setOpenDialog] = useState(false);
   const [currentEditingId, setCurrentEditingId] = useState<string | null>(
     editingId
@@ -416,7 +421,6 @@ export default function AddBudget({ editingId }: { editingId: string | null }) {
         budget_category: overrides?.budget_category ?? data.budget_category,
         budget_amount: overrides?.budget_amount ?? Number(data.budget_amount),
         notes: overrides?.notes ?? data.notes,
-        budget_month: overrides?.budget_month ?? data.budget_month,
         budget_start_date:
           overrides?.budget_start_date ?? new Date(data.budget_start_date),
 
@@ -464,12 +468,12 @@ export default function AddBudget({ editingId }: { editingId: string | null }) {
 
   const SuccessIndicator = ({ show }: { show?: boolean }) => {
     if (!show) return null;
-    return (
-      <div className="flex items-center gap-2 text-green-400 text-xs mt-2 animate-pulse">
-        <MdCheckCircle size={14} className="flex-shrink-0" />
-        <span className="font-medium">Valid</span>
-      </div>
-    );
+    // return (
+    //   <div className="flex items-center gap-2 text-green-400 text-xs mt-2 animate-pulse">
+    //     <MdCheckCircle size={14} className="flex-shrink-0" />
+    //     <span className="font-medium">Valid</span>
+    //   </div>
+    // );
   };
 
   return (
@@ -702,7 +706,7 @@ export default function AddBudget({ editingId }: { editingId: string | null }) {
               onChange={handleChange}
               rows={2}
               placeholder="Add any notes here..."
-              className="w-full px-4 py-2 rounded-lg border border-gray-400 
+              className="w-full px-4 py-2 rounded-lg border border-gray-400
                 bg-[rgba(255,255,255,0.15)] text-white text-sm placeholder-gray-400
                 focus:outline-none focus:ring-2 focus:ring-green-400 transition-all shadow-sm hover:border-green-400"
             />
@@ -787,7 +791,7 @@ export default function AddBudget({ editingId }: { editingId: string | null }) {
                 ? "Fill required fields before proceeding"
                 : undefined
             }
-            className="bg-[#c17a6b] hover:bg-[#d48976] disabled:bg-gray-600 disabled:opacity-50 
+            className="bg-[#c17a6b] hover:bg-[#d48976] disabled:bg-gray-600 disabled:opacity-50
               text-white font-medium py-2 px-6 rounded-lg shadow-md transition flex items-center gap-2"
           >
             {currentEditingId ? "Update Budget" : "Add Budget"}
@@ -795,7 +799,7 @@ export default function AddBudget({ editingId }: { editingId: string | null }) {
           <button
             onClick={handleClearAll}
             disabled={isSubmitting}
-            className="bg-[#5B3256] hover:bg-[#703a68] disabled:bg-gray-600 disabled:opacity-50 
+            className="bg-[#5B3256] hover:bg-[#703a68] disabled:bg-gray-600 disabled:opacity-50
               text-white font-medium py-2 px-6 rounded-lg shadow-md transition"
           >
             Clear All
@@ -809,7 +813,7 @@ export default function AddBudget({ editingId }: { editingId: string | null }) {
           <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm" />
 
           <Dialog.Content
-            className="fixed top-1/2 left-1/2 w-[420px] -translate-x-1/2 -translate-y-1/2 
+            className="fixed top-1/2 left-1/2 w-[420px] -translate-x-1/2 -translate-y-1/2
               bg-[#2E2E48] rounded-2xl shadow-2xl p-6 text-white
               data-[state=open]:animate-in data-[state=closed]:animate-out
               border border-gray-700"

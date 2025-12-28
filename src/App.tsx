@@ -14,7 +14,9 @@ import ViewBudget from "./pages/budget/ViewBudget";
 import ViewGoal from "./pages/goal/viewGoal";
 // import GoalHistory from "./pages/goal/viewGoal-history";
 import { ViewAllNotification } from "./pages/notification/view-all-notification";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, Slide } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "./toast.css";
 
 function App() {
   return (
@@ -45,16 +47,15 @@ function App() {
         </Routes>
       </BrowserRouter>
       <ToastContainer
-        position="top-center"
-        autoClose={4000}
-        hideProgressBar={false}
-        newestOnTop={false}
+        position="top-right"
+        autoClose={3500}
+        hideProgressBar={true}
         closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
         pauseOnHover
-        theme="colored"
+        draggable
+        newestOnTop
+        theme="light"
+        transition={Slide}
       />
     </>
   );

@@ -137,12 +137,12 @@ export default function AddGoal({ editingId }: { editingId: string | null }) {
 
   const SuccessIndicator = ({ show }: { show?: boolean }) => {
     if (!show) return null;
-    return (
-      <div className="flex items-center gap-2 text-green-400 text-xs mt-2 animate-pulse">
-        <MdCheckCircle size={14} className="flex-shrink-0" />
-        <span className="font-medium">Valid</span>
-      </div>
-    );
+    // return (
+    //   <div className="flex items-center gap-2 text-green-400 text-xs mt-2 animate-pulse">
+    //     <MdCheckCircle size={14} className="flex-shrink-0" />
+    //     <span className="font-medium">Valid</span>
+    //   </div>
+    // );
   };
 
   return (

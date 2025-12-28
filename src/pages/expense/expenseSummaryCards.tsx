@@ -13,7 +13,7 @@ export default function ExpenseSummaryCards({
   recordCount,
 }: Props) {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-5 px-4 sm:px-6">
+    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-5 px-0 sm:px-6">
       {/* Total Expenses */}
       <div className="rounded-xl p-3 flex flex-col gap-1 bg-red-500/10 border border-red-400/30">
         <div className="flex items-center justify-between">

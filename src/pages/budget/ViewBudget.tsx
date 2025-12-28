@@ -14,6 +14,7 @@ export default function ViewBudget() {
             // Force a prop-change even if same id is clicked repeatedly:
             setEditingId(null);
             setTimeout(() => setEditingId(id), 0);
+            // setOpenAdd(true);
           }}
         />
       </div>

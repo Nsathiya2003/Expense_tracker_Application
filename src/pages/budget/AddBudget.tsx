@@ -425,12 +425,13 @@ export default function AddBudget({
           overrides?.budget_start_date ?? new Date(data.budget_start_date),
 
         need_notification: true,
-        // set explicit booleans so backend receives consistent flags
-        budget_exceeded: notifyType !== "percentage",
-        budget_reaches: notifyType === "percentage",
-        // always include a numeric reach_percentage (0 when not using percentage)
-        reach_percentage:
-          notifyType === "percentage" ? Number(notifyPercent) : 0,
+
+        budget_reaches: data.budget_reaches === true,
+        budget_exceeded: data.budget_reaches === false,
+        reach_percentage: data.budget_reaches
+          ? Number(data.reach_percentage)
+          : 0,
+
         id: currentEditingId || "",
       };
 
@@ -446,14 +447,7 @@ export default function AddBudget({
         });
       }
     },
-    [
-      data,
-      currentEditingId,
-      updateBudget,
-      createBudget,
-      notifyType,
-      notifyPercent,
-    ]
+    [data, currentEditingId, updateBudget, createBudget, notifyType]
   );
 
   const ErrorMessage = ({ message }: { message?: string }) => {
@@ -721,57 +715,51 @@ export default function AddBudget({
               <label className="flex items-center gap-3 text-sm text-white">
                 <input
                   type="radio"
-                  name="notify"
-                  value="exceed"
-                  checked={notifyType === "exceed"}
-                  onChange={(e) => {
-                    const value = e.target.value as "exceed" | "percentage";
-                    setNotifyType(value);
-                    if (value === "exceed") {
-                      setNotifyPercent(0);
-                    }
-                  }}
+                  name="budget_reaches"
+                  checked={data.budget_reaches === false}
+                  onChange={() =>
+                    setData((prev) => ({
+                      ...prev,
+                      budget_reaches: false,
+                      reach_percentage: "0",
+                    }))
+                  }
                 />
+
                 <span>Only when I exceed the limit</span>
               </label>
               {/* Option 1: Percentage */}
               <label className="flex items-center gap-3 text-sm text-white">
                 <input
                   type="radio"
-                  name="notify"
-                  value="percentage"
-                  checked={notifyType === "percentage"}
-                  onChange={(e) => {
-                    const value = e.target.value as "exceed" | "percentage";
-                    setNotifyType(value);
-                    // ensure a sensible default when switching to percentage
-                    if (
-                      value === "percentage" &&
-                      (!notifyPercent || notifyPercent === 0)
-                    ) {
-                      setNotifyPercent(80);
-                    }
-                  }}
+                  name="budget_reaches"
+                  checked={data.budget_reaches === true}
+                  onChange={() =>
+                    setData((prev) => ({
+                      ...prev,
+                      budget_reaches: true,
+                      reach_percentage: prev.reach_percentage || "80",
+                    }))
+                  }
                 />
+
                 <input
                   type="text"
                   inputMode="numeric"
-                  pattern="[0-9]*"
-                  min={1}
-                  max={100}
-                  disabled={notifyType !== "percentage"}
-                  value={notifyPercent}
+                  value={data.reach_percentage}
+                  disabled={!data.budget_reaches}
                   onChange={(e) => {
-                    const v = Number(e.target.value);
-                    const normalized = Number.isNaN(v)
-                      ? 0
-                      : Math.max(0, Math.min(100, Math.floor(v)));
-                    setNotifyPercent(normalized);
+                    const v = Math.max(
+                      1,
+                      Math.min(100, Number(e.target.value) || 0)
+                    );
+                    setData((prev) => ({
+                      ...prev,
+                      reach_percentage: String(v),
+                    }));
                   }}
                   className={`w-16 px-2 py-1 rounded text-center text-black ${
-                    notifyType !== "percentage"
-                      ? "opacity-50 cursor-not-allowed"
-                      : ""
+                    !data.budget_reaches ? "opacity-50 cursor-not-allowed" : ""
                   }`}
                 />
 

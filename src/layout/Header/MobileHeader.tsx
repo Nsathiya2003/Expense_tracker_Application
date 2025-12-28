@@ -1,10 +1,13 @@
-import { MdMenu, MdNotificationsNone } from "react-icons/md";
+import { MdMenu } from "react-icons/md";
 import { FaRegUserCircle } from "react-icons/fa";
 import { FiLogOut, FiUser } from "react-icons/fi";
 import { useAppContext } from "../../context/AppContext";
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import * as Dialog from "@radix-ui/react-dialog";
+import { IoNotifications } from "react-icons/io5";
+import NotificationDialog from "../../pages/notification/notification-dialog";
+import { useUnreadNotification } from "../../pages/notification/unread-notication";
 
 export function MobileHeader() {
   const { setOpen, previewUrl } = useAppContext();
@@ -12,6 +15,7 @@ export function MobileHeader() {
 
   const [openProfile, setOpenProfile] = useState(false);
   const [logoutConfirm, setLogoutConfirm] = useState(false);
+  const [notifyDialog, setNotifyDialog] = useState(false); // <-- added state
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -25,7 +29,6 @@ export function MobileHeader() {
         setOpenProfile(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
@@ -38,6 +41,9 @@ export function MobileHeader() {
     setLogoutConfirm(false);
     navigate("/", { replace: true });
   };
+  const { data: notificationData } = useUnreadNotification();
+
+  const hasUnread = (notificationData?.pagination?.totalPages || 0) > 0;
 
   return (
     <>
@@ -57,8 +63,14 @@ export function MobileHeader() {
           </h1>
 
           {/* Notifications */}
-          <button className="p-2 rounded-xl active:scale-95 transition">
-            <MdNotificationsNone className="text-xl text-white" />
+          <button
+            onClick={() => setNotifyDialog(true)} // <-- open dialog on click
+            className="p-2 rounded-xl active:scale-95 transition relative"
+          >
+            <IoNotifications className="text-xl text-white" />
+            {hasUnread && (
+              <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse" />
+            )}{" "}
           </button>
 
           {/* Profile */}
@@ -108,6 +120,12 @@ export function MobileHeader() {
         </div>
       </header>
 
+      {/* Notification Dialog */}
+      <NotificationDialog
+        open={notifyDialog}
+        onClose={() => setNotifyDialog(false)}
+      />
+
       {/* Logout Confirmation Dialog */}
       <Dialog.Root open={logoutConfirm} onOpenChange={setLogoutConfirm}>
         <Dialog.Portal>
@@ -116,7 +134,6 @@ export function MobileHeader() {
             <Dialog.Title className="text-lg font-semibold text-center mb-4">
               Confirm Logout
             </Dialog.Title>
-
             <div className="flex justify-center gap-4">
               <button
                 onClick={() => setLogoutConfirm(false)}
@@ -124,7 +141,6 @@ export function MobileHeader() {
               >
                 Cancel
               </button>
-
               <button
                 onClick={handleLogout}
                 className="px-4 py-2 bg-red-600 rounded-lg text-sm"

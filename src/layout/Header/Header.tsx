@@ -86,7 +86,7 @@ export default function Header() {
                 className="w-9 h-9 rounded-full object-cover border-2 border-gray-300"
               />
             ) : (
-              <FaRegUserCircle className="w-9 h-9 text-white" />
+              <FaRegUserCircle className="w-8 h-8 text-white" />
             )}
           </button>
 

@@ -970,6 +970,7 @@ import { DeleteDialog } from "../../dialog/delete-dialog";
 import IncomeMobileCards from "./incomeMobileCards";
 import IncomeTableDesktop from "./incomeTableDesktop";
 import IncomeSummaryCards from "./incomeSummaryCards";
+import IncomeMobileControls from "./incomeMobileControl";
 
 export interface FilterState {
   page: number;
@@ -1026,9 +1027,9 @@ export default function IncomeTable({
 
   const pagination = filterData?.pagination;
 
-  // const totalPages = pagination?.totalPages || 1;
-  // const hasPrevPage = pagination?.hasPrevPage;
-  // const hasNextPage = pagination?.hasNextPage;
+  const totalPages = pagination?.totalPages || 1;
+  const hasPrevPage = pagination?.hasPrevPage;
+  const hasNextPage = pagination?.hasNextPage;
 
   const totalIncome = Number(pagination?.totalIncomeAmount || 0);
   const totalContributed = Number(pagination?.totalGoalContribution || 0);
@@ -1066,6 +1067,32 @@ export default function IncomeTable({
     setFilterOpen(false);
   }, []);
 
+  // Handle search
+  const handleSearch = useCallback((value: string) => {
+    setFilters((prev) => ({ ...prev, search: value, page: 1 }));
+  }, []);
+
+  //   // Handle page change
+  const handlePageChange = useCallback((newPage: number) => {
+    setFilters((prev) => ({ ...prev, page: newPage }));
+  }, []);
+
+  //   const totalPages = pagination?.totalPages || 1;
+  // const hasPrevPage = pagination?.hasPrevPage;
+  // const hasNextPage = pagination?.hasNextPage;
+
+  // const handlePageChange = useCallback((page: number) => {
+  //   setFilters((prev) => ({ ...prev, page }));
+  // }, []);
+
+  // const handleSearch = useCallback((search: string) => {
+  //   setFilters((prev) => ({ ...prev, search, page: 1 }));
+  // }, []);
+
+  const handleLimitChange = useCallback((limit: number) => {
+    setFilters((prev) => ({ ...prev, limit, page: 1 }));
+  }, []);
+
   /* -------------------- Render -------------------- */
 
   return (
@@ -1077,6 +1104,20 @@ export default function IncomeTable({
       />
 
       <div className="space-y-4">
+        {/* Mobile Search & Pagination */}
+        <IncomeMobileControls
+          page={filters.page}
+          totalPages={totalPages}
+          search={filters.search}
+          limit={filters.limit}
+          onSearch={handleSearch}
+          onPrev={() => handlePageChange(filters.page - 1)}
+          onNext={() => handlePageChange(filters.page + 1)}
+          onLimitChange={(limit) =>
+            setFilters((prev) => ({ ...prev, limit, page: 1 }))
+          }
+        />
+
         {/* Mobile Cards */}
         <IncomeMobileCards
           isLoading={isLoading}
@@ -1088,6 +1129,51 @@ export default function IncomeTable({
           }}
         />
 
+        {/* Desktop Controls */}
+        <div className="hidden md:flex items-center justify-between mb-4">
+          {/* Search */}
+          <input
+            type="text"
+            value={filters.search}
+            onChange={(e) => handleSearch(e.target.value)}
+            placeholder="Search income..."
+            className="
+      h-11 w-72 px-4
+      rounded-lg
+      bg-[#2E2E48]
+      border border-gray-700
+      text-sm text-white
+      placeholder:text-gray-400
+    "
+          />
+
+          {/* Actions */}
+          <div className="flex items-center gap-3">
+            {/* Limit */}
+            <select
+              value={filters.limit}
+              onChange={(e) => handleLimitChange(Number(e.target.value))}
+              className="h-11 px-3 rounded-lg bg-[#2E2E48] border border-gray-700 text-sm text-white"
+            >
+              <option value={5}>5</option>
+              <option value={10}>10</option>
+              <option value={20}>20</option>
+            </select>
+
+            {/* Filter Button */}
+            <button
+              onClick={() => setFilterOpen(true)}
+              className="
+        h-11 px-5 rounded-lg
+        bg-blue-500 hover:bg-blue-600
+        text-white text-sm font-medium
+      "
+            >
+              Filter
+            </button>
+          </div>
+        </div>
+
         {/* Desktop Table */}
         <IncomeTableDesktop
           isLoading={isLoading}
@@ -1096,6 +1182,41 @@ export default function IncomeTable({
           setDeleteId={setDeleteId}
           setDeleteDialog={setDeleteDialog}
         />
+
+        {/* Desktop Pagination */}
+        <div className="hidden md:flex items-center justify-between mt-4">
+          <span className="text-sm text-gray-400">
+            Page {filters.page} of {totalPages}
+          </span>
+
+          <div className="flex gap-2">
+            <button
+              disabled={!hasPrevPage}
+              onClick={() => handlePageChange(filters.page - 1)}
+              className="
+        px-4 py-2 rounded-lg
+        bg-[#2E2E48] border border-gray-700
+        text-sm text-white
+        disabled:opacity-40
+      "
+            >
+              Prev
+            </button>
+
+            <button
+              disabled={!hasNextPage}
+              onClick={() => handlePageChange(filters.page + 1)}
+              className="
+        px-4 py-2 rounded-lg
+        bg-[#2E2E48] border border-gray-700
+        text-sm text-white
+        disabled:opacity-40
+      "
+            >
+              Next
+            </button>
+          </div>
+        </div>
 
         {/* Delete Dialog */}
         <DeleteDialog

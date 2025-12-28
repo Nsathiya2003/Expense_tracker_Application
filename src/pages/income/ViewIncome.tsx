@@ -2,7 +2,7 @@ import { useState } from "react";
 import AddIncome from "./AddIncome";
 import IncomeTable from "./IncomeTable";
 
-export default function ViewGoal() {
+export default function ViewIncome() {
   const [editingId, setEditingId] = useState<string | null>(null);
 
   return (

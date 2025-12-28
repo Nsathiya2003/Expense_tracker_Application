@@ -64,13 +64,15 @@ const IncomeMobileCards: React.FC<IncomeMobileCardsProps> = ({
               </span>
             </div>
 
-            {/* Goal */}
-            <div className="flex items-center gap-2 text-xs text-gray-300">
-              <span className="opacity-70">Goal:</span>
-              <span className="font-medium">
-                {item.goal_id?.goal_name || "—"}
-              </span>
-            </div>
+            {/* Goal Contribution Amount (ONLY IF CONTRIBUTED) */}
+            {item.saving_contribution && (
+              <div className="text-xs text-blue-300">
+                Goal Contribution:&nbsp;
+                <span className="font-semibold text-red-400">
+                  ₹{item.goal_contribute_amount?.toLocaleString("en-IN") || 0}
+                </span>
+              </div>
+            )}
           </div>
 
           {/* ===== Status + Actions ===== */}

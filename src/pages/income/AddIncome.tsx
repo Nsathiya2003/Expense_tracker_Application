@@ -646,7 +646,7 @@ export default function AddIncome({
                 name="income_amount"
                 value={data.income_amount}
                 onChange={handleChange}
-                className={`h-11 w-full min-w-0 px-4 pr-10 rounded-lg border transition-all text-sm
+                className={`h-11 w-full min-w-0 px-6 pr-10 rounded-lg border transition-all text-sm
     appearance-none focus:outline-none shadow-sm
                   ${
                     errors.income_amount

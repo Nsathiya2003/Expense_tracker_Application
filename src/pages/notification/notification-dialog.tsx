@@ -82,10 +82,13 @@ export default function NotificationDialog({
   return (
     <Dialog.Root open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-black/40 backdrop-blur-sm data-[state=open]:animate-fadeIn data-[state=closed]:animate-fadeOut" />
+        <Dialog.Overlay
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm data-[state=open]:animate-fadeIn d
+        ata-[state=closed]:animate-fadeOut"
+        />
 
         <Dialog.Content
-          className={`absolute top-[60px] right-[20px] bg-[#2E2E48] text-white p-6 rounded-2xl 
+          className={`absolute top-[60px] right-[8px] bg-[#2E2E48] text-white p-6 rounded-md 
           shadow-2xl border border-gray-700 w-[450px]
           data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp`}
         >

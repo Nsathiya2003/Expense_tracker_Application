@@ -12,40 +12,63 @@ export default function IncomeSummaryCards({
   recordCount,
 }: Props) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-5">
       {/* Total Income */}
-      <div className="bg-gradient-to-br from-green-500 to-green-600 bg-opacity-20 border border-green-500 border-opacity-30 rounded-2xl p-3 flex items-center justify-between">
-        <div>
-          <p className="text-sm font-medium text-green-100">Total Income</p>
-          <p className="text-xl font-bold mt-1 text-white">
-            ₹{totalIncome > 0 ? totalIncome.toLocaleString("en-IN") : 0}
-          </p>
+      <div
+        className="
+          rounded-xl
+          p-3
+          flex flex-col gap-1
+          bg-green-500/10
+          border border-green-400/30
+        "
+      >
+        <div className="flex items-center justify-between">
+          <p className="text-xs font-medium text-green-300">Total Income</p>
+          <FiDollarSign className="text-green-400 text-sm" />
         </div>
-        <FiDollarSign className="text-green-200 text-2xl" />
+        <p className="text-lg font-bold text-white leading-tight">
+          ₹{totalIncome > 0 ? totalIncome.toLocaleString("en-IN") : 0}
+        </p>
       </div>
 
-      {/* Contributed to Goals */}
-      <div className="bg-gradient-to-br from-blue-500 to-blue-600 bg-opacity-20 border border-blue-500 border-opacity-30 rounded-2xl p-3 flex items-center justify-between">
-        <div>
-          <p className="text-sm font-medium text-blue-100">
-            Contributed to Goals
-          </p>
-          <p className="text-xl font-bold mt-1 text-white">
-            ₹{totalContributed.toLocaleString("en-IN")}
-          </p>
+      {/* Contributed */}
+      <div
+        className="
+          rounded-xl
+          p-3
+          flex flex-col gap-1
+          bg-blue-500/10
+          border border-blue-400/30
+        "
+      >
+        <div className="flex items-center justify-between">
+          <p className="text-xs font-medium text-blue-300">Contributed</p>
+          <FiTarget className="text-blue-400 text-sm" />
         </div>
-        <FiTarget className="text-blue-200 text-2xl" />
+        <p className="text-lg font-bold text-white leading-tight">
+          ₹{totalContributed.toLocaleString("en-IN")}
+        </p>
       </div>
 
-      {/* Total Records */}
-      <div className="bg-gradient-to-br from-orange-500 to-orange-600 bg-opacity-20 border border-orange-500 border-opacity-30 rounded-2xl p-3 flex items-center justify-between">
+      {/* Records */}
+      <div
+        className="
+          col-span-2 sm:col-span-1
+          rounded-xl
+          p-3
+          flex items-center justify-between
+          bg-orange-500/10
+          border border-orange-400/30
+        "
+      >
         <div>
-          <p className="text-sm font-medium text-orange-100">Total Records</p>
-          <p className="text-xl font-bold mt-1 text-white">
+          <p className="text-xs font-medium text-orange-300">Total Records</p>
+          <p className="text-base font-semibold text-white">
             {recordCount.toLocaleString("en-IN")}
           </p>
         </div>
-        <FiList className="text-orange-200 text-2xl" />
+        <FiList className="text-orange-400 text-sm" />
       </div>
     </div>
   );

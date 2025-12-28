@@ -125,12 +125,111 @@ import { SidebarItems } from "../data/Sidebar-items";
 import logo from "../assets/expense1.jpg";
 import { useAppContext } from "../context/AppContext";
 
+// export default function SideBar() {
+//   const { setOpen } = useAppContext();
+//   const [openSubMenu, setOpenSubMenu] = useState<number | null>(null);
+
+//   return (
+//     <aside className="bg-[#548f54] w-72 h-screen sticky top-0 p-4 pt-8 overflow-y-auto">
+//       {/* Logo */}
+//       <div className="flex justify-center mt-2">
+//         <img
+//           src={logo}
+//           alt="logo"
+//           className="w-36 h-36 rounded-full object-cover border-4 border-[#446144] shadow-md"
+//         />
+//       </div>
+
+//       {/* Menu */}
+//       <div className="mt-8 text-white text-lg font-medium pl-2">
+//         {SidebarItems.map((item, index) => {
+//           const Icon = item.icon;
+//           const hasSubItems = !!item.subItems;
+
+//           return (
+//             <div key={index}>
+//               {/* Main Menu */}
+//               <NavLink
+//                 to={item.routes}
+//                 onClick={() => {
+//                   if (hasSubItems) {
+//                     setOpenSubMenu(openSubMenu === index ? null : index);
+//                   } else {
+//                     setOpen(false); // close sidebar on mobile
+//                   }
+//                 }}
+//                 className={({ isActive }) =>
+//                   `flex items-center gap-3 p-2 mt-4 rounded-xl transition-all
+//                   ${
+//                     isActive
+//                       ? "bg-[#72c072] font-semibold"
+//                       : "hover:bg-[#415941]"
+//                   }`
+//                 }
+//               >
+//                 <Icon className="w-10 h-10 p-2 rounded-xl bg-[#32174D]" />
+//                 <span>{item.label}</span>
+
+//                 {hasSubItems && (
+//                   <MdKeyboardArrowDown
+//                     className={`ml-auto transition-transform
+//                     ${openSubMenu === index ? "rotate-180" : ""}`}
+//                   />
+//                 )}
+//               </NavLink>
+
+//               {/* Sub Menu */}
+//               {hasSubItems && openSubMenu === index && (
+//                 <ul className="ml-12 mt-2">
+//                   {item.subItems.map((sub, subIndex) => {
+//                     const SubIcon = sub.icon;
+//                     return (
+//                       <NavLink
+//                         key={subIndex}
+//                         to={sub.routes}
+//                         onClick={() => setOpen(false)}
+//                         className={({ isActive }) =>
+//                           `flex items-center gap-3 p-2 rounded-lg transition-all
+//                           ${
+//                             isActive
+//                               ? "bg-[#72c072]  font-semibold"
+//                               : "hover:bg-[#4b664b]"
+//                           }`
+//                         }
+//                       >
+//                         <div className="p-2 rounded-lg bg-[#32174D]">
+//                           <SubIcon className="w-4 h-4 text-white" />
+//                         </div>
+//                         <span>{sub.label}</span>
+//                       </NavLink>
+//                     );
+//                   })}
+//                 </ul>
+//               )}
+//             </div>
+//           );
+//         })}
+//       </div>
+//     </aside>
+//   );
+// }
+
 export default function SideBar() {
   const { setOpen } = useAppContext();
   const [openSubMenu, setOpenSubMenu] = useState<number | null>(null);
 
   return (
-    <aside className="bg-[#548f54] w-72 h-screen sticky top-0 p-4 pt-8 overflow-y-auto">
+    <aside
+      className="
+        fixed md:static
+        top-0 left-0
+        h-[100dvh] md:h-screen
+        w-72
+        bg-[#548f54]
+        p-4 pt-8
+        overflow-y-auto
+      "
+    >
       {/* Logo */}
       <div className="flex justify-center mt-2">
         <img
@@ -148,14 +247,13 @@ export default function SideBar() {
 
           return (
             <div key={index}>
-              {/* Main Menu */}
               <NavLink
                 to={item.routes}
                 onClick={() => {
                   if (hasSubItems) {
                     setOpenSubMenu(openSubMenu === index ? null : index);
                   } else {
-                    setOpen(false); // close sidebar on mobile
+                    setOpen(false);
                   }
                 }}
                 className={({ isActive }) =>
@@ -172,13 +270,13 @@ export default function SideBar() {
 
                 {hasSubItems && (
                   <MdKeyboardArrowDown
-                    className={`ml-auto transition-transform
-                    ${openSubMenu === index ? "rotate-180" : ""}`}
+                    className={`ml-auto transition-transform ${
+                      openSubMenu === index ? "rotate-180" : ""
+                    }`}
                   />
                 )}
               </NavLink>
 
-              {/* Sub Menu */}
               {hasSubItems && openSubMenu === index && (
                 <ul className="ml-12 mt-2">
                   {item.subItems.map((sub, subIndex) => {
@@ -192,7 +290,7 @@ export default function SideBar() {
                           `flex items-center gap-3 p-2 rounded-lg transition-all
                           ${
                             isActive
-                              ? "bg-[#72c072]  font-semibold"
+                              ? "bg-[#72c072] font-semibold"
                               : "hover:bg-[#4b664b]"
                           }`
                         }

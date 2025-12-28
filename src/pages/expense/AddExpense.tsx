@@ -275,18 +275,18 @@ export default function AddExpense({
 
   const SuccessIndicator = ({ show }: { show?: boolean }) => {
     if (!show) return null;
-    return (
-      <div className="flex items-center gap-2 text-green-400 text-xs mt-2 animate-pulse">
-        <MdCheckCircle size={14} className="flex-shrink-0" />
-        <span className="font-medium">Valid</span>
-      </div>
-    );
+    // return (
+    //   <div className="flex items-center gap-2 text-green-400 text-xs mt-2 animate-pulse">
+    //     <MdCheckCircle size={14} className="flex-shrink-0" />
+    //     <span className="font-medium">Valid</span>
+    //   </div>
+    // );
   };
 
   return (
-    <div className="min-h-full">
+    <div className="min-h-full lg:px-6">
       <div className="flex items-center gap-3 mb-6">
-        <h1 className="text-[#c17a6b] text-2xl font-bold">Expense Details</h1>
+        <h1 className="text-[#548f54] text-2xl font-bold">Expense Details</h1>
         {currentEditingId && (
           <span className="bg-blue-500 bg-opacity-20 text-blue-300 px-3 py-1 rounded-full text-xs font-medium">
             Editing Mode
@@ -294,8 +294,11 @@ export default function AddExpense({
         )}
       </div>
 
-      <div className="rounded-2xl p-6 shadow-lg w-full max-w-[1200px] mx-auto bg-[rgba(255,255,255,0.05)] border border-gray-700">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div
+        className="rounded-2xl p-6 shadow-lg w-full max-w-7xl mx-auto
+  bg-[rgba(255,255,255,0.05)] border border-gray-700"
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 mb-6">
           {/* Category */}
           <div className="flex flex-col">
             <label className="text-sm text-white mb-2 font-medium flex items-center gap-2">
@@ -309,8 +312,8 @@ export default function AddExpense({
                 name="expense_category"
                 value={data.expense_category}
                 onChange={handleChange}
-                className={`h-11 w-full px-4 pr-10 rounded-lg border transition-all text-sm
-                  appearance-none focus:outline-none shadow-sm
+                className={`h-11 w-full min-w-0 px-4 pr-10 rounded-lg border transition-all text-sm
+    appearance-none focus:outline-none shadow-sm
                   ${
                     errors.expense_category
                       ? "border-red-500 bg-red-500 bg-opacity-10 focus:ring-2 focus:ring-red-500 text-red-200"
@@ -398,8 +401,9 @@ export default function AddExpense({
                 name="expense_amount"
                 value={data.expense_amount}
                 onChange={handleChange}
-                placeholder="0"
-                className={`h-11 w-full px-4 pl-8 rounded-lg border transition-all text-white text-sm placeholder-gray-400 shadow-sm
+                // placeholder="0"
+                className={`h-11 w-full min-w-0 px-6 pr-10 rounded-lg border transition-all text-sm
+    appearance-none focus:outline-none shadow-sm
                   ${
                     errors.expense_amount
                       ? "border-red-500 bg-red-500 bg-opacity-10 focus:ring-2 focus:ring-red-500"
@@ -428,7 +432,8 @@ export default function AddExpense({
               name="expense_date"
               value={data.expense_date}
               onChange={handleChange}
-              className={`h-11 px-4 rounded-lg border transition-all text-white text-sm shadow-sm
+              className={`h-11 w-full min-w-0 px-4 pr-2 rounded-lg border transition-all text-sm
+    appearance-none focus:outline-none shadow-sm
                 ${
                   errors.expense_date
                     ? "border-red-500 bg-red-500 bg-opacity-10 focus:ring-2 focus:ring-red-500"
@@ -456,8 +461,8 @@ export default function AddExpense({
                 name="payment_mode"
                 value={data.payment_mode}
                 onChange={handleChange}
-                className={`h-11 w-full px-4 pr-10 rounded-lg border transition-all text-sm
-                  appearance-none focus:outline-none shadow-sm
+                className={`h-11 w-full min-w-0 px-4 pr-10 rounded-lg border transition-all text-sm
+    appearance-none focus:outline-none shadow-sm
                   ${
                     errors.payment_mode
                       ? "border-red-500 bg-red-500 bg-opacity-10 focus:ring-2 focus:ring-red-500 text-red-200"
@@ -533,7 +538,8 @@ export default function AddExpense({
               onChange={handleChange}
               rows={2}
               placeholder="Add any notes here..."
-              className="w-full px-4 py-2 rounded-lg border border-gray-400 
+              className="h-11 w-full lg:w-[600px] lg:h-20 min-w-0 px-4 pr-10 rounded-lg border transition-all text-sm
+    appearance-none focus:outline-none shadow-sm rounded-lg border border-gray-400 
                 bg-[rgba(255,255,255,0.15)] text-white text-sm placeholder-gray-400
                 focus:outline-none focus:ring-2 focus:ring-green-400 transition-all shadow-sm hover:border-green-400"
             />
@@ -583,7 +589,9 @@ export default function AddExpense({
                   Savings
                 </option>
               </select>
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none transition-colors text-gray-300">
+              <span
+                className={`absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none transition-colors`}
+              >
                 <MdKeyboardArrowDown size={20} />
               </span>
             </div>

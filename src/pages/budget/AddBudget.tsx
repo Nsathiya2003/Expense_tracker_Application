@@ -216,26 +216,31 @@ import {
   useUpdateBudget,
 } from "../../api/budget/budget-hooks";
 
-// const Months = [
-//   "JAN",
-//   "FEB",
-//   "MAR",
-//   "APR",
-//   "MAY",
-//   "JUN",
-//   "JUL",
-//   "AUG",
-//   "SEP",
-//   "OCT",
-//   "NOV",
-//   "DEC",
-// ];
+const BUDGET_CATEGORIES = [
+  "Food",
+  "Transport",
+  "Housing",
+  // "Utilities",
+  "Healthcare",
+  "Education",
+  "Shopping",
+  "Personal Care",
+  "Entertainment",
+  "Travel",
+  "Insurance",
+  "EMI / Loan",
+  "Gifts",
+  // "Subscriptions",
+  "Other",
+];
 
 interface FormData {
   budget_category: string;
   budget_amount: string;
   budget_month: string;
   budget_start_date: string;
+  budget_end_date: string;
+
   notes: string;
   need_notification: boolean;
   budget_exceeded: boolean;
@@ -249,6 +254,7 @@ interface ValidationErrors {
   budget_start_date?: string;
   payment_mode?: string;
   budget_month?: string;
+  budget_end_date?: string;
 }
 
 const INITIAL_FORM_STATE: FormData = {
@@ -256,6 +262,7 @@ const INITIAL_FORM_STATE: FormData = {
   budget_amount: "",
   budget_month: "",
   budget_start_date: "",
+  budget_end_date: "",
   notes: "",
   need_notification: true,
   budget_exceeded: true,
@@ -280,8 +287,9 @@ const validateForm = (data: FormData): ValidationErrors => {
 
   if (!data.budget_start_date?.trim()) {
     errors.budget_start_date = "Date is required";
-  } else if (new Date(data.budget_start_date) > new Date()) {
-    errors.budget_start_date = "Date cannot be in the future";
+  }
+  if (!data.budget_end_date?.trim()) {
+    errors.budget_end_date = "Date is required";
   }
 
   return errors;
@@ -313,6 +321,8 @@ export default function AddBudget({
     if (isNaN(amountNum) || amountNum <= 0) return false;
     if (!data.budget_start_date?.trim()) return false;
     if (new Date(data.budget_start_date) > new Date()) return false;
+    if (!data.budget_end_date?.trim()) return false;
+    // if (new Date(data.budget_end_date) > new Date()) return false;
     return true;
   }, [data]);
 
@@ -331,6 +341,9 @@ export default function AddBudget({
         budget_month: budgetData.budget_month || "",
         budget_start_date: budgetData.budget_start_date
           ? new Date(budgetData.budget_start_date).toISOString().split("T")[0]
+          : "",
+        budget_end_date: budgetData.budget_end_date
+          ? new Date(budgetData.budget_end_date).toISOString().split("T")[0]
           : "",
         notes: budgetData.notes || "",
         need_notification: budgetData.need_notification || false,
@@ -425,13 +438,15 @@ export default function AddBudget({
         notes: overrides?.notes ?? data.notes,
         budget_start_date:
           overrides?.budget_start_date ?? new Date(data.budget_start_date),
+        budget_end_date:
+          overrides?.budget_end_date ?? new Date(data.budget_end_date),
 
         need_notification: true,
 
-        budget_reaches: data.budget_reaches === true,
-        budget_exceeded: data.budget_reaches === false,
+        budget_reaches: Boolean(data.budget_reaches),
+        budget_exceeded: !data.budget_reaches,
         reach_percentage: data.budget_reaches
-          ? Number(data.reach_percentage)
+          ? Number(data.reach_percentage || 80)
           : 0,
 
         id: currentEditingId || "",
@@ -475,7 +490,7 @@ export default function AddBudget({
   return (
     <div className="min-h-full">
       <div className="flex items-center gap-3 mb-6">
-        <h1 className="text-[#c17a6b] text-2xl font-bold">Budget Details</h1>
+        <h1 className="text-[#548f54] text-2xl font-bold">Budget Details</h1>
         {currentEditingId && (
           <span className="bg-blue-500 bg-opacity-20 text-blue-300 px-3 py-1 rounded-full text-xs font-medium">
             Editing Mode
@@ -518,42 +533,15 @@ export default function AddBudget({
                 >
                   Select Category
                 </option>
-                <option
-                  value="Food"
-                  style={{ backgroundColor: "#2E2E48", color: "white" }}
-                >
-                  Food
-                </option>
-                <option
-                  value="Transport"
-                  style={{ backgroundColor: "#2E2E48", color: "white" }}
-                >
-                  Transport
-                </option>
-                <option
-                  value="Entertainment"
-                  style={{ backgroundColor: "#2E2E48", color: "white" }}
-                >
-                  Entertainment
-                </option>
-                <option
-                  value="Utilities"
-                  style={{ backgroundColor: "#2E2E48", color: "white" }}
-                >
-                  Utilities
-                </option>
-                <option
-                  value="Healthcare"
-                  style={{ backgroundColor: "#2E2E48", color: "white" }}
-                >
-                  Healthcare
-                </option>
-                <option
-                  value="Others"
-                  style={{ backgroundColor: "#2E2E48", color: "white" }}
-                >
-                  Others
-                </option>
+                {BUDGET_CATEGORIES.map((category) => (
+                  <option
+                    key={category}
+                    value={category}
+                    style={{ backgroundColor: "#2E2E48", color: "white" }}
+                  >
+                    {category}
+                  </option>
+                ))}
               </select>
               <span
                 className={`absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none transition-colors ${
@@ -604,65 +592,6 @@ export default function AddBudget({
             ) : null}
           </div>
 
-          {/* Month */}
-          {/* <div className="flex flex-col">
-            <label className="text-sm text-white mb-2 font-medium flex items-center gap-2">
-              Choose Month <span className="text-red-600">*</span>
-              {data.budget_month && !errors.budget_month && (
-                <span className="text-green-400 text-xs">(✓)</span>
-              )}
-            </label>
-            <div className="relative group">
-              <select
-                name="budget_month"
-                value={data.budget_month}
-                onChange={handleChange}
-                className={`h-11 w-full px-4 pr-10 rounded-lg border transition-all text-sm
-                  appearance-none focus:outline-none shadow-sm
-                  ${
-                    errors.budget_month
-                      ? "border-red-500 bg-red-500 bg-opacity-10 focus:ring-2 focus:ring-red-500 text-red-200"
-                      : "border-gray-400 bg-[rgba(255,255,255,0.15)] text-white focus:ring-2 focus:ring-green-400 hover:border-green-400"
-                  }`}
-                style={{
-                  backgroundColor: errors.budget_month
-                    ? "rgba(239, 68, 68, 0.1)"
-                    : "rgba(255,255,255,0.15)",
-                  color: errors.budget_month ? "#fecaca" : "white",
-                }}
-              >
-                <option
-                  value=""
-                  style={{ backgroundColor: "#2E2E48", color: "white" }}
-                >
-                  Choose Month
-                </option>
-                {Months &&
-                  Months.length > 0 &&
-                  Months.map((item) => (
-                    <option
-                      value={item}
-                      style={{ backgroundColor: "#2E2E48", color: "white" }}
-                    >
-                      {item}
-                    </option>
-                  ))}
-              </select>
-              <span
-                className={`absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none transition-colors ${
-                  errors.budget_month ? "text-red-400" : "text-gray-300"
-                }`}
-              >
-                <MdKeyboardArrowDown size={20} />
-              </span>
-            </div>
-            {errors.budget_month ? (
-              <ErrorMessage message={errors.budget_month} />
-            ) : data.budget_month ? (
-              <SuccessIndicator show={true} />
-            ) : null}
-          </div> */}
-
           {/* Date */}
           <div className="flex flex-col">
             <label className="text-sm text-white mb-2 font-medium flex items-center gap-2">
@@ -687,6 +616,32 @@ export default function AddBudget({
             {errors.budget_start_date ? (
               <ErrorMessage message={errors.budget_start_date} />
             ) : data.budget_start_date ? (
+              <SuccessIndicator show={true} />
+            ) : null}
+          </div>
+          <div className="flex flex-col">
+            <label className="text-sm text-white mb-2 font-medium flex items-center gap-2">
+              Budget End Date <span className="text-red-600">*</span>
+              {data.budget_end_date && !errors.budget_end_date && (
+                <span className="text-green-400 text-xs">(✓)</span>
+              )}
+            </label>
+            <input
+              type="date"
+              name="budget_end_date"
+              value={data.budget_end_date}
+              onChange={handleChange}
+              className={`h-11 px-4 rounded-lg border transition-all text-white text-sm shadow-sm
+                ${
+                  errors.budget_end_date
+                    ? "border-red-500 bg-red-500 bg-opacity-10 focus:ring-2 focus:ring-red-500"
+                    : "border-gray-400 bg-[rgba(255,255,255,0.15)] focus:ring-2 focus:ring-green-400 hover:border-green-400"
+                }
+                focus:outline-none`}
+            />
+            {errors.budget_end_date ? (
+              <ErrorMessage message={errors.budget_end_date} />
+            ) : data.budget_end_date ? (
               <SuccessIndicator show={true} />
             ) : null}
           </div>
@@ -717,8 +672,7 @@ export default function AddBudget({
               <label className="flex items-center gap-3 text-sm text-white">
                 <input
                   type="radio"
-                  name="budget_reaches"
-                  checked={data.budget_reaches === false}
+                  checked={!data.budget_reaches}
                   onChange={() =>
                     setData((prev) => ({
                       ...prev,
@@ -727,15 +681,13 @@ export default function AddBudget({
                     }))
                   }
                 />
-
                 <span>Only when I exceed the limit</span>
               </label>
-              {/* Option 1: Percentage */}
+
               <label className="flex items-center gap-3 text-sm text-white">
                 <input
                   type="radio"
-                  name="budget_reaches"
-                  checked={data.budget_reaches === true}
+                  checked={data.budget_reaches}
                   onChange={() =>
                     setData((prev) => ({
                       ...prev,
@@ -764,7 +716,6 @@ export default function AddBudget({
                     !data.budget_reaches ? "opacity-50 cursor-not-allowed" : ""
                   }`}
                 />
-
                 <span>%</span>
               </label>
             </div>
@@ -845,6 +796,14 @@ export default function AddBudget({
                       day: "numeric",
                     }
                   )}
+                </p>
+                <p className="text-sm text-gray-300">
+                  <span className="font-medium text-white">Date:</span>{" "}
+                  {new Date(data.budget_end_date).toLocaleDateString("en-IN", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
                 </p>
               </div>
 

@@ -23,6 +23,7 @@ export interface filterExpensePayload {
 export interface CheckBudgetLimitPayload {
   expense_amount: number;
   category: string;
+  expense_date: Date;
 }
 
 export const expenseApi = {

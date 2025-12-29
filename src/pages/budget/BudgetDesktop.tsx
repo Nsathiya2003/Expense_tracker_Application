@@ -44,6 +44,7 @@ export default function BudgetTableDesktop({
             <th className="py-4 px-4 text-left font-semibold">Category</th>
             <th className="py-4 px-4 text-left font-semibold">Budget Amount</th>
             <th className="py-4 px-4 text-left font-semibold">Start Date</th>
+            <th className="py-4 px-4 text-left font-semibold">End Date</th>
             <th className="py-4 px-4 text-left font-semibold">Notification</th>
             <th className="py-4 px-4 text-center font-semibold">Actions</th>
           </tr>
@@ -91,6 +92,17 @@ export default function BudgetTableDesktop({
                 </span>
               </td>
 
+              {/* End Date */}
+              <td className="py-4 px-4 text-gray-300 text-sm">
+                <span className="bg-gray-700/50 px-2 py-1 rounded">
+                  {new Date(item.budget_end_date).toLocaleDateString("en-IN", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </span>
+              </td>
+
               {/* Notification */}
               <td className="py-4 px-4 font-semibold">
                 {!item.budget_exceeded ? (
@@ -131,8 +143,11 @@ export default function BudgetTableDesktop({
           {/* Empty State */}
           {budgetData.length === 0 && (
             <tr>
-              <td colSpan={5} className="text-center py-10 text-gray-400">
-                No budget records found
+              <td colSpan={5} className="text-center py-12 text-gray-400">
+                <div className="flex flex-col items-center gap-2">
+                  <p className="text-3xl">📭</p>
+                  <p>No budget records found</p>
+                </div>
               </td>
             </tr>
           )}

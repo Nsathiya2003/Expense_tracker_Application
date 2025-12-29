@@ -39,6 +39,24 @@ const INITIAL_FORM_STATE: FormData = {
   tags: "",
 };
 
+const EXPENSE_CATEGORIES = [
+  "Food",
+  "Transport",
+  "Housing",
+  // "Utilities",
+  "Healthcare",
+  "Education",
+  "Shopping",
+  "Personal Care",
+  "Entertainment",
+  "Travel",
+  "Insurance",
+  "EMI / Loan",
+  "Gifts",
+  // "Subscriptions",
+  "Other",
+];
+
 const validateForm = (data: FormData): ValidationErrors => {
   const errors: ValidationErrors = {};
 
@@ -233,6 +251,7 @@ export default function AddExpense({
         {
           category: payload.expense_category,
           expense_amount: payload.expense_amount,
+          expense_date: payload.expense_date,
         },
         {
           onSuccess: (res) => {
@@ -332,42 +351,15 @@ export default function AddExpense({
                 >
                   Select Category
                 </option>
-                <option
-                  value="Food"
-                  style={{ backgroundColor: "#2E2E48", color: "white" }}
-                >
-                  Food
-                </option>
-                <option
-                  value="Transport"
-                  style={{ backgroundColor: "#2E2E48", color: "white" }}
-                >
-                  Transport
-                </option>
-                <option
-                  value="Entertainment"
-                  style={{ backgroundColor: "#2E2E48", color: "white" }}
-                >
-                  Entertainment
-                </option>
-                <option
-                  value="Utilities"
-                  style={{ backgroundColor: "#2E2E48", color: "white" }}
-                >
-                  Utilities
-                </option>
-                <option
-                  value="Healthcare"
-                  style={{ backgroundColor: "#2E2E48", color: "white" }}
-                >
-                  Healthcare
-                </option>
-                <option
-                  value="Others"
-                  style={{ backgroundColor: "#2E2E48", color: "white" }}
-                >
-                  Others
-                </option>
+                {EXPENSE_CATEGORIES.map((category) => (
+                  <option
+                    key={category}
+                    value={category}
+                    style={{ backgroundColor: "#2E2E48", color: "white" }}
+                  >
+                    {category}
+                  </option>
+                ))}
               </select>
               <span
                 className={`absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none transition-colors ${

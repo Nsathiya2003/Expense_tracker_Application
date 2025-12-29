@@ -136,7 +136,7 @@ export default function IncomeTableDesktop({
             </tr>
           )}
           {/* Mobile View (Cards) */}
-          <div className="md:hidden space-y-4">
+          {/* <div className="md:hidden space-y-4">
             {isLoading ? (
               <TableLoader />
             ) : incomeData.length > 0 ? (
@@ -214,10 +214,10 @@ export default function IncomeTableDesktop({
               ))
             ) : (
               <div className="text-center py-12 text-gray-400">
-                No income records found
+                No income records foundss
               </div>
             )}
-          </div>
+          </div> */}
         </tbody>
       </table>
     </div>

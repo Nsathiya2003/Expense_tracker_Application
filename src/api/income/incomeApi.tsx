@@ -8,7 +8,7 @@ export interface CreateIncomePayload {
   payment_receive_mode: string;
   notes: string;
   saving_contribution: boolean;
-  goal_id: string;
+  goal_id: string | null;
   goal_contribute_amount: number;
 }
 

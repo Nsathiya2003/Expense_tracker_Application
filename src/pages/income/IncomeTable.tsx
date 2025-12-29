@@ -1268,12 +1268,26 @@ export default function IncomeTable({
                 name="goal_id"
                 value={tempFilters.goal_id}
                 onChange={handleFilterChange}
-                className="h-11 w-full px-4 rounded-lg bg-[rgba(255,255,255,0.15)] text-white"
+                className={`h-11 w-full min-w-0 px-4 pr-10 rounded-lg border transition-all text-sm
+    appearance-none focus:outline-none shadow-sm`}
+                style={{
+                  backgroundColor: "rgba(255,255,255,0.15)",
+                  // color: "white",
+                }}
               >
-                <option value="">All Goals</option>
+                <option
+                  value=""
+                  style={{ backgroundColor: "#2E2E48", color: "white" }}
+                >
+                  All Goals
+                </option>
 
                 {GoalData?.data?.map((goal: GoalData) => (
-                  <option key={goal._id} value={goal._id}>
+                  <option
+                    key={goal._id}
+                    value={goal._id}
+                    style={{ backgroundColor: "#2E2E48", color: "white" }}
+                  >
                     {goal.goal_name}
                   </option>
                 ))}

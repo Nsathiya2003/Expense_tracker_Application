@@ -25,8 +25,8 @@ export default function GoalMobileCards({
 
   if (!goalData || goalData.length === 0) {
     return (
-      <div className="md:hidden text-center text-gray-400 py-10">
-        No goals found
+      <div className="md:hidden flex items-center justify-center h-64">
+        <p className="text-sm text-gray-400 italic">No goals found</p>
       </div>
     );
   }

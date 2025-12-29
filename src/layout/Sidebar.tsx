@@ -1,218 +1,9 @@
-// import { useState } from "react";
-// // import { BsArrowLeftShort } from "react-icons/bs";
-// import { MdKeyboardArrowDown } from "react-icons/md";
-// import { NavLink } from "react-router-dom";
-// import { SidebarItems } from "../data/Sidebar-items";
-// import logo from "../assets/expense1.jpg";
-// import { useAppContext } from "../context/AppContext";
-
-// export default function SideBar() {
-//   const { open, setOpen } = useAppContext();
-//   const [openSubMenu, setOpenSubMenu] = useState<number | null>(null);
-
-//   const handleSubMenuToggle = (index: number) => {
-//     setOpenSubMenu(openSubMenu === index ? null : index);
-//   };
-
-//   console.log("setOpen:", setOpen);
-
-//   // const handleChangeMenu = () => {
-//   //   setOpenSubMenu(null);
-//   //   setOpen(!open);
-//   // };
-
-//   return (
-//     <div className="hidden md:block">
-//       <div
-//         className={`bg-[#548f54] h-screen sticky top-0 p-4 pt-8 transition-all duration-300 ${
-//           open ? "w-72" : "w-20"
-//         }`}
-//       >
-//         <div
-//           className={`transition-all duration-500 flex justify-center ${
-//             open ? "mt-2" : "mt-6"
-//           }`}
-//         >
-//           <img
-//             src={logo}
-//             alt="logo"
-//             className={`transition-all duration-500 rounded-full object-cover border-4 border-[#446144] shadow-md ${
-//               open ? "w-36 h-36" : "w-10 h-10"
-//             }`}
-//           />
-//         </div>
-
-//         {/* Menu Section */}
-//         <div
-//           className={`mt-8 text-white text-lg font-medium ${
-//             !open ? "pl-0" : "pl-2"
-//           }`}
-//         >
-//           {SidebarItems.map((item, index) => {
-//             const Icon = item.icon;
-//             const hasSubItems = !!item.subItems;
-
-//             return (
-//               <div key={index}>
-//                 {/* Main Menu */}
-//                 <NavLink
-//                   to={item.routes}
-//                   onClick={() => hasSubItems && handleSubMenuToggle(index)}
-//                   className={({ isActive }) =>
-//                     `flex items-center gap-3 p-2 mt-4 rounded-xl cursor-pointer transition-all duration-200
-//                   ${
-//                     isActive
-//                       ? "bg-[#72c072] text-black font-semibold"
-//                       : "hover:bg-[#415941]"
-//                   }`
-//                   }
-//                 >
-//                   <Icon
-//                     className={`w-10 h-10 p-2 rounded-xl bg-[#32174D] text-white hover:bg-[#5B3256] transition-all duration-200 ${
-//                       !open ? "mx-auto" : ""
-//                     }`}
-//                   />
-//                   {open && <span>{item.label}</span>}
-//                   {hasSubItems && open && (
-//                     <MdKeyboardArrowDown
-//                       className={`ml-auto text-xl transition-transform duration-300 ${
-//                         openSubMenu === index ? "rotate-180" : ""
-//                       }`}
-//                     />
-//                   )}
-//                 </NavLink>
-
-//                 {/* Submenu */}
-//                 {hasSubItems && openSubMenu === index && (
-//                   <ul className="ml-12 mt-2">
-//                     {item.subItems.map((sub, subIndex) => {
-//                       const SubIcon = sub.icon;
-//                       return (
-//                         <NavLink
-//                           key={subIndex}
-//                           to={sub.routes}
-//                           className={({ isActive }) =>
-//                             `flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-all duration-200
-//                           ${
-//                             isActive
-//                               ? "bg-[#72c072] text-black font-semibold"
-//                               : "hover:bg-[#4b664b]"
-//                           }`
-//                           }
-//                         >
-//                           <div className="p-2 rounded-lg bg-[#32174D] hover:bg-[#5B3256] transition-all duration-200">
-//                             <SubIcon className="w-4 h-4 text-white" />
-//                           </div>
-//                           {open && <span>{sub.label}</span>}
-//                         </NavLink>
-//                       );
-//                     })}
-//                   </ul>
-//                 )}
-//               </div>
-//             );
-//           })}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-
 import { useState } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 import { SidebarItems } from "../data/Sidebar-items";
-import logo from "../assets/expense1.jpg";
+import logo from "../assets/images.jpg";
 import { useAppContext } from "../context/AppContext";
-
-// export default function SideBar() {
-//   const { setOpen } = useAppContext();
-//   const [openSubMenu, setOpenSubMenu] = useState<number | null>(null);
-
-//   return (
-//     <aside className="bg-[#548f54] w-72 h-screen sticky top-0 p-4 pt-8 overflow-y-auto">
-//       {/* Logo */}
-//       <div className="flex justify-center mt-2">
-//         <img
-//           src={logo}
-//           alt="logo"
-//           className="w-36 h-36 rounded-full object-cover border-4 border-[#446144] shadow-md"
-//         />
-//       </div>
-
-//       {/* Menu */}
-//       <div className="mt-8 text-white text-lg font-medium pl-2">
-//         {SidebarItems.map((item, index) => {
-//           const Icon = item.icon;
-//           const hasSubItems = !!item.subItems;
-
-//           return (
-//             <div key={index}>
-//               {/* Main Menu */}
-//               <NavLink
-//                 to={item.routes}
-//                 onClick={() => {
-//                   if (hasSubItems) {
-//                     setOpenSubMenu(openSubMenu === index ? null : index);
-//                   } else {
-//                     setOpen(false); // close sidebar on mobile
-//                   }
-//                 }}
-//                 className={({ isActive }) =>
-//                   `flex items-center gap-3 p-2 mt-4 rounded-xl transition-all
-//                   ${
-//                     isActive
-//                       ? "bg-[#72c072] font-semibold"
-//                       : "hover:bg-[#415941]"
-//                   }`
-//                 }
-//               >
-//                 <Icon className="w-10 h-10 p-2 rounded-xl bg-[#32174D]" />
-//                 <span>{item.label}</span>
-
-//                 {hasSubItems && (
-//                   <MdKeyboardArrowDown
-//                     className={`ml-auto transition-transform
-//                     ${openSubMenu === index ? "rotate-180" : ""}`}
-//                   />
-//                 )}
-//               </NavLink>
-
-//               {/* Sub Menu */}
-//               {hasSubItems && openSubMenu === index && (
-//                 <ul className="ml-12 mt-2">
-//                   {item.subItems.map((sub, subIndex) => {
-//                     const SubIcon = sub.icon;
-//                     return (
-//                       <NavLink
-//                         key={subIndex}
-//                         to={sub.routes}
-//                         onClick={() => setOpen(false)}
-//                         className={({ isActive }) =>
-//                           `flex items-center gap-3 p-2 rounded-lg transition-all
-//                           ${
-//                             isActive
-//                               ? "bg-[#72c072]  font-semibold"
-//                               : "hover:bg-[#4b664b]"
-//                           }`
-//                         }
-//                       >
-//                         <div className="p-2 rounded-lg bg-[#32174D]">
-//                           <SubIcon className="w-4 h-4 text-white" />
-//                         </div>
-//                         <span>{sub.label}</span>
-//                       </NavLink>
-//                     );
-//                   })}
-//                 </ul>
-//               )}
-//             </div>
-//           );
-//         })}
-//       </div>
-//     </aside>
-//   );
-// }
 
 export default function SideBar() {
   const { setOpen } = useAppContext();
@@ -221,26 +12,35 @@ export default function SideBar() {
   return (
     <aside
       className="
-        fixed md:static
-        top-0 left-0
-        h-[100dvh] md:h-screen
-        w-72
-        bg-[#548f54]
-        p-4 pt-8
-        overflow-y-auto
-      "
+      fixed md:static
+      top-0 left-0
+      h-[100dvh] md:h-screen
+      w-72
+      bg-transparent
+      p-4 pt-6
+      overflow-y-auto
+    "
     >
-      {/* Logo */}
-      <div className="flex justify-center mt-2">
+      {/* ===== Brand ===== */}
+      <div className="flex items-center gap-3 px-2 mb-8">
         <img
           src={logo}
-          alt="logo"
-          className="w-36 h-36 rounded-full object-cover border-4 border-[#446144] shadow-md"
+          alt="Expense Tracker"
+          className="w-10 h-10 rounded-full object-cover"
         />
+
+        <div className="flex flex-col justify-center">
+          <span className="text-base font-semibold text-white/95 tracking-wide">
+            Expense Tracker
+          </span>
+          <span className="mt-0.5 text-[11px] text-white/60 tracking-wide">
+            Save smart. Spend wiser.
+          </span>
+        </div>
       </div>
 
-      {/* Menu */}
-      <div className="mt-8 text-white text-lg font-medium pl-2">
+      {/* ===== Menu ===== */}
+      <div className="mt-10 text-white text-base font-medium pl-1">
         {SidebarItems.map((item, index) => {
           const Icon = item.icon;
           const hasSubItems = !!item.subItems;
@@ -257,28 +57,35 @@ export default function SideBar() {
                   }
                 }}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 p-2 mt-4 rounded-xl transition-all
-                  ${
-                    isActive
-                      ? "bg-[#72c072] font-semibold"
-                      : "hover:bg-[#415941]"
-                  }`
+                  `flex items-center gap-3 px-3 py-2.5 mt-3 rounded-lg transition-colors
+                ${
+                  isActive
+                    ? "bg-[#72c072] text-black font-semibold"
+                    : "hover:bg-[#415941]"
+                }`
                 }
               >
-                <Icon className="w-10 h-10 p-2 rounded-xl bg-[#32174D]" />
-                <span>{item.label}</span>
+                {/* Icon */}
+                <div className="flex items-center justify-center w-10 h-10">
+                  <Icon className="w-8 h-8 text-white" />
+                </div>
 
+                {/* Label */}
+                <span className="flex-1">{item.label}</span>
+
+                {/* Arrow */}
                 {hasSubItems && (
                   <MdKeyboardArrowDown
-                    className={`ml-auto transition-transform ${
+                    className={`transition-transform ${
                       openSubMenu === index ? "rotate-180" : ""
                     }`}
                   />
                 )}
               </NavLink>
 
+              {/* ===== Sub Menu ===== */}
               {hasSubItems && openSubMenu === index && (
-                <ul className="ml-12 mt-2">
+                <ul className="ml-10 mt-1 space-y-1">
                   {item.subItems.map((sub, subIndex) => {
                     const SubIcon = sub.icon;
                     return (
@@ -287,17 +94,15 @@ export default function SideBar() {
                         to={sub.routes}
                         onClick={() => setOpen(false)}
                         className={({ isActive }) =>
-                          `flex items-center gap-3 p-2 rounded-lg transition-all
-                          ${
-                            isActive
-                              ? "bg-[#72c072] font-semibold"
-                              : "hover:bg-[#4b664b]"
-                          }`
+                          `flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors
+                        ${
+                          isActive
+                            ? "bg-[#72c072] text-black font-semibold"
+                            : "hover:bg-[#4b664b]"
+                        }`
                         }
                       >
-                        <div className="p-2 rounded-lg bg-[#32174D]">
-                          <SubIcon className="w-4 h-4 text-white" />
-                        </div>
+                        <SubIcon className="w-6 h-6 text-white" />
                         <span>{sub.label}</span>
                       </NavLink>
                     );

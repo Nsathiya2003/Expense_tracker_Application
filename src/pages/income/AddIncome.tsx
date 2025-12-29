@@ -45,8 +45,8 @@ const INITIAL_FORM_STATE: FormData = {
 
 // Validation function
 const validateForm = (
-  data: FormData,
-  choice: "yes" | "no" | null
+  data: FormData
+  // choice: "yes" | "no" | null
 ): ValidationErrors => {
   const errors: ValidationErrors = {};
 
@@ -64,33 +64,68 @@ const validateForm = (
 
   if (!data.income_date?.trim()) {
     errors.income_date = "Date is required";
-  } else if (new Date(data.income_date) > new Date()) {
-    errors.income_date = "Date cannot be in the future";
+  } else {
+    const selectedDate = new Date(data.income_date);
+    const today = new Date();
+
+    // normalize time
+    selectedDate.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+
+    if (selectedDate > today) {
+      errors.income_date = "Date can't be in the future";
+    }
   }
 
   if (!data.payment_receive_mode?.trim()) {
     errors.payment_receive_mode = "Payment mode is required";
   }
 
-  if (choice === "yes") {
-    if (!data.goal_id?.trim()) {
-      errors.goal_id = "Goal is required when contributing";
-    }
+  // if (choice === "yes") {
+  //   if (!data.goal_id?.trim()) {
+  //     errors.goal_id = "Goal is required when contributing";
+  //   }
 
-    if (!data.goal_contribute_amount?.trim()) {
-      errors.goal_contribute_amount = "Contribution amount is required";
-    } else if (Number(data.goal_contribute_amount) <= 0) {
-      errors.goal_contribute_amount = "Contribution must be greater than 0";
-    } else if (
-      Number(data.goal_contribute_amount) > Number(data.income_amount)
-    ) {
-      errors.goal_contribute_amount =
-        "Cannot contribute more than income amount";
-    }
-  }
+  //   if (!data.goal_contribute_amount?.trim()) {
+  //     errors.goal_contribute_amount = "Contribution amount is required";
+  //   } else if (Number(data.goal_contribute_amount) <= 0) {
+  //     errors.goal_contribute_amount = "Contribution must be greater than 0";
+  //   } else if (
+  //     Number(data.goal_contribute_amount) > Number(data.income_amount)
+  //   ) {
+  //     errors.goal_contribute_amount =
+  //       "Cannot contribute more than income amount";
+  //   }
+  // }
 
   return errors;
 };
+
+const incomeCategories = [
+  "Salary",
+  "Business",
+  "Freelancing",
+  "Investments",
+  "Rental Income",
+  "Interest",
+  "Bonus",
+  "Commission",
+  "Gifts",
+  "Other",
+];
+
+const PAYMENT_MODES = [
+  "Cash",
+  "Google Pay",
+  "PhonePe",
+  "Paytm",
+  "Bank Transfer",
+  "Account Transaction",
+  "Debit Card",
+  "Credit Card",
+  "Cheque",
+  "Other",
+];
 
 export default function AddIncome({
   editingId,
@@ -111,17 +146,19 @@ export default function AddIncome({
   const navigate = useNavigate();
 
   // Determine if main required fields are filled and valid (independent of dialog)
-  const isMainFieldsValid = useMemo(() => {
-    if (!data) return false;
-    if (!data.income_category?.trim()) return false;
-    if (!data.income_amount?.trim()) return false;
-    const amountNum = Number(data.income_amount || 0);
-    if (isNaN(amountNum) || amountNum <= 0) return false;
-    if (!data.income_date?.trim()) return false;
-    if (new Date(data.income_date) > new Date()) return false;
-    if (!data.payment_receive_mode?.trim()) return false;
-    return true;
-  }, [data]);
+  // const isMainFieldsValid = useMemo(() => {
+  //   if (!data) return false;
+  //   if (!data.income_category?.trim()) return false;
+  //   if (!data.income_amount?.trim()) return false;
+
+  //   const amountNum = Number(data.income_amount || 0);
+  //   if (isNaN(amountNum) || amountNum <= 0) return false;
+
+  //   if (!data.income_date?.trim()) return false;
+  //   if (!data.payment_receive_mode?.trim()) return false;
+
+  //   return true;
+  // }, [data]);
 
   // Get income data by id
   const { data: incomeById } = useGetIncomeById(currentEditingId);
@@ -215,11 +252,6 @@ export default function AddIncome({
           overrides?.goal_contribute_amount?.toString() ??
           data.goal_contribute_amount,
       };
-
-      // Use override saving_contribution when provided to avoid relying on
-      // the async state update of `choice` (which can be stale immediately
-      // after Dialog changes). This ensures validation uses the intended
-      // value when user toggles contribution and clicks Save.
       const effectiveChoice: "yes" | "no" | null =
         typeof overrides?.saving_contribution !== "undefined"
           ? overrides?.saving_contribution
@@ -227,7 +259,7 @@ export default function AddIncome({
             : "no"
           : choice;
 
-      const validationErrors = validateForm(submitData, effectiveChoice);
+      const validationErrors = validateForm(submitData);
 
       if (Object.keys(validationErrors).length > 0) {
         setErrors(validationErrors);
@@ -235,6 +267,11 @@ export default function AddIncome({
       }
 
       setIsSubmitting(true);
+      const isSaving =
+        typeof overrides?.saving_contribution !== "undefined"
+          ? overrides.saving_contribution
+          : effectiveChoice === "yes";
+
       const payload: updateIncomePayload = {
         income_category: overrides?.income_category ?? data.income_category,
         income_amount:
@@ -243,16 +280,16 @@ export default function AddIncome({
         payment_receive_mode:
           overrides?.payment_receive_mode ?? data.payment_receive_mode,
         income_date: overrides?.income_date ?? new Date(data.income_date),
-        // prefer explicit override, otherwise use effectiveChoice
-        saving_contribution:
-          typeof overrides?.saving_contribution !== "undefined"
-            ? overrides!.saving_contribution
-            : effectiveChoice === "yes",
-        goal_contribute_amount:
-          Number(
-            overrides?.goal_contribute_amount ?? data.goal_contribute_amount
-          ) || 0,
-        goal_id: goalId,
+
+        saving_contribution: isSaving,
+
+        goal_id: isSaving ? goalId : null,
+        goal_contribute_amount: isSaving
+          ? Number(
+              overrides?.goal_contribute_amount ?? data.goal_contribute_amount
+            ) || 0
+          : 0,
+
         id: currentEditingId || "",
       };
 
@@ -308,7 +345,7 @@ export default function AddIncome({
       if (isNaN(amt) || amt <= 0) return false;
       if (amt > incomeAmt) return false;
       return true;
-    }, [localChoice, localGoalId, localAmount, data.income_amount]);
+    }, [localChoice, localGoalId, localAmount]);
 
     console.log("localChoice--", localChoice);
 
@@ -319,7 +356,7 @@ export default function AddIncome({
         setLocalAmount(data.goal_contribute_amount || "");
         setDialogErrors({});
       }
-    }, [openDialog]);
+    }, []);
 
     const handleSave = useCallback(() => {
       const dialogValidationData = {
@@ -334,7 +371,7 @@ export default function AddIncome({
         saving_contribution: localChoice === "yes",
       };
 
-      const validationErrors = validateForm(dialogValidationData, localChoice);
+      const validationErrors = validateForm(dialogValidationData);
 
       if (Object.keys(validationErrors).length > 0) {
         setDialogErrors(validationErrors);
@@ -356,7 +393,7 @@ export default function AddIncome({
         goal_contribute_amount: Number(localAmount) || 0,
         saving_contribution: localChoice === "yes",
       });
-    }, [localChoice, localGoalId, localAmount, data]);
+    }, [localChoice, localGoalId, localAmount]);
 
     const handleNoChange = () => {
       setLocalChoice("no"); // UI state
@@ -441,7 +478,12 @@ export default function AddIncome({
                 }}
                 disabled={!GoalData?.data || GoalData.data.length === 0}
               >
-                <option value="">Select a goal</option>
+                <option
+                  value=""
+                  style={{ backgroundColor: "#2E2E48", color: "white" }}
+                >
+                  Select a goal
+                </option>
 
                 {GoalData?.data?.map((item: GoalData) => (
                   <option
@@ -449,7 +491,7 @@ export default function AddIncome({
                     value={item._id}
                     style={{ backgroundColor: "#2E2E48", color: "white" }}
                   >
-                    {item.goal_name} – ₹{item.allocated_amount}
+                    {item.goal_name}
                   </option>
                 ))}
               </select>
@@ -538,6 +580,19 @@ export default function AddIncome({
     );
   };
 
+  const validateBeforeDialogOpen = useCallback(() => {
+    const validationErrors = validateForm(data);
+    console.log({ validationErrors });
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return false;
+    }
+
+    setOpenDialog(true);
+    return true;
+  }, [data]);
+
   return (
     <div className="min-h-full">
       <div className="flex items-center gap-3 mb-6">
@@ -587,36 +642,15 @@ export default function AddIncome({
                 >
                   Select Category
                 </option>
-                <option
-                  value="Salary"
-                  style={{ backgroundColor: "#2E2E48", color: "white" }}
-                >
-                  Salary
-                </option>
-                <option
-                  value="Business"
-                  style={{ backgroundColor: "#2E2E48", color: "white" }}
-                >
-                  Business
-                </option>
-                <option
-                  value="Investments"
-                  style={{ backgroundColor: "#2E2E48", color: "white" }}
-                >
-                  Investments
-                </option>
-                <option
-                  value="Freelancing"
-                  style={{ backgroundColor: "#2E2E48", color: "white" }}
-                >
-                  Freelancing
-                </option>
-                <option
-                  value="Others"
-                  style={{ backgroundColor: "#2E2E48", color: "white" }}
-                >
-                  Others
-                </option>
+                {incomeCategories.map((category) => (
+                  <option
+                    key={category}
+                    value={category}
+                    style={{ backgroundColor: "#2E2E48", color: "white" }}
+                  >
+                    {category}
+                  </option>
+                ))}
               </select>
               <span
                 className={`absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none transition-colors ${
@@ -729,36 +763,15 @@ export default function AddIncome({
                 >
                   Select Mode
                 </option>
-                <option
-                  value="Salary"
-                  style={{ backgroundColor: "#2E2E48", color: "white" }}
-                >
-                  Cash
-                </option>
-                <option
-                  value="Business"
-                  style={{ backgroundColor: "#2E2E48", color: "white" }}
-                >
-                  Google Pay
-                </option>
-                <option
-                  value="Investments"
-                  style={{ backgroundColor: "#2E2E48", color: "white" }}
-                >
-                  Phone Pay
-                </option>
-                <option
-                  value="Freelancing"
-                  style={{ backgroundColor: "#2E2E48", color: "white" }}
-                >
-                  Account transaction
-                </option>
-                <option
-                  value="Others"
-                  style={{ backgroundColor: "#2E2E48", color: "white" }}
-                >
-                  Others
-                </option>
+                {PAYMENT_MODES.map((mode) => (
+                  <option
+                    key={mode}
+                    value={mode}
+                    style={{ backgroundColor: "#2E2E48", color: "white" }}
+                  >
+                    {mode}
+                  </option>
+                ))}
               </select>
               <span
                 className={`absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none transition-colors ${
@@ -795,8 +808,14 @@ export default function AddIncome({
 
         {/* Action Buttons */}
         <div className="flex gap-3">
-          <button
-            onClick={() => setOpenDialog(true)}
+          {/* <button
+            onClick={() => {
+              setOpenDialog(true);
+              const isValid = validateBeforeDialogOpen();
+              if (!isValid) return;
+
+              setOpenDialog(true);
+            }}
             disabled={!isMainFieldsValid || isSubmitting}
             title={
               !isMainFieldsValid
@@ -807,7 +826,21 @@ export default function AddIncome({
               text-white font-medium py-2 px-6 rounded-lg shadow-md transition flex items-center gap-2"
           >
             {currentEditingId ? "Update Income" : "Add Income"}
+          </button> */}
+          <button
+            onClick={() => {
+              const canOpen = validateBeforeDialogOpen();
+              if (!canOpen) return;
+              setOpenDialog(false);
+              setTimeout(() => setOpenDialog(true), 0);
+            }}
+            disabled={isSubmitting}
+            className="bg-[#548f54] hover:bg-[#468f46] disabled:bg-gray-600 disabled:opacity-50 
+    text-white font-medium py-2 px-6 rounded-lg shadow-md transition flex items-center gap-2"
+          >
+            {currentEditingId ? "Update Income" : "Add Income"}
           </button>
+
           <button
             onClick={handleClearAll}
             disabled={isSubmitting}

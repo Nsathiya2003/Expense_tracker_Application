@@ -121,8 +121,11 @@ export default function GoalTableDesktop({
           {/* Empty State */}
           {goalData.length === 0 && (
             <tr>
-              <td colSpan={6} className="text-center py-10 text-gray-400">
-                No goals found
+              <td colSpan={5} className="text-center py-12 text-gray-400">
+                <div className="flex flex-col items-center gap-2">
+                  <p className="text-3xl">📭</p>
+                  <p>No goal records found</p>
+                </div>
               </td>
             </tr>
           )}

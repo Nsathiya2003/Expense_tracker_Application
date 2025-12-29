@@ -28,7 +28,7 @@ export default function WelcomeProfileComponent() {
   }, [userData]);
   return (
     <>
-      <div className="flex items-center gap-3 sm:gap-4 px-4 sm:px-0">
+      <div className="flex items-center gap-3 sm:gap-4 px-4 lg:px-6 sm:px-0">
         {previewUrl ? (
           <img
             src={previewUrl}

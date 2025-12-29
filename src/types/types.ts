@@ -78,6 +78,7 @@ export interface BudgetData {
   budget_amount: number;
   budget_month: string;
   budget_start_date: Date;
+  budget_end_date: Date;
   notes: string;
   need_Notification: boolean;
   budget_exceeded: boolean;

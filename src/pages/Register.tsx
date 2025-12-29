@@ -377,14 +377,16 @@ export default function Register() {
     });
   };
 
-  const handlePhoneChange = (phone: string) => {
-    setData((prev) => ({ ...prev, mobileNumber: phone }));
+  const handlePhoneChange = (value: string) => {
+    setData((prev) => ({
+      ...prev,
+      mobileNumber: value,
+    }));
 
-    setErrors((prev) => {
-      const newErrors = { ...prev };
-      delete newErrors.mobileNumber;
-      return newErrors;
-    });
+    setErrors((prev) => ({
+      ...prev,
+      mobileNumber: "",
+    }));
   };
 
   const validateForm = () => {
@@ -582,60 +584,37 @@ export default function Register() {
               )}
             </div> */}
             <div>
-              <label className="block text-sm font-medium text-theme-text mb-2">
-                Mobile Number <span className="text-red-500">*</span>
+              <label className="text-sm font-medium text-gray-700">
+                Mobile Number <span className="text-red-600">*</span>
               </label>
-              {/* <Input
-                        value={formData.instituteMobileNumber}
-                        onChange={(e) => handleInputChange('instituteMobileNumber', e.target.value)}
-                        placeholder="Enter mobile number"
-                        error={errors.instituteMobileNumber}
-                        className="w-full bg-theme-surface border-theme-border text-theme-text"
-
-                      />  */}
 
               <PhoneInput
                 country={"in"}
-                // inputClass={`input ${
-                //   document.documentElement.classList.contains("dark")
-                //     ? "bg-theme-surface text-theme-text border-theme-border"
-                //     : "bg-theme-surface text-theme-text border-theme-border"
-                // }`}
-                inputStyle={{
-                  width: "100%",
-                  padding: "1.2rem",
-                  paddingLeft: "3rem",
-                  borderRadius: "0.375rem",
-                  // background: document.documentElement.classList.contains(
-                  //   "dark"
-                  // )
-                  //   ? "var(--theme-surface)"
-                  //   : "var(--theme-surface)",
-                  // color: document.documentElement.classList.contains("dark")
-                  //   ? "var(--theme-text)"
-                  //   : "var(--theme-text)",
-                  // border: `1px solid var(--theme-border)`,
-                }}
-                buttonClass={`phone-flag-container ${
-                  document.documentElement.classList.contains("dark")
-                    ? "bg-theme-surface border-theme-border"
-                    : "bg-theme-surface border-theme-border"
-                }`}
-                buttonStyle={{
-                  background: document.documentElement.classList.contains(
-                    "dark"
-                  )
-                    ? "var(--theme-surface)"
-                    : "var(--theme-surface)",
-                  border: `1px solid var(--theme-border)`,
-                }}
                 value={data.mobileNumber}
                 onChange={handlePhoneChange}
                 placeholder="Enter mobile number"
+                inputStyle={{
+                  width: "100%",
+                  height: "44px",
+                  paddingLeft: "3rem",
+                  borderRadius: "0.5rem",
+                  fontSize: "14px",
+                  background: "white",
+                  border: errors.mobileNumber
+                    ? "1px solid #dc2626"
+                    : "1px solid #d1d5db",
+                }}
+                buttonStyle={{
+                  background: "white",
+                  border: errors.mobileNumber
+                    ? "1px solid #dc2626"
+                    : "1px solid #d1d5db",
+                }}
               />
-              {errors.instituteMobileNumber && (
-                <p className="mt-1 text-xs ml-1 text-theme-error">
-                  {errors.instituteMobileNumber}
+
+              {errors.mobileNumber && (
+                <p className="text-[12px] text-red-600 leading-tight">
+                  {errors.mobileNumber}
                 </p>
               )}
             </div>

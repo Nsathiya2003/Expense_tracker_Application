@@ -598,11 +598,12 @@ export default function Register() {
                   height: "44px",
                   paddingLeft: "3rem",
                   borderRadius: "0.5rem",
-                  fontSize: "14px",
+                  // fontSize: "14px",
                   background: "white",
                   border: errors.mobileNumber
                     ? "1px solid #dc2626"
                     : "1px solid #d1d5db",
+                  color: "black",
                 }}
                 buttonStyle={{
                   background: "white",

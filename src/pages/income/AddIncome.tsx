@@ -604,7 +604,7 @@ export default function AddIncome({
         )}
       </div>
       <div
-        className="rounded-2xl p-6 shadow-lg w-full max-w-7xl mx-auto
+        className="rounded-2xl p-6 shadow-lg w-full max-w-6xl mx-auto
   bg-[rgba(255,255,255,0.05)] border border-gray-700"
       >
         {/* Input Fields Grid */}

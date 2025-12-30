@@ -981,6 +981,7 @@ export interface FilterState {
   deadline_date: string;
   status: string;
   goal_id: string;
+  income_date: "";
 }
 
 const DEFAULT_FILTERS: FilterState = {
@@ -992,6 +993,7 @@ const DEFAULT_FILTERS: FilterState = {
   deadline_date: "",
   status: "",
   goal_id: "",
+  income_date: "",
 };
 
 export default function IncomeTable({
@@ -1252,6 +1254,21 @@ export default function IncomeTable({
                   type="date"
                   name="toDate"
                   value={tempFilters.toDate}
+                  onChange={handleFilterChange}
+                  className="flex-1 bg-[#3a3a5c] border border-gray-600 rounded-lg px-2 py-2 text-white text-sm"
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-3 mb-4">
+              <label className="text-sm text-gray-300 font-medium">
+                Income Date
+              </label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="date"
+                  name="income_date"
+                  value={tempFilters.income_date}
                   onChange={handleFilterChange}
                   className="flex-1 bg-[#3a3a5c] border border-gray-600 rounded-lg px-2 py-2 text-white text-sm"
                 />

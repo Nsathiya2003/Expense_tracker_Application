@@ -93,7 +93,8 @@ export const useDeleteExpense = ({ onSuccess }: { onSuccess?: () => void }) => {
       setTimeout(() => {
         queryClient.invalidateQueries({ queryKey: ["expense"] });
         queryClient.invalidateQueries({ queryKey: ["expenseFilter"] });
-      }, 500);
+        queryClient.invalidateQueries({ queryKey: ["incomeBalance"] });
+      }, 300);
       if (onSuccess) onSuccess();
     },
     onError: (error: AxiosError<{ message: string }>) => {

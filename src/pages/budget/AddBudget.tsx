@@ -498,7 +498,7 @@ export default function AddBudget({
         )}
       </div>
 
-      <div className="rounded-2xl p-6 shadow-lg w-full max-w-[1200px] mx-auto bg-[rgba(255,255,255,0.05)] border border-gray-700">
+      <div className="rounded-2xl p-6 shadow-lg w-full max-w-[1100px] mx-auto bg-[rgba(255,255,255,0.05)] border border-gray-700">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           {/* Category */}
           <div className="flex flex-col">

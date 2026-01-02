@@ -70,6 +70,7 @@ export const ViewAllNotification = () => {
   };
 
   const handleBulkDelete = (ids: string[]) => {
+    console.log("ids----", ids);
     if (!ids.length) return;
     setPendingDeleteIds(ids);
     setOpenDeletePopup(true);
@@ -85,6 +86,19 @@ export const ViewAllNotification = () => {
     setCurrentPage(page);
     setExpandedId(null);
     setSelectedIds([]);
+  };
+
+  const confirmDelete = () => {
+    if (!pendingDeleteIds.length) return;
+
+    deleteNotificationsMutation.mutate(pendingDeleteIds, {
+      onSuccess: () => {
+        setOpenDeletePopup(false);
+        setPendingDeleteIds([]);
+        setSelectedIds([]);
+        refetch();
+      },
+    });
   };
 
   /* ---------------- LOADING ---------------- */
@@ -283,6 +297,44 @@ export const ViewAllNotification = () => {
           >
             <IoIosArrowForward />
           </button>
+        </div>
+      )}
+      {/* ---------------- DELETE CONFIRMATION MODAL ---------------- */}
+      {openDeletePopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
+          <div className="bg-[#1f1f3a] rounded-xl w-[90%] max-w-md p-6 shadow-lg">
+            <h2 className="text-lg font-semibold text-white mb-2">
+              Delete Notification{pendingDeleteIds.length > 1 ? "s" : ""}
+            </h2>
+
+            <p className="text-sm text-gray-400 mb-6">
+              Are you sure you want to delete{" "}
+              <span className="text-white font-medium">
+                {pendingDeleteIds.length}
+              </span>{" "}
+              notification{pendingDeleteIds.length > 1 ? "s" : ""}? This action
+              cannot be undone.
+            </p>
+
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => {
+                  setOpenDeletePopup(false);
+                  setPendingDeleteIds([]);
+                }}
+                className="px-4 py-2 rounded bg-gray-600 hover:bg-gray-500 text-sm"
+              >
+                Cancel
+              </button>
+
+              <button
+                onClick={confirmDelete}
+                className="px-4 py-2 rounded bg-red-600 hover:bg-red-700 text-sm"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

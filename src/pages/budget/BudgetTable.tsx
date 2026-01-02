@@ -684,13 +684,13 @@ export default function BudgetTable({
             onClick={() => setFilterOpen(true)}
             className="
               h-11
-              px-5
-              rounded-lg
-              bg-green-600
-              hover:bg-green-700
-              text-white
-              text-sm
-              font-medium
+            px-5
+            rounded-lg
+            bg-blue-500
+            hover:bg-blue-600
+            text-white
+            text-sm
+            font-medium
             "
           >
             Filter

@@ -25,6 +25,11 @@ export const useCreateExpense = (resetForm: () => void) => {
       queryClient.invalidateQueries({
         queryKey: ["unread-notification-count"],
       });
+      queryClient.invalidateQueries({ queryKey: ["spendHistory"] });
+      queryClient.invalidateQueries({ queryKey: ["monthlyExpenseIncome"] });
+      queryClient.invalidateQueries({
+        queryKey: ["dashboardSummaryCards"],
+      });
 
       resetForm();
     },
@@ -71,7 +76,11 @@ export const useUpdateExpense = (resetForm: () => void) => {
       queryClient.invalidateQueries({ queryKey: ["expenseFilter"] });
       queryClient.invalidateQueries({ queryKey: ["expenseById"] });
       queryClient.invalidateQueries({ queryKey: ["incomeBalance"] });
-
+      queryClient.invalidateQueries({ queryKey: ["spendHistory"] });
+      queryClient.invalidateQueries({ queryKey: ["monthlyExpenseIncome"] });
+      queryClient.invalidateQueries({
+        queryKey: ["dashboardSummaryCards"],
+      });
       resetForm();
     },
 

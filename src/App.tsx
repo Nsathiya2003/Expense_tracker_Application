@@ -17,6 +17,7 @@ import { ViewAllNotification } from "./pages/notification/view-all-notification"
 import { ToastContainer, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./toast.css";
+import ProtectedRoute from "./routes/protectedRoutes";
 
 function App() {
   return (
@@ -30,19 +31,21 @@ function App() {
           <Route path="/reset-password" element={<ResetPassword />} />
 
           {/* With layout (Sidebar + Header always visible) */}
-          <Route element={<MainLayout />}>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/profile-setting" element={<ProfileSetting />} />
-            <Route path="/transaction" element={<ViewPage />} />
-            <Route path="/transaction/income" element={<ViewPage />} />
-            <Route path="/transaction/expense" element={<ViewExpense />} />
-            <Route path="/transaction/budget" element={<ViewBudget />} />
-            <Route path="/goal" element={<ViewGoal />}></Route>
-            {/* <Route path="/goal-history" element={<GoalHistory />}></Route> */}
-            <Route
-              path="/notification"
-              element={<ViewAllNotification />}
-            ></Route>
+          <Route element={<ProtectedRoute />}>
+            <Route element={<MainLayout />}>
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/profile-setting" element={<ProfileSetting />} />
+              <Route path="/transaction" element={<ViewPage />} />
+              <Route path="/transaction/income" element={<ViewPage />} />
+              <Route path="/transaction/expense" element={<ViewExpense />} />
+              <Route path="/transaction/budget" element={<ViewBudget />} />
+              <Route path="/goal" element={<ViewGoal />}></Route>
+              {/* <Route path="/goal-history" element={<GoalHistory />}></Route> */}
+              <Route
+                path="/notification"
+                element={<ViewAllNotification />}
+              ></Route>
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>

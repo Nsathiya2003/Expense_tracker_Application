@@ -61,7 +61,7 @@ export default function Header() {
 
   return (
     <>
-      <div className="w-full bg-[#2e362e] h-12 px-4 rounded-md flex items-center justify-end gap-6 text-white">
+      <div className="w-full bg-[#2e362e] h-12 px-4 rounded-md flex items-center justify-end gap-2 text-white">
         {/* Notifications */}
         <div
           className="relative cursor-pointer"
@@ -83,10 +83,10 @@ export default function Header() {
               <img
                 src={previewUrl}
                 alt="profile"
-                className="w-9 h-9 rounded-full object-cover border-2 border-gray-300"
+                className="w-9 h-9 rounded-full object-cover border-2 border-gray-300 mt-1"
               />
             ) : (
-              <FaRegUserCircle className="w-8 h-8 text-white" />
+              <FaRegUserCircle className="w-6 h-6 text-white mt-1" />
             )}
           </button>
 

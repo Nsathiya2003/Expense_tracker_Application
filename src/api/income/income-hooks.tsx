@@ -22,7 +22,18 @@ export const useCreateIncome = (resetForm: () => void) => {
       // Invalidate income queries to refetch data
       queryClient.invalidateQueries({ queryKey: ["income"] });
       queryClient.invalidateQueries({ queryKey: ["incomeFilter"] });
-
+      queryClient.invalidateQueries({ queryKey: ["incomeBalance"] });
+      queryClient.invalidateQueries({
+        queryKey: ["unread-notification-count"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["goal"],
+      });
+      queryClient.invalidateQueries({ queryKey: ["spendHistory"] });
+      queryClient.invalidateQueries({ queryKey: ["monthlyExpenseIncome"] });
+      queryClient.invalidateQueries({
+        queryKey: ["dashboardSummaryCards"],
+      });
       resetForm();
     },
 
@@ -66,6 +77,11 @@ export const useUpdateIncome = (resetForm: () => void) => {
       queryClient.invalidateQueries({ queryKey: ["income"] });
       queryClient.invalidateQueries({ queryKey: ["incomeFilter"] });
       queryClient.invalidateQueries({ queryKey: ["incomeById"] });
+      queryClient.invalidateQueries({ queryKey: ["spendHistory"] });
+      queryClient.invalidateQueries({ queryKey: ["monthlyExpenseIncome"] });
+      queryClient.invalidateQueries({
+        queryKey: ["dashboardSummaryCards"],
+      });
       resetForm();
     },
 

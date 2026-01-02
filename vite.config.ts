@@ -10,6 +10,6 @@ export default defineConfig({
     }),
   ],
   server: {
-    allowedHosts: true, // ✅ allow ngrok & mobile
+    allowedHosts: true, 
   },
 });
